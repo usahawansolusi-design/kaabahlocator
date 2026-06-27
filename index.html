@@ -3,143 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaabah Finder - Global Premium v3.6</title>
+    <title>Kaabah Finder - Ultimate Premium v3.7</title>
     <style>
-        :root { --gold: #d4af37; --bg: #121212; --card: #1a1a1a; --border: #282828; --green: #2ecc71; }
-        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: var(--bg); color: #fff; text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100vh; box-sizing: border-box; padding: 24px; transition: background-color 0.4s; overflow: hidden; }
+        :root {
+            --gold: #d4af37;
+            --bg: #121212;
+            --card: #1a1a1a;
+            --border: #282828;
+            --green: #2ecc71;
+            --red: #e74c3c;
+            --amber: #f39c12;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg); color: #ffffff; text-align: center;
+            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            height: 100vh; box-sizing: border-box; padding: 24px;
+            transition: background-color 0.4s ease; overflow: hidden;
+        }
+
+        /* BRANDING */
         .brand-container { margin-top: 10px; display: flex; flex-direction: column; align-items: center; }
         .brand-logo { font-size: 3rem; margin-bottom: 8px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
         .brand-title { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin: 0; }
         .brand-tagline { color: #888; font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 6px; }
-        
+
         /* WELCOME SCREEN */
         #start-screen { display: flex; flex-direction: column; height: 100%; width: 100%; max-width: 360px; justify-content: space-between; align-items: center; }
         .checklist-card { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
         .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; color: #e0e0e0; margin: 14px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; font-size: 1.1rem; }
-        .btn-action { width: 100%; font-size: 1.1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; box-shadow: 0 8px 20px rgba(212,175,55,0.3); letter-spacing: 1px; text-transform: uppercase; transition: transform 0.1s, background-color 0.2s; }
-        .btn-action:active { transform: scale(0.97); background-color: #bfa030; }
+        .btn-action { width: 100%; font-size: 1.1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; box-shadow: 0 8px 20px rgba(212,175,55,0.3); letter-spacing: 1px; text-transform: uppercase; transition: transform 0.1s; }
+        .btn-action:active { transform: scale(0.97); }
         .slogan-footer { font-size: 0.8rem; color: #555; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
-        
+
         /* MAIN APP */
         #app-screen { display: none; flex-direction: column; height: 100%; width: 100%; justify-content: space-between; align-items: center; }
-        .compass-ring { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; margin: 10px 0; border: 3px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, #1c1c1c 0%, #0a0a0a 100%); box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 25px rgba(212,175,55,0.15); }
-        .compass-ticks { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, var(--gold) 0deg 1deg, transparent 1deg 6deg); -webkit-mask: radial-gradient(circle, transparent 91%, black 92%); opacity: 0.4; }
-        #arrow { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 105px solid var(--gold); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform-origin: center bottom; }
+        .compass-outer-wrapper { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; margin: 10px 0; }
+        .compass-container { position: relative; width: 260px; height: 260px; display: flex; justify-content: center; align-items: center; border: 3px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, #1c1c1c 0%, #0a0a0a 100%); box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 25px rgba(212,175,55,0.15); }
+        .compass-ticks { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, var(--gold) 0deg 1deg, transparent 1deg 6deg); -webkit-mask: radial-gradient(circle, transparent 91%, black 92%); mask: radial-gradient(circle, transparent 91%, black 92%); opacity: 0.4; }
         #kaabah-marker { position: absolute; top: -24px; font-size: 2.6rem; z-index: 25; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
-        .cardinal { position: absolute; font-size: 1.15rem; font-weight: 800; color: var(--gold); }
+        .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 800; color: var(--gold); z-index: 5; }
         .cardinal-n { top: 26px; } .cardinal-s { bottom: 18px; } .cardinal-e { right: 20px; } .cardinal-w { left: 20px; }
+        
+        /* 3D NEEDLE */
+        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; will-change: transform; }
+        #arrow { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 105px solid var(--gold); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); position: relative; transform: translateY(-45px); }
+        #arrow::after { content: ''; position: absolute; top: 0; left: -14px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 0px solid transparent; border-bottom: 105px solid rgba(0,0,0,0.18); }
+
+        /* UI ELEMENTS */
         #instruction-card { width: 100%; max-width: 360px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        #status-text { font-size: 1.4rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        #status-text { font-size: 1.4rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; }
+        #arrows-icon { font-size: 1.4rem; display: flex; align-items: center; }
         .dashboard { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 8px; }
         .panel-row { display: flex; justify-content: space-between; background: var(--card); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; align-items: center; }
         .panel-label { font-size: 0.85rem; color: #aaa; } .panel-value { font-size: 0.95rem; font-weight: 700; color: #fff; }
+
+        /* 4-GRID STATUS PANEL */
         .engine-grid { display: grid; grid-template-columns: repeat(3, 1fr) 1.3fr; gap: 8px; width: 100%; }
-        .grid-tile { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .tile-label { font-size: 0.68rem; font-weight: 700; color: #888; }
-        .led-dot { width: 8px; height: 8px; background-color: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
-        .accuracy-value { font-size: 0.78rem; font-weight: 800; color: var(--green); }
+        .grid-tile { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+        .tile-label { font-size: 0.68rem; font-weight: 700; color: #888888; }
+        .led-dot { width: 8px; height: 8px; background-color: #444444; border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
+        .accuracy-value { font-size: 0.78rem; font-weight: 800; color: #888888; }
     </style>
 </head>
 <body>
-    <!-- START SCREEN -->
+
     <div id="start-screen">
         <div class="brand-container">
             <div class="brand-logo">🕋</div>
             <h1 class="brand-title">Kaabah Finder</h1>
             <div class="brand-tagline">Verified Qiblah Navigation System</div>
         </div>
+
         <div class="checklist-card">
             <div class="checklist-item">Place phone on flat surface</div>
             <div class="checklist-item">Keep away from metal objects</div>
             <div class="checklist-item">Enable GPS location</div>
             <div class="checklist-item">Hold device steady</div>
         </div>
+
         <div style="width: 100%;">
             <button class="btn-action" onclick="initApp()">Start Finder</button>
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
     </div>
-    <!-- MAIN APP SCREEN -->
+
     <div id="app-screen">
         <div class="brand-container">
             <h1 class="brand-title" style="font-size: 1.2rem; letter-spacing: 2px;">Kaabah Finder</h1>
         </div>
-        <div class="compass-ring">
-            <div id="kaabah-marker">🕋</div>
-            <div class="compass-ticks"></div>
-            <div class="cardinal cardinal-n">N</div> <div class="cardinal cardinal-s">S</div> <div class="cardinal cardinal-e">E</div> <div class="cardinal cardinal-w">W</div>
-            <div id="arrow"></div>
+
+        <div class="compass-outer-wrapper">
+            <div id="kaabah-marker">🕋</div> 
+            <div class="compass-container">
+                <div class="compass-ticks"></div>
+                <div class="compass-cardinal cardinal-n">N</div>
+                <div class="compass-cardinal cardinal-e">E</div>
+                <div class="compass-cardinal cardinal-s">S</div>
+                <div class="compass-cardinal cardinal-w">W</div>
+                
+                <div class="needle-wrapper" id="needle-plate">
+                    <div id="arrow"></div>
+                </div>
+            </div>
         </div>
-        <div id="instruction-card"> <div id="arrows-icon">⏳</div> <span id="status-text">WAITING...</span> </div>
+
+        <div id="instruction-card">
+            <div id="arrows-icon">⏳</div>
+            <span id="status-text">INITIALIZING...</span>
+        </div>
+
         <div class="dashboard">
-            <div class="panel-row"> <div class="panel-label">🌐 Distance</div> <div id="distance-text" class="panel-value" style="color: var(--gold);">Waiting...</div> </div>
-            <div class="panel-row"> <div class="panel-label">📍 Location</div> <div id="location-text" class="panel-value">Waiting...</div> </div>
+            <div class="panel-row">
+                <div class="panel-label">🌐 Distance to Kaabah</div>
+                <div id="distance-text" class="panel-value" style="color: var(--gold);">Calculating...</div>
+            </div>
+            <div class="panel-row">
+                <div class="panel-label">📍 Current Location</div>
+                <div id="location-text" class="panel-value">Detecting...</div>
+            </div>
+            
             <div class="engine-grid">
-                <div class="grid-tile"><div class="tile-label">GPS</div><div id="gps-led" class="led-dot" style="background:#444; box-shadow:none;"></div></div>
-                <div class="grid-tile"><div class="tile-label">SENSOR</div><div id="sensor-led" class="led-dot" style="background:#444; box-shadow:none;"></div></div>
-                <div class="grid-tile"><div class="tile-label">QIBLA</div><div id="qibla-led" class="led-dot" style="background:#444; box-shadow:none;"></div></div>
-                <div class="grid-tile"><div class="tile-label">ACCURACY</div><div class="accuracy-value">LOW</div></div>
+                <div class="grid-tile"><div class="tile-label">GPS</div><div id="led-gps" class="led-dot"></div></div>
+                <div class="grid-tile"><div class="tile-label">SENSOR</div><div id="led-sensor" class="led-dot"></div></div>
+                <div class="grid-tile"><div class="tile-label">QIBLA</div><div id="led-qibla" class="led-dot"></div></div>
+                <div class="grid-tile"><div class="tile-label">ACCURACY</div><div id="val-accuracy" class="accuracy-value">WAIT</div></div>
             </div>
         </div>
     </div>
+
     <script>
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
-        let qiblaBearing = 0, smoothedHeading = null, isLocked = false, vibrateInterval;
+        let userLat, userLng, qiblaBearing = 0, smoothedHeading = null, isLocked = false, vibrateInterval;
+
+        function updateLED(id, color) {
+            const led = document.getElementById(id);
+            if (!led) return;
+            if (color === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 8px var(--green)'; }
+            else if (color === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 8px var(--amber)'; }
+            else if (color === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 8px var(--red)'; }
+        }
 
         function initApp() {
-            console.log("Initializing App...");
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
             document.getElementById('status-text').innerText = "CONNECTING GPS...";
-            
+            updateLED('led-gps', 'amber');
+
             if (!navigator.geolocation) {
                 document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
+                updateLED('led-gps', 'red');
                 return;
             }
 
             navigator.geolocation.getCurrentPosition(position => {
-                console.log("GPS Success!");
-                const { latitude, longitude } = position.coords;
-                qiblaBearing = calculateQibla(latitude, longitude);
-                document.getElementById('distance-text').innerText = `${Math.round(calculateDistance(latitude, longitude)).toLocaleString()} KM`;
-                getAreaName(latitude, longitude);
-                document.getElementById('gps-led').style.background = '#2ecc71';
-                document.getElementById('gps-led').style.shadow = '0 0 8px #2ecc71';
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
                 
-                document.getElementById('status-text').innerText = "CALIBRATING SENSOR...";
-                startCompass();
-            }, () => {
-                document.getElementById('status-text').innerText = "GPS DENIED";
-                alert("GPS permission is REQUIRED for Kaabah direction.");
-            }, { enableHighAccuracy: true });
+                qiblaBearing = calculateQibla(userLat, userLng);
+                let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
+                
+                document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
+                getAreaName(userLat, userLng);
+                
+                updateLED('led-gps', 'green');
+                document.getElementById('status-text').innerText = "LINKING SENSOR...";
+                updateLED('led-sensor', 'amber');
+                
+                setupSensor();
+            }, error => {
+                document.getElementById('status-text').innerText = "GPS ERROR";
+                updateLED('led-gps', 'red');
+                alert("Please enable Device Location / GPS to track the Qiblah.");
+            }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
-        function startCompass() {
-            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(state => {
-                    if (state === 'granted') {
-                        window.addEventListener('deviceorientation', handleOrientation, true);
-                    } else {
-                        document.getElementById('status-text').innerText = "SENSOR DENIED";
-                        alert("Sensor permission is REQUIRED.");
-                    }
-                });
+        function setupSensor() {
+            // FIX ENGINE FOR ANDROID & IOS COMPATIBILITY
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                // iOS Devices
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation, true);
+                            updateLED('led-sensor', 'green');
+                            document.getElementById('val-accuracy').innerText = "HIGH";
+                            document.getElementById('val-accuracy').style.color = "var(--green)";
+                        } else {
+                            document.getElementById('status-text').innerText = "SENSOR DENIED";
+                            updateLED('led-sensor', 'red');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        document.getElementById('status-text').innerText = "CRITICAL ERROR";
+                    });
             } else {
+                // Android or Non-iOS Devices (Direct listener without strict permission block)
                 window.addEventListener('deviceorientation', handleOrientation, true);
+                // Guna timeout singkat untuk sahkan sensor hidup pada Android
+                setTimeout(() => {
+                    updateLED('led-sensor', 'green');
+                    document.getElementById('val-accuracy').innerText = "HIGH";
+                    document.getElementById('val-accuracy').style.color = "var(--green)";
+                }, 500);
             }
         }
 
         function handleOrientation(event) {
-            let heading;
+            let heading = null;
+
             if (event.webkitCompassHeading) {
-                heading = event.webkitCompassHeading; // iOS
-            } else {
-                heading = 360 - event.alpha; // Android (adjusted)
-                if (heading === 360) heading = 0;
+                heading = event.webkitCompassHeading; // iOS Direct Compass
+            } else if (event.alpha !== null) {
+                heading = (360 - event.alpha) % 360; // Android Dynamic Alternative
             }
-            if (heading === null || heading === undefined) return;
-            document.getElementById('sensor-led').style.background = '#2ecc71';
+
+            if (heading === null) return;
 
             if (smoothedHeading === null) {
                 smoothedHeading = heading;
@@ -151,59 +234,78 @@
                 smoothedHeading = (smoothedHeading + 360) % 360;
             }
 
-            const arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
-            document.getElementById('arrow').style.transform = `rotate(${arrowRotation}deg)`;
+            let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
+            document.getElementById('needle-plate').style.transform = `rotate(${arrowRotation}deg)`;
 
-            if (Math.abs(arrowRotation > 180 ? arrowRotation-360 : arrowRotation) < 6) {
-                lockCompass();
+            let relativeAngle = arrowRotation;
+            if (relativeAngle > 180) relativeAngle -= 360;
+
+            // LOCKING TRIGGER (6 Degrees Tolerance)
+            if (Math.abs(relativeAngle) < 6) {
+                if (!isLocked) {
+                    isLocked = true;
+                    document.body.style.backgroundColor = "#073b24"; 
+                    document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
+                    document.getElementById('instruction-card').style.borderColor = "#4ade80";
+                    document.getElementById('arrow').style.borderBottomColor = "var(--green)";
+                    document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
+                    document.getElementById('arrows-icon').innerHTML = "👍";
+                    updateLED('led-qibla', 'green');
+                    
+                    if (navigator.vibrate) {
+                        navigator.vibrate(400);
+                        vibrateInterval = setInterval(() => navigator.vibrate(400), 600);
+                    }
+                }
             } else {
-                unlockCompass(arrowRotation);
+                if (isLocked) {
+                    isLocked = false;
+                    document.body.style.backgroundColor = "var(--bg)"; 
+                    document.getElementById('instruction-card').style.backgroundColor = "var(--card)";
+                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
+                    document.getElementById('arrow').style.borderBottomColor = "var(--gold)";
+                    updateLED('led-qibla', '444444');
+                    clearInterval(vibrateInterval);
+                    if (navigator.vibrate) navigator.vibrate(0);
+                }
+
+                let roundedAngle = Math.abs(Math.round(relativeAngle));
+                if (relativeAngle > 0) {
+                    document.getElementById('status-text').innerText = `Turn Right ${roundedAngle}°`;
+                    document.getElementById('arrows-icon').innerHTML = "➡️";
+                } else {
+                    document.getElementById('status-text').innerText = `Turn Left ${roundedAngle}°`;
+                    document.getElementById('arrows-icon').innerHTML = "⬅️";
+                }
             }
         }
 
         function calculateQibla(lat, lng) {
-            let phi1 = lat * Math.PI / 180, phi2 = KAABAH_LAT * Math.PI / 180;
-            let dLam = (KAABAH_LNG - lng) * Math.PI / 180;
-            let num = Math.sin(dLam);
-            let denom = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(dLam);
+            let phi1 = lat * Math.PI / 180;
+            let phi2 = KAABAH_LAT * Math.PI / 180;
+            let lam1 = lng * Math.PI / 180;
+            let lam2 = KAABAH_LNG * Math.PI / 180;
+            let num = Math.sin(lam2 - lam1);
+            let denom = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1);
             return (Math.atan2(num, denom) * 180 / Math.PI + 360) % 360;
         }
 
-        function calculateDistance(lat, lng) {
-            const dLat = (KAABAH_LAT - lat) * Math.PI / 180, dLon = (KAABAH_LNG - lng) * Math.PI / 180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(lat*Math.PI/180)*Math.cos(KAABAH_LAT*Math.PI/180)*Math.sin(dLon/2)**2;
-            return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            let dLat = (lat2 - lat1) * Math.PI / 180;
+            let dLon = (lon2 - lon1) * Math.PI / 180;
+            let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
 
         function getAreaName(lat, lng) {
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`)
-                .then(r => r.json()).then(d => document.getElementById('location-text').innerText = d.address ? (d.address.city || d.address.town || d.address.suburb) : `${lat.toFixed(2)}, ${lng.toFixed(2)}`)
-                .catch(() => document.getElementById('location-text').innerText = 'Location Secured');
-        }
-
-        function lockCompass() {
-            if (!isLocked) {
-                isLocked = true;
-                document.body.style.backgroundColor = "#073b24"; // Green bg
-                document.getElementById('arrow').style.borderBottomColor = var(--green);
-                document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
-                document.getElementById('arrows-icon').innerHTML = "👍";
-                document.getElementById('qibla-led').style.background = var(--green);
-                if (navigator.vibrate) { navigator.vibrate(400); vibrateInterval = setInterval(() => navigator.vibrate(400), 600); }
-            }
-        }
-
-        function unlockCompass(rotation) {
-            if (isLocked) {
-                isLocked = false;
-                document.body.style.backgroundColor = var(--bg);
-                document.getElementById('arrow').style.borderBottomColor = var(--gold);
-                document.getElementById('qibla-led').style.background = '#444';
-                clearInterval(vibrateInterval); if (navigator.vibrate) navigator.vibrate(0);
-            }
-            const angle = rotation > 180 ? rotation - 360 : rotation;
-            document.getElementById('status-text').innerText = `Turn ${angle > 0 ? 'Right' : 'Left'} ${Math.abs(Math.round(angle))}°`;
-            document.getElementById('arrows-icon').innerHTML = angle > 0 ? "➡️" : "⬅️";
+                .then(r => r.json())
+                .then(d => {
+                    let name = d.address ? (d.address.suburb || d.address.town || d.address.city) : `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
+                    document.getElementById('location-text').innerText = name || "Location Secured";
+                })
+                .catch(() => document.getElementById('location-text').innerText = "Location Secured");
         }
     </script>
 </body>
