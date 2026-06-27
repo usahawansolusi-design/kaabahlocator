@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaabah Finder - Ultimate Premium v3.7</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kaabah Finder - Premium v3.8</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -19,54 +19,56 @@
             margin: 0; padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg); color: #ffffff; text-align: center;
-            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            height: 100vh; box-sizing: border-box; padding: 24px;
-            transition: background-color 0.4s ease; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100vh; height: -webkit-fill-available; box-sizing: border-box; 
+            padding: 16px; overflow: hidden;
+            transition: background-color 0.4s ease;
         }
 
         /* BRANDING */
-        .brand-container { margin-top: 10px; display: flex; flex-direction: column; align-items: center; }
-        .brand-logo { font-size: 3rem; margin-bottom: 8px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
-        .brand-title { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin: 0; }
-        .brand-tagline { color: #888; font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 6px; }
+        .brand-container { margin: 5px 0; display: flex; flex-direction: column; align-items: center; }
+        .brand-logo { font-size: 2.2rem; margin-bottom: 4px; }
+        .brand-title { font-size: 1.3rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
+        .brand-tagline { color: #888; font-size: 0.65rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
 
         /* WELCOME SCREEN */
-        #start-screen { display: flex; flex-direction: column; height: 100%; width: 100%; max-width: 360px; justify-content: space-between; align-items: center; }
-        .checklist-card { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
-        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; color: #e0e0e0; margin: 14px 0; text-align: left; }
-        .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; font-size: 1.1rem; }
-        .btn-action { width: 100%; font-size: 1.1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; box-shadow: 0 8px 20px rgba(212,175,55,0.3); letter-spacing: 1px; text-transform: uppercase; transition: transform 0.1s; }
-        .btn-action:active { transform: scale(0.97); }
-        .slogan-footer { font-size: 0.8rem; color: #555; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
+        #start-screen { display: flex; flex-direction: column; height: 100%; width: 100%; max-width: 340px; justify-content: space-between; align-items: center; box-sizing: border-box; padding: 10px 0; }
+        .checklist-card { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-sizing: border-box; }
+        .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
+        .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
+        .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 14px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(212,175,55,0.25); }
+        .slogan-footer { font-size: 0.7rem; color: #555; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px; }
 
-        /* MAIN APP */
-        #app-screen { display: none; flex-direction: column; height: 100%; width: 100%; justify-content: space-between; align-items: center; }
-        .compass-outer-wrapper { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; margin: 10px 0; }
-        .compass-container { position: relative; width: 260px; height: 260px; display: flex; justify-content: center; align-items: center; border: 3px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, #1c1c1c 0%, #0a0a0a 100%); box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 25px rgba(212,175,55,0.15); }
-        .compass-ticks { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, var(--gold) 0deg 1deg, transparent 1deg 6deg); -webkit-mask: radial-gradient(circle, transparent 91%, black 92%); mask: radial-gradient(circle, transparent 91%, black 92%); opacity: 0.4; }
-        #kaabah-marker { position: absolute; top: -24px; font-size: 2.6rem; z-index: 25; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
-        .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 800; color: var(--gold); z-index: 5; }
-        .cardinal-n { top: 26px; } .cardinal-s { bottom: 18px; } .cardinal-e { right: 20px; } .cardinal-w { left: 20px; }
+        /* MAIN APP CONTAINER - FORCED ONE SCREEN Fit */
+        #app-screen { display: none; flex-direction: column; height: 100%; width: 100%; max-width: 340px; justify-content: space-between; align-items: center; box-sizing: border-box; }
         
-        /* 3D NEEDLE */
+        /* SAIS KOMPAS DIKECILKAN */
+        .compass-outer-wrapper { position: relative; width: 230px; height: 230px; display: flex; justify-content: center; align-items: center; margin: 5px 0; }
+        .compass-container { position: relative; width: 210px; height: 210px; display: flex; justify-content: center; align-items: center; border: 3px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, #1c1c1c 0%, #0a0a0a 100%); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        #kaabah-marker { position: absolute; top: -20px; font-size: 2.2rem; z-index: 25; }
+        .compass-cardinal { position: absolute; font-size: 1rem; font-weight: 800; color: var(--gold); z-index: 5; }
+        .cardinal-n { top: 18px; } .cardinal-s { bottom: 14px; } .cardinal-e { right: 15px; } .cardinal-w { left: 15px; }
+        
+        /* NEEDLE */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; will-change: transform; }
-        #arrow { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 105px solid var(--gold); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); position: relative; transform: translateY(-45px); }
-        #arrow::after { content: ''; position: absolute; top: 0; left: -14px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 0px solid transparent; border-bottom: 105px solid rgba(0,0,0,0.18); }
+        #arrow { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 85px solid var(--gold); position: relative; transform: translateY(-35px); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        #arrow::after { content: ''; position: absolute; top: 0; left: -12px; width: 0; height: 0; border-left: 12px solid transparent; border-right: 0px solid transparent; border-bottom: 85px solid rgba(0,0,0,0.18); }
 
-        /* UI ELEMENTS */
-        #instruction-card { width: 100%; max-width: 360px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        #status-text { font-size: 1.4rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; }
-        #arrows-icon { font-size: 1.4rem; display: flex; align-items: center; }
-        .dashboard { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 8px; }
-        .panel-row { display: flex; justify-content: space-between; background: var(--card); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; align-items: center; }
-        .panel-label { font-size: 0.85rem; color: #aaa; } .panel-value { font-size: 0.95rem; font-weight: 700; color: #fff; }
+        /* BUTTON / DIRECTION TEXT BOX */
+        .direction-box { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; margin: 5px 0; text-transform: uppercase; }
+        
+        /* INFO DASHBOARD */
+        .dashboard { width: 100%; display: flex; flex-direction: column; gap: 6px; margin-bottom: 5px; }
+        .panel-row { display: flex; justify-content: space-between; background: var(--card); border: 1px solid var(--border); padding: 10px 14px; border-radius: 10px; align-items: center; font-size: 0.85rem; }
+        .panel-label { color: #aaa; font-weight: 500; } 
+        .panel-value { font-weight: 700; color: #fff; }
 
-        /* 4-GRID STATUS PANEL */
-        .engine-grid { display: grid; grid-template-columns: repeat(3, 1fr) 1.3fr; gap: 8px; width: 100%; }
-        .grid-tile { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
-        .tile-label { font-size: 0.68rem; font-weight: 700; color: #888888; }
-        .led-dot { width: 8px; height: 8px; background-color: #444444; border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
-        .accuracy-value { font-size: 0.78rem; font-weight: 800; color: #888888; }
+        /* ENGINE SYSTEM STATUS */
+        .engine-status-row { display: flex; background: var(--card); border: 1px solid var(--border); padding: 10px 14px; border-radius: 10px; align-items: center; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #888; }
+        .status-indicators { display: flex; gap: 12px; align-items: center; }
+        .status-group { display: flex; align-items: center; gap: 5px; }
+        .led-dot { width: 7px; height: 7px; background-color: #444; border-radius: 50%; transition: background-color 0.3s; }
+        .acc-text { color: #888; }
     </style>
 </head>
 <body>
@@ -93,13 +95,12 @@
 
     <div id="app-screen">
         <div class="brand-container">
-            <h1 class="brand-title" style="font-size: 1.2rem; letter-spacing: 2px;">Kaabah Finder</h1>
+            <h1 class="brand-title" style="font-size: 1rem; letter-spacing: 1px;">Kaabah Finder</h1>
         </div>
 
         <div class="compass-outer-wrapper">
             <div id="kaabah-marker">🕋</div> 
             <div class="compass-container">
-                <div class="compass-ticks"></div>
                 <div class="compass-cardinal cardinal-n">N</div>
                 <div class="compass-cardinal cardinal-e">E</div>
                 <div class="compass-cardinal cardinal-s">S</div>
@@ -111,8 +112,8 @@
             </div>
         </div>
 
-        <div id="instruction-card">
-            <div id="arrows-icon">⏳</div>
+        <div id="instruction-card" class="direction-box">
+            <span id="arrows-icon">⏳</span>
             <span id="status-text">INITIALIZING...</span>
         </div>
 
@@ -126,11 +127,13 @@
                 <div id="location-text" class="panel-value">Detecting...</div>
             </div>
             
-            <div class="engine-grid">
-                <div class="grid-tile"><div class="tile-label">GPS</div><div id="led-gps" class="led-dot"></div></div>
-                <div class="grid-tile"><div class="tile-label">SENSOR</div><div id="led-sensor" class="led-dot"></div></div>
-                <div class="grid-tile"><div class="tile-label">QIBLA</div><div id="led-qibla" class="led-dot"></div></div>
-                <div class="grid-tile"><div class="tile-label">ACCURACY</div><div id="val-accuracy" class="accuracy-value">WAIT</div></div>
+            <div class="engine-status-row">
+                <span>⚙️ ENGINE STATUS</span>
+                <div class="status-indicators">
+                    <div class="status-group"><span>GPS</span><div id="led-gps" class="led-dot"></div></div>
+                    <div class="status-group"><span>SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
+                    <div class="status-group"><span>ACC</span><span id="val-accuracy" class="acc-text">WAIT</span></div>
+                </div>
             </div>
         </div>
     </div>
@@ -142,9 +145,9 @@
         function updateLED(id, color) {
             const led = document.getElementById(id);
             if (!led) return;
-            if (color === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 8px var(--green)'; }
-            else if (color === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 8px var(--amber)'; }
-            else if (color === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 8px var(--red)'; }
+            if (color === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 6px var(--green)'; }
+            else if (color === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 6px var(--amber)'; }
+            else if (color === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 6px var(--red)'; }
         }
 
         function initApp() {
@@ -154,8 +157,7 @@
             updateLED('led-gps', 'amber');
 
             if (!navigator.geolocation) {
-                document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
-                updateLED('led-gps', 'red');
+                document.getElementById('status-text').innerText = "GPS ERROR";
                 return;
             }
 
@@ -175,16 +177,13 @@
                 
                 setupSensor();
             }, error => {
-                document.getElementById('status-text').innerText = "GPS ERROR";
-                updateLED('led-gps', 'red');
-                alert("Please enable Device Location / GPS to track the Qiblah.");
+                document.getElementById('status-text').innerText = "GPS DENIED";
+                alert("Please enable Location services.");
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
         function setupSensor() {
-            // FIX ENGINE FOR ANDROID & IOS COMPATIBILITY
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                // iOS Devices
                 DeviceOrientationEvent.requestPermission()
                     .then(permissionState => {
                         if (permissionState === 'granted') {
@@ -194,32 +193,26 @@
                             document.getElementById('val-accuracy').style.color = "var(--green)";
                         } else {
                             document.getElementById('status-text').innerText = "SENSOR DENIED";
-                            updateLED('led-sensor', 'red');
                         }
-                    })
-                    .catch(err => {
-                        console.error(err);
+                    }).catch(() => {
                         document.getElementById('status-text').innerText = "CRITICAL ERROR";
                     });
             } else {
-                // Android or Non-iOS Devices (Direct listener without strict permission block)
                 window.addEventListener('deviceorientation', handleOrientation, true);
-                // Guna timeout singkat untuk sahkan sensor hidup pada Android
                 setTimeout(() => {
                     updateLED('led-sensor', 'green');
                     document.getElementById('val-accuracy').innerText = "HIGH";
                     document.getElementById('val-accuracy').style.color = "var(--green)";
-                }, 500);
+                }, 400);
             }
         }
 
         function handleOrientation(event) {
             let heading = null;
-
             if (event.webkitCompassHeading) {
-                heading = event.webkitCompassHeading; // iOS Direct Compass
+                heading = event.webkitCompassHeading;
             } else if (event.alpha !== null) {
-                heading = (360 - event.alpha) % 360; // Android Dynamic Alternative
+                heading = (360 - event.alpha) % 360;
             }
 
             if (heading === null) return;
@@ -230,7 +223,7 @@
                 let diff = heading - smoothedHeading;
                 if (diff > 180) diff -= 360;
                 if (diff < -180) diff += 360;
-                smoothedHeading += 0.12 * diff;
+                smoothedHeading += 0.15 * diff; // Sikit lebih laju tindak balas
                 smoothedHeading = (smoothedHeading + 360) % 360;
             }
 
@@ -240,8 +233,7 @@
             let relativeAngle = arrowRotation;
             if (relativeAngle > 180) relativeAngle -= 360;
 
-            // LOCKING TRIGGER (6 Degrees Tolerance)
-            if (Math.abs(relativeAngle) < 6) {
+            if (Math.abs(relativeAngle) < 5) {
                 if (!isLocked) {
                     isLocked = true;
                     document.body.style.backgroundColor = "#073b24"; 
@@ -250,11 +242,10 @@
                     document.getElementById('arrow').style.borderBottomColor = "var(--green)";
                     document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
                     document.getElementById('arrows-icon').innerHTML = "👍";
-                    updateLED('led-qibla', 'green');
                     
                     if (navigator.vibrate) {
-                        navigator.vibrate(400);
-                        vibrateInterval = setInterval(() => navigator.vibrate(400), 600);
+                        navigator.vibrate(300);
+                        vibrateInterval = setInterval(() => navigator.vibrate(300), 700);
                     }
                 }
             } else {
@@ -264,17 +255,16 @@
                     document.getElementById('instruction-card').style.backgroundColor = "var(--card)";
                     document.getElementById('instruction-card').style.borderColor = "var(--border)";
                     document.getElementById('arrow').style.borderBottomColor = "var(--gold)";
-                    updateLED('led-qibla', '444444');
                     clearInterval(vibrateInterval);
                     if (navigator.vibrate) navigator.vibrate(0);
                 }
 
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
                 if (relativeAngle > 0) {
-                    document.getElementById('status-text').innerText = `Turn Right ${roundedAngle}°`;
+                    document.getElementById('status-text').innerText = `Pusing Kanan ${roundedAngle}°`;
                     document.getElementById('arrows-icon').innerHTML = "➡️";
                 } else {
-                    document.getElementById('status-text').innerText = `Turn Left ${roundedAngle}°`;
+                    document.getElementById('status-text').innerText = `Pusing Kiri ${roundedAngle}°`;
                     document.getElementById('arrows-icon').innerHTML = "⬅️";
                 }
             }
@@ -285,9 +275,7 @@
             let phi2 = KAABAH_LAT * Math.PI / 180;
             let lam1 = lng * Math.PI / 180;
             let lam2 = KAABAH_LNG * Math.PI / 180;
-            let num = Math.sin(lam2 - lam1);
-            let denom = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1);
-            return (Math.atan2(num, denom) * 180 / Math.PI + 360) % 360;
+            return (Math.atan2(Math.sin(lam2 - lam1), Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1)) * 180 / Math.PI + 360) % 360;
         }
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -302,10 +290,9 @@
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`)
                 .then(r => r.json())
                 .then(d => {
-                    let name = d.address ? (d.address.suburb || d.address.town || d.address.city) : `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
-                    document.getElementById('location-text').innerText = name || "Location Secured";
-                })
-                .catch(() => document.getElementById('location-text').innerText = "Location Secured");
+                    let name = d.address ? (d.address.suburb || d.address.town || d.address.city) : "Batu Caves";
+                    document.getElementById('location-text').innerText = name;
+                }).catch(() => document.getElementById('location-text').innerText = "Batu Caves");
         }
     </script>
 </body>
