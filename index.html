@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Perfect Fit v5.0</title>
+    <title>Kaabah Finder - Hybrid Premium v5.5</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -25,7 +25,7 @@
             transition: background-color 0.4s ease;
         }
 
-        /* ONE-SIZE-FIT-ALL CONTAINER (RAPAT & MAMPAT) */
+        /* ONE-SIZE-FIT-ALL WRAPPER (RAPAT & MAMPAT) */
         .main-wrapper {
             width: 100%; max-width: 342px;
             display: flex; flex-direction: column;
@@ -40,7 +40,7 @@
         }
         #app-screen { display: none; gap: 10px; }
 
-        /* BRANDING (RAPATKAN SEPERTI 1000041740.jpg) */
+        /* BRANDING (START SCREEN) */
         .brand-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; }
         .brand-logo { font-size: 2.8rem; margin-bottom: 4px; }
         .brand-title-main { font-size: 1.4rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
@@ -56,26 +56,50 @@
         .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 14px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
         .slogan-footer { font-size: 0.7rem; color: #444; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
 
-        /* COMPASS SYSTEM (EXACT CLONE 1000041738.jpg) */
+        /* HYBRID COMPASS CONTAINER (DARI KOD BARU ANDA) */
         .compass-outer-wrapper { position: relative; width: 220px; height: 220px; display: flex; justify-content: center; align-items: center; margin: 2px 0; }
-        .compass-container { position: relative; width: 210px; height: 210px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--gold); border-radius: 50%; background: #000000; }
-        .compass-ticks { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, #ffffff 0deg 0.6deg, transparent 0.6deg 5deg); -webkit-mask: radial-gradient(circle, transparent 89%, black 90%); mask: radial-gradient(circle, transparent 89%, black 90%); opacity: 0.45; }
+        .compass-container { 
+            position: relative; width: 210px; height: 210px; 
+            display: flex; justify-content: center; align-items: center; 
+            border: 2px solid rgba(212, 175, 55, 0.4); border-radius: 50%; 
+            background-color: #000000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
         
-        /* CARDINAL TEXTS */
-        .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 700; color: var(--gold); z-index: 5; }
-        .cardinal-n { top: 12px; } .cardinal-s { bottom: 10px; } .cardinal-e { right: 14px; } .cardinal-w { left: 14px; }
-        
-        /* KAABAH EXACT LOCATION UNDER N */
-        #kaabah-static { position: absolute; top: 38px; font-size: 1.25rem; z-index: 6; }
+        /* DYNAMIC TICKS STYLE */
+        .ticks-container { position: absolute; width: 100%; height: 100%; border-radius: 50%; }
+        .tick {
+            position: absolute; width: 1.5px; height: 5px;
+            background-color: rgba(212, 175, 55, 0.4);
+            left: 50%; transform-origin: bottom center; bottom: 50%;
+        }
+        .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.8); }
 
-        /* EXACT TRADITIONAL ARROWHEAD NEEDLE (1000041738.jpg) */
+        /* CARDINAL TEXTS (MINIMALIST) */
+        .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 700; color: var(--gold); z-index: 5; }
+        .cardinal-n { top: 10px; } 
+        .cardinal-e { right: 14px; color: rgba(212, 175, 55, 0.5); font-weight: 400; font-size: 0.95rem; } 
+        .cardinal-s { bottom: 10px; color: rgba(212, 175, 55, 0.5); font-weight: 400; font-size: 0.95rem; } 
+        .cardinal-w { left: 14px; color: rgba(212, 175, 55, 0.5); font-weight: 400; font-size: 0.95rem; }
+        
+        /* STATIC KAABAH IN COMPASS */
+        #kaabah-static { position: absolute; top: 32px; font-size: 1.25rem; z-index: 6; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+
+        /* MINIMALIST PREMIUM NEEDLE SYSTEM */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; will-change: transform; }
-        .arrowhead {
-            width: 32px; height: 100px;
-            background: linear-gradient(90deg, var(--gold) 50%, #b3922e 50%);
-            clip-path: polygon(50% 0%, 100% 45%, 65% 40%, 65% 100%, 35% 100%, 35% 40%, 0% 45%);
-            transform: translateY(-22px);
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+        .pointer-axis {
+            position: relative; width: 14px; height: 14px;
+            background-color: #D4AF37; border-radius: 50%; z-index: 10;
+        }
+        /* Jarum Tradisional Anak Panah Emas */
+        .pointer-axis::before {
+            content: ''; position: absolute; bottom: 7px; left: 50%; transform: translateX(-50%);
+            border-left: 6px solid transparent; border-right: 6px solid transparent;
+            border-bottom: 72px solid #FFD700;
+            transition: border-bottom-color 0.3s ease;
+        }
+        /* Penukaran Warna Hijau Automatik Bila Aligned */
+        .pointer-axis.aligned::before {
+            border-bottom-color: var(--green);
         }
 
         /* DIRECTION BANNER */
@@ -127,9 +151,12 @@
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
             </div>
 
+            <!-- KOMPAS HYBRID BERSTRUKTUR TEPAT -->
             <div class="compass-outer-wrapper">
                 <div class="compass-container">
-                    <div class="compass-ticks"></div>
+                    <!-- Ticks halus dijana di sini secara automatik melalui JS -->
+                    <div class="ticks-container" id="ticks"></div>
+                    
                     <div class="compass-cardinal cardinal-n">N</div>
                     <div class="compass-cardinal cardinal-e">E</div>
                     <div class="compass-cardinal cardinal-s">S</div>
@@ -137,9 +164,9 @@
                     
                     <div id="kaabah-static">🕋</div>
                     
-                    <!-- NEW SHARP TRADITIONAL ARROWHEAD NEEDLE -->
+                    <!-- UTAMA: JARUM ANAK PANAH DAN PORSI PAKSI DARI KOD BARU -->
                     <div class="needle-wrapper" id="needle-plate">
-                        <div class="arrowhead"></div>
+                        <div class="pointer-axis" id="compassPointer"></div>
                     </div>
                 </div>
             </div>
@@ -178,6 +205,20 @@
     <script>
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
         let userLat, userLng, qiblaBearing = 0, smoothedHeading = null, isLocked = false, vibrateInterval;
+
+        // GENERASI TICK HALUS DINAMIK (DIAMBIL DARI KOD MINIMALIST ANDA)
+        const ticksContainer = document.getElementById('ticks');
+        for (let i = 0; i < 360; i += 5) {
+            const tick = document.createElement('div');
+            if (i % 30 === 0) {
+                tick.className = 'tick major';
+                tick.style.transform = `translateX(-50%) rotate(${i}deg) translateY(-94px)`;
+            } else {
+                tick.className = 'tick';
+                tick.style.transform = `translateX(-50%) rotate(${i}deg) translateY(-99px)`;
+            }
+            ticksContainer.appendChild(tick);
+        }
 
         function updateLED(id, color) {
             const led = document.getElementById(id);
@@ -268,13 +309,18 @@
             let relativeAngle = arrowRotation;
             if (relativeAngle > 180) relativeAngle -= 360;
 
+            const pointerAxis = document.getElementById('compassPointer');
+
             if (Math.abs(relativeAngle) < 5) {
                 if (!isLocked) {
                     isLocked = true;
                     document.body.style.backgroundColor = "#073b24"; 
                     document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
-                    document.querySelector('.arrowhead').style.background = "linear-gradient(90deg, var(--green) 50%, #1e7e43 50%)";
+                    
+                    // Aktifkan class warna hijau daripada kod baru anda
+                    pointerAxis.classList.add('aligned');
+                    
                     document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
                     document.getElementById('arrows-icon').innerHTML = "👍";
                     updateLED('led-qibla', 'green');
@@ -290,7 +336,10 @@
                     document.body.style.backgroundColor = "var(--bg)"; 
                     document.getElementById('instruction-card').style.backgroundColor = "#141414";
                     document.getElementById('instruction-card').style.borderColor = "var(--border)";
-                    document.querySelector('.arrowhead').style.background = "linear-gradient(90deg, var(--gold) 50%, #b3922e 50%)";
+                    
+                    // Buang warna hijau kembali kepada emas asal
+                    pointerAxis.classList.remove('aligned');
+                    
                     updateLED('led-qibla', '#222222');
                     clearInterval(vibrateInterval);
                     if (navigator.vibrate) navigator.vibrate(0);
