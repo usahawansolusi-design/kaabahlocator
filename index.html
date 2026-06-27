@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Real Diagnostics v5.6</title>
+    <title>Kaabah Finder - Premium v5.7</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -22,7 +22,7 @@
             background-color: var(--bg); color: #ffffff; text-align: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             height: 100vh; height: -webkit-fill-available;
-            box-sizing: border-box; padding: 12px; overflow: hidden;
+            box-sizing: border-box; padding: 16px; overflow: hidden;
             transition: background-color 0.4s ease;
         }
 
@@ -30,29 +30,51 @@
             width: 100%; max-width: 342px;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            gap: 10px; height: 100%; max-height: 100%;
+            height: 100%; max-height: 100%;
         }
 
-        #start-screen, #app-screen { 
-            display: flex; flex-direction: column; width: 100%; 
-            justify-content: center; align-items: center; gap: 14px; 
+        /* PERBAIKAN HALAMAN MULA - DUDUK CENTER SKRIN */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            height: 100%;
         }
-        #app-screen { display: none; gap: 10px; }
 
-        .brand-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; }
-        .brand-logo { font-size: 2.8rem; margin-bottom: 4px; }
-        .brand-title-main { font-size: 1.4rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
-        .brand-tagline { color: #888; font-size: 0.65rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 4px; }
+        #app-screen { 
+            display: none; 
+            flex-direction: column; 
+            width: 100%; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 12px; 
+        }
 
-        .app-header { font-size: 1.25rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+        .brand-container { display: flex; flex-direction: column; align-items: center; }
+        .brand-logo { font-size: 3.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+        .brand-title-main { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
+        .brand-tagline { color: #888; font-size: 0.7rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 6px; }
 
-        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; }
-        .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
+        .app-header { font-size: 1.25rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+
+        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; box-sizing: border-box; }
+        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 12px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
-        .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 14px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
-        .slogan-footer { font-size: 0.7rem; color: #444; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+        
+        .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; box-shadow: 0 5px 15px rgba(212,175,55,0.3); }
+        
+        /* SLOGAN BAWAH - LEBIH JELAS & ADA JARAK */
+        .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 24px; font-weight: 600; }
 
-        .compass-outer-wrapper { position: relative; width: 220px; height: 220px; display: flex; justify-content: center; align-items: center; margin: 2px 0; }
+        /* KAWASAN KOMPAS & IKON KAABAH DI LUAR */
+        .compass-outer-wrapper { position: relative; width: 240px; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
+        
+        /* IKON KAABAH DI LUAR GELUNG (DI ATAS HURUF N) */
+        #kaabah-outer { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.4rem; z-index: 15; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+
         .compass-container { 
             position: relative; width: 210px; height: 210px; 
             display: flex; justify-content: center; align-items: center; 
@@ -70,39 +92,42 @@
 
         .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 700; color: var(--gold); z-index: 5; }
         .cardinal-n { top: 10px; } 
-        .cardinal-e { right: 14px; color: rgba(212, 175, 55, 0.4); font-weight: 400; font-size: 0.95rem; } 
-        .cardinal-s { bottom: 10px; color: rgba(212, 175, 55, 0.4); font-weight: 400; font-size: 0.95rem; } 
-        .cardinal-w { left: 14px; color: rgba(212, 175, 55, 0.4); font-weight: 400; font-size: 0.95rem; }
+        .cardinal-e { right: 14px; color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; } 
+        .cardinal-s { bottom: 10px; color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; } 
+        .cardinal-w { left: 14px; color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; }
+
+        /* BUBBLE LEVEL (TIMBANG AIR) GRAPHIC */
+        .bubble-level-ring { position: absolute; width: 36px; height: 36px; border: 1px dashed rgba(46, 204, 113, 0.4); border-radius: 50%; z-index: 8; pointer-events: none; }
+        .bubble-dot { position: absolute; width: 10px; height: 10px; background-color: rgba(231, 76, 60, 0.7); border-radius: 50%; z-index: 9; pointer-events: none; transition: transform 0.1s ease-out, background-color 0.2s; transform: translate(0px, 0px); }
+        .bubble-dot.centered { background-color: var(--green); box-shadow: 0 0 8px var(--green); }
+
+        /* PEMBETULAN JARUM TAJAM ASLI & PAKSI PUSAT MUKTAMAD */
+        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
+        .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
         
-        #kaabah-static { position: absolute; top: 32px; font-size: 1.25rem; z-index: 6; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
-
-        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; will-change: transform; }
-        .pointer-axis {
-            position: relative; width: 14px; height: 14px;
-            background-color: #D4AF37; border-radius: 50%; z-index: 10;
-        }
+        /* Bentuk anak panah segi tiga tirus dikunci mati di titik tengah (0,0) */
         .pointer-axis::before {
-            content: ''; position: absolute; bottom: 7px; left: 50%; transform: translateX(-50%);
+            content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
             border-left: 6px solid transparent; border-right: 6px solid transparent;
-            border-bottom: 72px solid #FFD700;
-            transition: border-bottom-color 0.3s ease;
+            border-bottom: 76px solid #FFD700;
         }
-        .pointer-axis.aligned::before {
-            border-bottom-color: var(--green);
-        }
+        .pointer-axis.aligned::before { border-bottom-color: var(--green); }
 
-        .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; }
-        .direction-icon { font-size: 1.3rem; display: flex; align-items: center; }
+        .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; letter-spacing: 0.5px; }
+        .direction-icon { font-size: 1.4rem; display: flex; align-items: center; }
 
-        .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 10px; }
-        .info-group { display: flex; flex-direction: column; gap: 2px; }
-        .info-label { font-size: 0.82rem; color: #777777; font-weight: 500; }
-        .info-value-row { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; color: #ffffff; }
-        .info-icon { font-size: 1rem; display: flex; align-items: center; }
+        /* KAD MAKLUMAT BARU - GAYA ROW HORIZONTAL (IKUT GAMBAR USER) */
+        .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.95rem; }
+        .info-left { display: flex; align-items: center; gap: 8px; color: #aaaaaa; font-weight: 500; }
+        .info-left .icon-glob { color: #3498db; font-size: 1.1rem; }
+        .info-left .icon-pin { color: #e74c3c; font-size: 1.1rem; }
+        .info-right-val { font-weight: 700; color: #ffffff; }
+        .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
 
         /* 4-GRID STATUS BOXES */
         .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
-        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 8px; padding: 8px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
+        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 10px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
         .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
         .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
         .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
@@ -137,6 +162,8 @@
             </div>
 
             <div class="compass-outer-wrapper">
+                <div id="kaabah-outer">🕋</div>
+                
                 <div class="compass-container">
                     <div class="ticks-container" id="ticks"></div>
                     
@@ -145,7 +172,8 @@
                     <div class="compass-cardinal cardinal-s">S</div>
                     <div class="compass-cardinal cardinal-w">W</div>
                     
-                    <div id="kaabah-static">🕋</div>
+                    <div class="bubble-level-ring"></div>
+                    <div id="bubble-node" class="bubble-dot"></div>
                     
                     <div class="needle-wrapper" id="needle-plate">
                         <div class="pointer-axis" id="compassPointer"></div>
@@ -159,19 +187,19 @@
             </div>
 
             <div class="united-card">
-                <div class="info-group">
-                    <span class="info-label">Location</span>
-                    <div class="info-value-row">
-                        <span class="info-icon">📍</span>
-                        <span id="location-text">Detecting...</span>
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-glob">🌐</span>
+                        <span>Distance to Kaabah</span>
                     </div>
+                    <div id="distance-text" class="info-right-val gold-text">Calculating...</div>
                 </div>
-                <div class="info-group">
-                    <span class="info-label">Distance to Kaabah</span>
-                    <div class="info-value-row">
-                        <span class="info-icon" style="color: var(--gold);">📏</span>
-                        <span id="distance-text" style="color: var(--gold);">Calculating...</span>
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-pin">📍</span>
+                        <span>Current Location</span>
                     </div>
+                    <div id="location-text" class="info-right-val">Detecting...</div>
                 </div>
             </div>
 
@@ -186,7 +214,9 @@
 
     <script>
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
-        let userLat, userLng, qiblaBearing = 0, smoothedHeading = null, isLocked = false, vibrateInterval;
+        let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
+        let isLocked = false, vibrateInterval;
+        let gpsReady = false, sensorReady = false;
 
         // GENERASI TICK COMPASS
         const ticksContainer = document.getElementById('ticks');
@@ -202,34 +232,20 @@
             ticksContainer.appendChild(tick);
         }
 
-        // FUNGSI UTAMA PENUKARAN STATUS LED SEBENAR
         function updateLED(id, state) {
             const led = document.getElementById(id);
             if (!led) return;
-            if (state === 'green') { 
-                led.style.backgroundColor = 'var(--green)'; 
-                led.style.boxShadow = '0 0 8px var(--green)'; 
-            } else if (state === 'amber') { 
-                led.style.backgroundColor = 'var(--amber)'; 
-                led.style.boxShadow = '0 0 8px var(--amber)'; 
-            } else if (state === 'red') { 
-                led.style.backgroundColor = 'var(--red)'; 
-                led.style.boxShadow = '0 0 8px var(--red)'; 
-            } else { 
-                led.style.backgroundColor = 'var(--dim-gray)'; 
-                led.style.boxShadow = 'none'; 
-            }
+            if (state === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 8px var(--green)'; }
+            else if (state === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 8px var(--amber)'; }
+            else if (state === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 8px var(--red)'; }
+            else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
         function initApp() {
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
             document.getElementById('status-text').innerText = "CONNECTING GPS...";
-            
-            // GPS Mula mengesan (Amber)
             updateLED('led-gps', 'amber');
-            updateLED('led-sensor', 'off');
-            updateLED('led-qibla', 'off');
 
             if (!navigator.geolocation) {
                 document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
@@ -244,14 +260,21 @@
                 qiblaBearing = calculateQibla(userLat, userLng);
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
                 
-                document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} km`;
-                document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+                document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
                 
-                // GPS Berjaya dikunci (Hijau Sebenar)
+                // REVERSE GEOCODING UNTUK DAPAT NAMA TEMPAT SEBENAR
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
+                    .then(res => res.json())
+                    .then(data => {
+                        let placeName = data.address.suburb || data.address.town || data.address.city || "Unknown Location";
+                        document.getElementById('location-text').innerText = placeName;
+                    })
+                    .catch(() => {
+                        document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+                    });
+                
+                gpsReady = true;
                 updateLED('led-gps', 'green');
-                document.getElementById('status-text').innerText = "LINKING SENSOR...";
-                updateLED('led-sensor', 'amber');
-                
                 setupSensor();
             }, error => {
                 document.getElementById('status-text').innerText = "GPS SIGNAL ERROR";
@@ -266,18 +289,13 @@
                         .then(permissionState => {
                             if (permissionState === 'granted') {
                                 window.addEventListener('deviceorientation', handleOrientation, true);
-                                updateLED('led-sensor', 'green');
                             } else {
                                 document.getElementById('status-text').innerText = "SENSOR DENIED";
                                 updateLED('led-sensor', 'red');
                             }
-                        }).catch(() => { 
-                            document.getElementById('status-text').innerText = "PERMISSION ERROR"; 
-                            updateLED('led-sensor', 'red');
-                        });
+                        }).catch(() => { updateLED('led-sensor', 'red'); });
                 } else {
                     window.addEventListener('deviceorientation', handleOrientation, true);
-                    updateLED('led-sensor', 'green');
                 }
             } else {
                 document.getElementById('status-text').innerText = "NO SENSOR HARDWARE";
@@ -287,23 +305,58 @@
 
         function handleOrientation(event) {
             let heading = null;
+            let beta = event.beta || 0;   // Kecondongan Depan/Belakang
+            let gamma = event.gamma || 0; // Kecondongan Kiri/Kanan (Bot)
 
-            // Bacaan Ketepatan Sensor (Accuracy Tile) secara dinamik
+            // 1. PENGIRAAN URUSAN TIMBANG AIR (BUBBLE LEVEL)
+            const bubbleNode = document.getElementById('bubble-node');
+            let moveX = Math.max(-25, Math.min(25, gamma * 0.8));
+            let moveY = Math.max(-25, Math.min(25, beta * 0.8));
+            bubbleNode.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+            // Tetapkan Toleransi Flat Rata (Maksimum ralat 6 darjah)
+            let isFlat = Math.abs(beta) < 6 && Math.abs(gamma) < 6;
+            let isTegak = Math.abs(beta) > 65;
+
+            // 2. LOGIK INTERLOCK STATUS SENSOR (MERAH / KUNING / HIJAU)
+            if (isTegak) {
+                sensorReady = false;
+                updateLED('led-sensor', 'red');
+                document.getElementById('status-text').innerText = "⚠️ PHONE VERTICAL";
+                bubbleNode.classList.remove('centered');
+            } else if (!isFlat) {
+                sensorReady = false;
+                updateLED('led-sensor', 'amber');
+                document.getElementById('status-text').innerText = "⚠️ TILTED / UNSTEADY";
+                bubbleNode.classList.remove('centered');
+            } else {
+                sensorReady = true;
+                updateLED('led-sensor', 'green');
+                bubbleNode.classList.add('centered');
+            }
+
+            // KAWALAN PAPARAN ACCURACY SYSTEM
             const accText = document.getElementById('val-accuracy');
             if (event.webkitCompassAccuracy) {
                 let accuracy = event.webkitCompassAccuracy;
-                if (accuracy > 0 && accuracy <= 15) {
-                    accText.innerText = "HIGH"; accText.style.color = "var(--green)";
-                } else if (accuracy > 15 && accuracy <= 30) {
-                    accText.innerText = "MED"; accText.style.color = "var(--amber)";
-                } else {
-                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
-                }
+                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
+                else if (accuracy > 15 && accuracy <= 30) { accText.innerText = "MED"; accText.style.color = "var(--amber)"; }
+                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
             } else {
-                // Alternatif fallback jika OS tak hantar data darjah ralat
                 accText.innerText = event.absolute ? "HIGH" : "MED";
                 accText.style.color = event.absolute ? "var(--green)" : "var(--amber)";
             }
+
+            // 3. GATEKEEPER INTERLOCK - BUKA JIKA GPS + SENSOR KEDUA-DUANYA OK
+            const needlePlate = document.getElementById('needle-plate');
+            if (!gpsReady || !sensorReady) {
+                needlePlate.style.opacity = "0.15"; // Malapkan kompas
+                resetQiblaLock();
+                return; 
+            }
+
+            // Jika lulus interlock, hidupkan visual jarum kompas sepenuhnya
+            needlePlate.style.opacity = "1";
 
             if (event.webkitCompassHeading) {
                 heading = event.webkitCompassHeading;
@@ -319,31 +372,28 @@
                 let diff = heading - smoothedHeading;
                 if (diff > 180) diff -= 360;
                 if (diff < -180) diff += 360;
-                smoothedHeading += 0.15 * diff;
+                smoothedHeading += 0.20 * diff;
                 smoothedHeading = (smoothedHeading + 360) % 360;
             }
 
             let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
-            document.getElementById('needle-plate').style.transform = `rotate(${arrowRotation}deg)`;
+            needlePlate.style.transform = `rotate(${arrowRotation}deg)`;
 
             let relativeAngle = arrowRotation;
             if (relativeAngle > 180) relativeAngle -= 360;
 
             const pointerAxis = document.getElementById('compassPointer');
 
-            // KAWALAN REAL-TIME UNTUK LED QIBLA
+            // 4. LOGIK QIBLA LOCKING
             if (Math.abs(relativeAngle) < 5) {
                 if (!isLocked) {
                     isLocked = true;
                     document.body.style.backgroundColor = "#073b24"; 
                     document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
-                    
                     pointerAxis.classList.add('aligned');
                     document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
                     document.getElementById('arrows-icon').innerHTML = "👍";
-                    
-                    // Nyalakan LED Qibla hanya bila betul-betul tepat!
                     updateLED('led-qibla', 'green');
                     
                     if (navigator.vibrate) {
@@ -352,29 +402,28 @@
                     }
                 }
             } else {
-                if (isLocked) {
-                    isLocked = false;
-                    document.body.style.backgroundColor = "var(--bg)"; 
-                    document.getElementById('instruction-card').style.backgroundColor = "#141414";
-                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
-                    
-                    pointerAxis.classList.remove('aligned');
-                    
-                    // Padamkan balik LED Qibla bila tersasar jauh
-                    updateLED('led-qibla', 'off');
-                    
-                    clearInterval(vibrateInterval);
-                    if (navigator.vibrate) navigator.vibrate(0);
-                }
-
+                resetQiblaLock();
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
                 if (relativeAngle > 0) {
-                    document.getElementById('status-text').innerText = `Turn Right ${roundedAngle}°`;
+                    document.getElementById('status-text').innerText = `PUSING KANAN ${roundedAngle}°`;
                     document.getElementById('arrows-icon').innerHTML = "↪️";
                 } else {
-                    document.getElementById('status-text').innerText = `Turn Left ${roundedAngle}°`;
+                    document.getElementById('status-text').innerText = `PUSING KIRI ${roundedAngle}°`;
                     document.getElementById('arrows-icon').innerHTML = "↩️";
                 }
+            }
+        }
+
+        function resetQiblaLock() {
+            if (isLocked) {
+                isLocked = false;
+                document.body.style.backgroundColor = "var(--bg)"; 
+                document.getElementById('instruction-card').style.backgroundColor = "#141414";
+                document.getElementById('instruction-card').style.borderColor = "var(--border)";
+                document.getElementById('compassPointer').classList.remove('aligned');
+                updateLED('led-qibla', 'off');
+                clearInterval(vibrateInterval);
+                if (navigator.vibrate) navigator.vibrate(0);
             }
         }
 
