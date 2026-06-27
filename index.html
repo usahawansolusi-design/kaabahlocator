@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kaabah Finder - 100% Exact Clone v4.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kaabah Finder - Perfect Fit v5.0</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -20,156 +20,157 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg); color: #ffffff; text-align: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            height: 100vh; box-sizing: border-box; padding: 16px; overflow: hidden;
+            height: 100vh; height: -webkit-fill-available;
+            box-sizing: border-box; padding: 12px; overflow: hidden;
             transition: background-color 0.4s ease;
         }
 
+        /* ONE-SIZE-FIT-ALL CONTAINER (RAPAT & MAMPAT) */
+        .main-wrapper {
+            width: 100%; max-width: 342px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            gap: 10px; height: 100%; max-height: 100%;
+        }
+
         /* SCREEN MANAGEMENT */
-        #start-screen { display: flex; flex-direction: column; height: 100%; width: 100%; max-width: 360px; justify-content: space-between; align-items: center; box-sizing: border-box; padding: 20px 0; }
-        #app-screen { display: none; flex-direction: column; height: 100%; width: 100%; max-width: 360px; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        #start-screen, #app-screen { 
+            display: flex; flex-direction: column; width: 100%; 
+            justify-content: center; align-items: center; gap: 14px; 
+        }
+        #app-screen { display: none; gap: 10px; }
 
-        /* BRANDING (EXACT CLONE) */
-        .brand-container { margin: 10px 0; display: flex; flex-direction: column; align-items: center; }
-        .brand-logo { font-size: 3rem; margin-bottom: 8px; }
-        .brand-title-main { font-size: 1.5rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
-        .brand-tagline { color: #888; font-size: 0.7rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 6px; }
+        /* BRANDING (RAPATKAN SEPERTI 1000041740.jpg) */
+        .brand-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; }
+        .brand-logo { font-size: 2.8rem; margin-bottom: 4px; }
+        .brand-title-main { font-size: 1.4rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
+        .brand-tagline { color: #888; font-size: 0.65rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 4px; }
 
-        /* HEADER APP SCREEN (🕋 KAABAH FINDER 🕋) */
-        .app-header { font-size: 1.35rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+        /* HEADER APP SCREEN */
+        .app-header { font-size: 1.25rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
 
         /* START SCREEN CHECKLIST & BUTTON */
-        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-sizing: border-box; }
-        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; color: #e0e0e0; margin: 14px 0; text-align: left; }
+        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; }
+        .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
-        .btn-action { width: 100%; font-size: 1.1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 8px 20px rgba(212,175,55,0.25); }
-        .slogan-footer { font-size: 0.75rem; color: #555; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 10px; }
+        .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 14px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
+        .slogan-footer { font-size: 0.7rem; color: #444; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
 
-        /* COMPASS SYSTEM (EXACT RING & TICKS) */
-        .compass-outer-wrapper { position: relative; width: 250px; height: 250px; display: flex; justify-content: center; align-items: center; margin: 10px 0; }
-        .compass-container { position: relative; width: 240px; height: 240px; display: flex; justify-content: center; align-items: center; border: 2.5px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, #161616 0%, #080808 100%); }
-        .compass-ticks { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, #ffffff 0deg 0.5deg, transparent 0.5deg 4.5deg); -webkit-mask: radial-gradient(circle, transparent 92%, black 93%); mask: radial-gradient(circle, transparent 92%, black 93%); opacity: 0.35; }
+        /* COMPASS SYSTEM (EXACT CLONE 1000041738.jpg) */
+        .compass-outer-wrapper { position: relative; width: 220px; height: 220px; display: flex; justify-content: center; align-items: center; margin: 2px 0; }
+        .compass-container { position: relative; width: 210px; height: 210px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--gold); border-radius: 50%; background: #000000; }
+        .compass-ticks { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, #ffffff 0deg 0.6deg, transparent 0.6deg 5deg); -webkit-mask: radial-gradient(circle, transparent 89%, black 90%); mask: radial-gradient(circle, transparent 89%, black 90%); opacity: 0.45; }
         
         /* CARDINAL TEXTS */
-        .compass-cardinal { position: absolute; font-size: 1.2rem; font-weight: 700; color: var(--gold); z-index: 5; }
-        .cardinal-n { top: 16px; } .cardinal-s { bottom: 12px; } .cardinal-e { right: 16px; } .cardinal-w { left: 16px; }
+        .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 700; color: var(--gold); z-index: 5; }
+        .cardinal-n { top: 12px; } .cardinal-s { bottom: 10px; } .cardinal-e { right: 14px; } .cardinal-w { left: 14px; }
         
-        /* STATIC KAABAH UNDER N */
-        #kaabah-static { position: absolute; top: 40px; font-size: 1.3rem; z-index: 6; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        /* KAABAH EXACT LOCATION UNDER N */
+        #kaabah-static { position: absolute; top: 38px; font-size: 1.25rem; z-index: 6; }
 
-        /* SHARP PREMIUM NEEDLE (TIRUS TAJAM) */
+        /* EXACT TRADITIONAL ARROWHEAD NEEDLE (1000041738.jpg) */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; will-change: transform; }
-        #arrow { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 95px solid var(--gold); position: relative; transform: translateY(-40px); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); }
-        #arrow::after { content: ''; position: absolute; top: 0; left: -14px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 0px solid transparent; border-bottom: 95px solid rgba(0,0,0,0.22); }
+        .arrowhead {
+            width: 32px; height: 100px;
+            background: linear-gradient(90deg, var(--gold) 50%, #b3922e 50%);
+            clip-path: polygon(50% 0%, 100% 45%, 65% 40%, 65% 100%, 35% 100%, 35% 40%, 0% 45%);
+            transform: translateY(-22px);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+        }
 
-        /* DIRECTION BANNER (➡️ Turn Right 12°) */
-        .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px; font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 12px; box-sizing: border-box; margin: 5px 0; }
-        .direction-icon { font-size: 1.4rem; display: flex; align-items: center; }
+        /* DIRECTION BANNER */
+        .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; }
+        .direction-icon { font-size: 1.3rem; display: flex; align-items: center; }
 
-        /* UNITED INFO CONTAINER (KOTAK BERSATU) */
-        .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 12px; margin: 5px 0; }
-        .info-group { display: flex; flex-direction: column; gap: 4px; }
-        .info-label { font-size: 0.9rem; color: #888888; font-weight: 500; }
-        .info-value-row { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; font-weight: 700; color: #ffffff; }
-        .info-icon { font-size: 1.1rem; display: flex; align-items: center; }
+        /* UNITED INFO CONTAINER */
+        .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+        .info-group { display: flex; flex-direction: column; gap: 2px; }
+        .info-label { font-size: 0.82rem; color: #777777; font-weight: 500; }
+        .info-value-row { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; color: #ffffff; }
+        .info-icon { font-size: 1rem; display: flex; align-items: center; }
 
-        /* 4-GRID SEPARATE STATUS BOXES (4 KOTAK BERASINGAN KAT BAWAH) */
-        .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; margin-bottom: 5px; }
-        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box; }
-        .tile-label { font-size: 0.7rem; font-weight: 800; color: #888888; letter-spacing: 0.5px; }
-        .led-dot { width: 8px; height: 8px; background-color: #333333; border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
-        .accuracy-text { font-size: 0.8rem; font-weight: 800; color: #555555; }
+        /* 4-GRID STATUS BOXES */
+        .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 8px; padding: 8px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
+        .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
+        .led-dot { width: 7px; height: 7px; background-color: #222222; border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
+        .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #444444; }
     </style>
 </head>
 <body>
 
-    <!-- SKRIN MULA -->
-    <div id="start-screen">
-        <div class="brand-container">
-            <div class="brand-logo">🕋</div>
-            <h1 class="brand-title-main">Kaabah Finder</h1>
-            <div class="brand-tagline">Verified Qiblah Navigation System</div>
+    <div class="main-wrapper">
+        <!-- SKRIN MULA -->
+        <div id="start-screen">
+            <div class="brand-container">
+                <div class="brand-logo">🕋</div>
+                <h1 class="brand-title-main">Kaabah Finder</h1>
+                <div class="brand-tagline">Verified Qiblah Navigation System</div>
+            </div>
+
+            <div class="checklist-card">
+                <div class="checklist-item">Place phone on flat surface</div>
+                <div class="checklist-item">Keep away from metal objects</div>
+                <div class="checklist-item">Enable GPS location</div>
+                <div class="checklist-item">Hold device steady</div>
+            </div>
+
+            <div style="width: 100%;">
+                <button class="btn-action" onclick="initApp()">Start Finder</button>
+                <div class="slogan-footer">Find. Align. Verify. Pray.</div>
+            </div>
         </div>
 
-        <div class="checklist-card">
-            <div class="checklist-item">Place phone on flat surface</div>
-            <div class="checklist-item">Keep away from metal objects</div>
-            <div class="checklist-item">Enable GPS location</div>
-            <div class="checklist-item">Hold device steady</div>
-        </div>
+        <!-- SKRIN UTAMA -->
+        <div id="app-screen">
+            <div class="app-header">
+                <span>🕋</span> KAABAH FINDER <span>🕋</span>
+            </div>
 
-        <div style="width: 100%;">
-            <button class="btn-action" onclick="initApp()">Start Finder</button>
-            <div class="slogan-footer">Find. Align. Verify. Pray.</div>
-        </div>
-    </div>
-
-    <!-- SKRIN UTAMA (100% MATCHED TO 1000041402.jpg) -->
-    <div id="app-screen">
-        <!-- TAJUK DIAPIT EMOJI -->
-        <div class="app-header">
-            <span>🕋</span> KAABAH FINDER <span>🕋</span>
-        </div>
-
-        <!-- KOMPAS BERSENGAT DENGAN KAABAH DI BAWAH N -->
-        <div class="compass-outer-wrapper">
-            <div class="compass-container">
-                <div class="compass-ticks"></div>
-                <div class="compass-cardinal cardinal-n">N</div>
-                <div class="compass-cardinal cardinal-e">E</div>
-                <div class="compass-cardinal cardinal-s">S</div>
-                <div class="compass-cardinal cardinal-w">W</div>
-                
-                <!-- KAABAH DUDUK STATIK BAWAH HURUF N -->
-                <div id="kaabah-static">🕋</div>
-                
-                <!-- JARUM EMAS TIRUS PREMIUM -->
-                <div class="needle-wrapper" id="needle-plate">
-                    <div id="arrow"></div>
+            <div class="compass-outer-wrapper">
+                <div class="compass-container">
+                    <div class="compass-ticks"></div>
+                    <div class="compass-cardinal cardinal-n">N</div>
+                    <div class="compass-cardinal cardinal-e">E</div>
+                    <div class="compass-cardinal cardinal-s">S</div>
+                    <div class="compass-cardinal cardinal-w">W</div>
+                    
+                    <div id="kaabah-static">🕋</div>
+                    
+                    <!-- NEW SHARP TRADITIONAL ARROWHEAD NEEDLE -->
+                    <div class="needle-wrapper" id="needle-plate">
+                        <div class="arrowhead"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ARAHAN GERAKAN -->
-        <div id="instruction-card" class="direction-box">
-            <span id="arrows-icon" class="direction-icon">⏳</span>
-            <span id="status-text">INITIALIZING...</span>
-        </div>
+            <div id="instruction-card" class="direction-box">
+                <span id="arrows-icon" class="direction-icon">⏳</span>
+                <span id="status-text">INITIALIZING...</span>
+            </div>
 
-        <!-- KOTAK LOKASI & JARAK BERSATU (UNITED CONTAINER) -->
-        <div class="united-card">
-            <div class="info-group">
-                <span class="info-label">Location</span>
-                <div class="info-value-row">
-                    <span class="info-icon">📍</span>
-                    <span id="location-text">Detecting...</span>
+            <div class="united-card">
+                <div class="info-group">
+                    <span class="info-label">Location</span>
+                    <div class="info-value-row">
+                        <span class="info-icon">📍</span>
+                        <span id="location-text">Detecting...</span>
+                    </div>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Distance to Kaabah</span>
+                    <div class="info-value-row">
+                        <span class="info-icon" style="color: var(--gold);">📏</span>
+                        <span id="distance-text" style="color: var(--gold);">Calculating...</span>
+                    </div>
                 </div>
             </div>
-            <div class="info-group">
-                <span class="info-label">Distance to Kaabah</span>
-                <div class="info-value-row">
-                    <span class="info-icon" style="color: var(--gold);">📏</span>
-                    <span id="distance-text" style="color: var(--gold);">Calculating...</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- 4 KOTAK STATUS BERASINGAN SEBARIS -->
-        <div class="status-grid">
-            <div class="status-tile">
-                <span class="tile-label">GPS</span>
-                <div id="led-gps" class="led-dot"></div>
-            </div>
-            <div class="status-tile">
-                <span class="tile-label">SENSOR</span>
-                <div id="led-sensor" class="led-dot"></div>
-            </div>
-            <div class="status-tile">
-                <span class="tile-label">QIBLA</span>
-                <div id="led-qibla" class="led-dot"></div>
-            </div>
-            <div class="status-tile">
-                <span class="tile-label">ACCURACY</span>
-                <span id="val-accuracy" class="accuracy-text">WAIT</span>
+            <div class="status-grid">
+                <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">QIBLA</span><div id="led-qibla" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
             </div>
         </div>
     </div>
@@ -181,9 +182,9 @@
         function updateLED(id, color) {
             const led = document.getElementById(id);
             if (!led) return;
-            if (color === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 8px var(--green)'; }
-            else if (color === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 8px var(--amber)'; }
-            else if (color === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 8px var(--red)'; }
+            if (color === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 6px var(--green)'; }
+            else if (color === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 6px var(--amber)'; }
+            else if (color === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 6px var(--red)'; }
         }
 
         function initApp() {
@@ -193,8 +194,7 @@
             updateLED('led-gps', 'amber');
 
             if (!navigator.geolocation) {
-                document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
-                updateLED('led-gps', 'red');
+                document.getElementById('status-text').innerText = "GPS ERROR";
                 return;
             }
 
@@ -216,7 +216,6 @@
             }, error => {
                 document.getElementById('status-text').innerText = "GPS ERROR";
                 updateLED('led-gps', 'red');
-                alert("Please enable Device Location / GPS to track the Qiblah.");
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
@@ -231,13 +230,8 @@
                             document.getElementById('val-accuracy').style.color = "var(--green)";
                         } else {
                             document.getElementById('status-text').innerText = "SENSOR DENIED";
-                            updateLED('led-sensor', 'red');
                         }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        document.getElementById('status-text').innerText = "CRITICAL ERROR";
-                    });
+                    }).catch(() => { document.getElementById('status-text').innerText = "CRITICAL ERROR"; });
             } else {
                 window.addEventListener('deviceorientation', handleOrientation, true);
                 setTimeout(() => {
@@ -250,7 +244,6 @@
 
         function handleOrientation(event) {
             let heading = null;
-
             if (event.webkitCompassHeading) {
                 heading = event.webkitCompassHeading;
             } else if (event.alpha !== null) {
@@ -281,7 +274,7 @@
                     document.body.style.backgroundColor = "#073b24"; 
                     document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
-                    document.getElementById('arrow').style.borderBottomColor = "var(--green)";
+                    document.querySelector('.arrowhead').style.background = "linear-gradient(90deg, var(--green) 50%, #1e7e43 50%)";
                     document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
                     document.getElementById('arrows-icon').innerHTML = "👍";
                     updateLED('led-qibla', 'green');
@@ -297,8 +290,8 @@
                     document.body.style.backgroundColor = "var(--bg)"; 
                     document.getElementById('instruction-card').style.backgroundColor = "#141414";
                     document.getElementById('instruction-card').style.borderColor = "var(--border)";
-                    document.getElementById('arrow').style.borderBottomColor = "var(--gold)";
-                    updateLED('led-qibla', '#333333');
+                    document.querySelector('.arrowhead').style.background = "linear-gradient(90deg, var(--gold) 50%, #b3922e 50%)";
+                    updateLED('led-qibla', '#222222');
                     clearInterval(vibrateInterval);
                     if (navigator.vibrate) navigator.vibrate(0);
                 }
@@ -315,19 +308,14 @@
         }
 
         function calculateQibla(lat, lng) {
-            let phi1 = lat * Math.PI / 180;
-            let phi2 = KAABAH_LAT * Math.PI / 180;
-            let lam1 = lng * Math.PI / 180;
-            let lam2 = KAABAH_LNG * Math.PI / 180;
-            let num = Math.sin(lam2 - lam1);
-            let denom = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1);
-            return (Math.atan2(num, denom) * 180 / Math.PI + 360) % 360;
+            let phi1 = lat * Math.PI / 180; let phi2 = KAABAH_LAT * Math.PI / 180;
+            let lam1 = lng * Math.PI / 180; let lam2 = KAABAH_LNG * Math.PI / 180;
+            return (Math.atan2(Math.sin(lam2 - lam1), Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1)) * 180 / Math.PI + 360) % 360;
         }
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
             const R = 6371; 
-            let dLat = (lat2 - lat1) * Math.PI / 180;
-            let dLon = (lon2 - lon1) * Math.PI / 180;
+            let dLat = (lat2 - lat1) * Math.PI / 180; let dLon = (lon2 - lon1) * Math.PI / 180;
             let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
