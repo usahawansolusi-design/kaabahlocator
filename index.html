@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Hybrid Premium v5.5</title>
+    <title>Kaabah Finder - Real Diagnostics v5.6</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -13,6 +13,7 @@
             --green: #2ecc71;
             --red: #e74c3c;
             --amber: #f39c12;
+            --dim-gray: #222222;
         }
 
         body {
@@ -25,7 +26,6 @@
             transition: background-color 0.4s ease;
         }
 
-        /* ONE-SIZE-FIT-ALL WRAPPER (RAPAT & MAMPAT) */
         .main-wrapper {
             width: 100%; max-width: 342px;
             display: flex; flex-direction: column;
@@ -33,30 +33,25 @@
             gap: 10px; height: 100%; max-height: 100%;
         }
 
-        /* SCREEN MANAGEMENT */
         #start-screen, #app-screen { 
             display: flex; flex-direction: column; width: 100%; 
             justify-content: center; align-items: center; gap: 14px; 
         }
         #app-screen { display: none; gap: 10px; }
 
-        /* BRANDING (START SCREEN) */
         .brand-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; }
         .brand-logo { font-size: 2.8rem; margin-bottom: 4px; }
         .brand-title-main { font-size: 1.4rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
         .brand-tagline { color: #888; font-size: 0.65rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 4px; }
 
-        /* HEADER APP SCREEN */
         .app-header { font-size: 1.25rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
 
-        /* START SCREEN CHECKLIST & BUTTON */
         .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; }
         .checklist-item { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
         .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 14px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
         .slogan-footer { font-size: 0.7rem; color: #444; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
 
-        /* HYBRID COMPASS CONTAINER (DARI KOD BARU ANDA) */
         .compass-outer-wrapper { position: relative; width: 220px; height: 220px; display: flex; justify-content: center; align-items: center; margin: 2px 0; }
         .compass-container { 
             position: relative; width: 210px; height: 210px; 
@@ -65,48 +60,40 @@
             background-color: #000000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
         
-        /* DYNAMIC TICKS STYLE */
         .ticks-container { position: absolute; width: 100%; height: 100%; border-radius: 50%; }
         .tick {
             position: absolute; width: 1.5px; height: 5px;
-            background-color: rgba(212, 175, 55, 0.4);
+            background-color: rgba(212, 175, 55, 0.3);
             left: 50%; transform-origin: bottom center; bottom: 50%;
         }
-        .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.8); }
+        .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.7); }
 
-        /* CARDINAL TEXTS (MINIMALIST) */
         .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 700; color: var(--gold); z-index: 5; }
         .cardinal-n { top: 10px; } 
-        .cardinal-e { right: 14px; color: rgba(212, 175, 55, 0.5); font-weight: 400; font-size: 0.95rem; } 
-        .cardinal-s { bottom: 10px; color: rgba(212, 175, 55, 0.5); font-weight: 400; font-size: 0.95rem; } 
-        .cardinal-w { left: 14px; color: rgba(212, 175, 55, 0.5); font-weight: 400; font-size: 0.95rem; }
+        .cardinal-e { right: 14px; color: rgba(212, 175, 55, 0.4); font-weight: 400; font-size: 0.95rem; } 
+        .cardinal-s { bottom: 10px; color: rgba(212, 175, 55, 0.4); font-weight: 400; font-size: 0.95rem; } 
+        .cardinal-w { left: 14px; color: rgba(212, 175, 55, 0.4); font-weight: 400; font-size: 0.95rem; }
         
-        /* STATIC KAABAH IN COMPASS */
         #kaabah-static { position: absolute; top: 32px; font-size: 1.25rem; z-index: 6; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
-        /* MINIMALIST PREMIUM NEEDLE SYSTEM */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; will-change: transform; }
         .pointer-axis {
             position: relative; width: 14px; height: 14px;
             background-color: #D4AF37; border-radius: 50%; z-index: 10;
         }
-        /* Jarum Tradisional Anak Panah Emas */
         .pointer-axis::before {
             content: ''; position: absolute; bottom: 7px; left: 50%; transform: translateX(-50%);
             border-left: 6px solid transparent; border-right: 6px solid transparent;
             border-bottom: 72px solid #FFD700;
             transition: border-bottom-color 0.3s ease;
         }
-        /* Penukaran Warna Hijau Automatik Bila Aligned */
         .pointer-axis.aligned::before {
             border-bottom-color: var(--green);
         }
 
-        /* DIRECTION BANNER */
         .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; }
         .direction-icon { font-size: 1.3rem; display: flex; align-items: center; }
 
-        /* UNITED INFO CONTAINER */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 10px; }
         .info-group { display: flex; flex-direction: column; gap: 2px; }
         .info-label { font-size: 0.82rem; color: #777777; font-weight: 500; }
@@ -117,14 +104,13 @@
         .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
         .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 8px; padding: 8px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
         .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
-        .led-dot { width: 7px; height: 7px; background-color: #222222; border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
-        .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #444444; }
+        .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
+        .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
     </style>
 </head>
 <body>
 
     <div class="main-wrapper">
-        <!-- SKRIN MULA -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -145,16 +131,13 @@
             </div>
         </div>
 
-        <!-- SKRIN UTAMA -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
             </div>
 
-            <!-- KOMPAS HYBRID BERSTRUKTUR TEPAT -->
             <div class="compass-outer-wrapper">
                 <div class="compass-container">
-                    <!-- Ticks halus dijana di sini secara automatik melalui JS -->
                     <div class="ticks-container" id="ticks"></div>
                     
                     <div class="compass-cardinal cardinal-n">N</div>
@@ -164,7 +147,6 @@
                     
                     <div id="kaabah-static">🕋</div>
                     
-                    <!-- UTAMA: JARUM ANAK PANAH DAN PORSI PAKSI DARI KOD BARU -->
                     <div class="needle-wrapper" id="needle-plate">
                         <div class="pointer-axis" id="compassPointer"></div>
                     </div>
@@ -206,7 +188,7 @@
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
         let userLat, userLng, qiblaBearing = 0, smoothedHeading = null, isLocked = false, vibrateInterval;
 
-        // GENERASI TICK HALUS DINAMIK (DIAMBIL DARI KOD MINIMALIST ANDA)
+        // GENERASI TICK COMPASS
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
             const tick = document.createElement('div');
@@ -220,22 +202,38 @@
             ticksContainer.appendChild(tick);
         }
 
-        function updateLED(id, color) {
+        // FUNGSI UTAMA PENUKARAN STATUS LED SEBENAR
+        function updateLED(id, state) {
             const led = document.getElementById(id);
             if (!led) return;
-            if (color === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 6px var(--green)'; }
-            else if (color === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 6px var(--amber)'; }
-            else if (color === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 6px var(--red)'; }
+            if (state === 'green') { 
+                led.style.backgroundColor = 'var(--green)'; 
+                led.style.boxShadow = '0 0 8px var(--green)'; 
+            } else if (state === 'amber') { 
+                led.style.backgroundColor = 'var(--amber)'; 
+                led.style.boxShadow = '0 0 8px var(--amber)'; 
+            } else if (state === 'red') { 
+                led.style.backgroundColor = 'var(--red)'; 
+                led.style.boxShadow = '0 0 8px var(--red)'; 
+            } else { 
+                led.style.backgroundColor = 'var(--dim-gray)'; 
+                led.style.boxShadow = 'none'; 
+            }
         }
 
         function initApp() {
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
             document.getElementById('status-text').innerText = "CONNECTING GPS...";
+            
+            // GPS Mula mengesan (Amber)
             updateLED('led-gps', 'amber');
+            updateLED('led-sensor', 'off');
+            updateLED('led-qibla', 'off');
 
             if (!navigator.geolocation) {
-                document.getElementById('status-text').innerText = "GPS ERROR";
+                document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
+                updateLED('led-gps', 'red');
                 return;
             }
 
@@ -249,42 +247,64 @@
                 document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} km`;
                 document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
                 
+                // GPS Berjaya dikunci (Hijau Sebenar)
                 updateLED('led-gps', 'green');
                 document.getElementById('status-text').innerText = "LINKING SENSOR...";
                 updateLED('led-sensor', 'amber');
                 
                 setupSensor();
             }, error => {
-                document.getElementById('status-text').innerText = "GPS ERROR";
+                document.getElementById('status-text').innerText = "GPS SIGNAL ERROR";
                 updateLED('led-gps', 'red');
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
         function setupSensor() {
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                            window.addEventListener('deviceorientation', handleOrientation, true);
-                            updateLED('led-sensor', 'green');
-                            document.getElementById('val-accuracy').innerText = "HIGH";
-                            document.getElementById('val-accuracy').style.color = "var(--green)";
-                        } else {
-                            document.getElementById('status-text').innerText = "SENSOR DENIED";
-                        }
-                    }).catch(() => { document.getElementById('status-text').innerText = "CRITICAL ERROR"; });
-            } else {
-                window.addEventListener('deviceorientation', handleOrientation, true);
-                setTimeout(() => {
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                window.addEventListener('deviceorientation', handleOrientation, true);
+                                updateLED('led-sensor', 'green');
+                            } else {
+                                document.getElementById('status-text').innerText = "SENSOR DENIED";
+                                updateLED('led-sensor', 'red');
+                            }
+                        }).catch(() => { 
+                            document.getElementById('status-text').innerText = "PERMISSION ERROR"; 
+                            updateLED('led-sensor', 'red');
+                        });
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation, true);
                     updateLED('led-sensor', 'green');
-                    document.getElementById('val-accuracy').innerText = "HIGH";
-                    document.getElementById('val-accuracy').style.color = "var(--green)";
-                }, 500);
+                }
+            } else {
+                document.getElementById('status-text').innerText = "NO SENSOR HARDWARE";
+                updateLED('led-sensor', 'red');
             }
         }
 
         function handleOrientation(event) {
             let heading = null;
+
+            // Bacaan Ketepatan Sensor (Accuracy Tile) secara dinamik
+            const accText = document.getElementById('val-accuracy');
+            if (event.webkitCompassAccuracy) {
+                let accuracy = event.webkitCompassAccuracy;
+                if (accuracy > 0 && accuracy <= 15) {
+                    accText.innerText = "HIGH"; accText.style.color = "var(--green)";
+                } else if (accuracy > 15 && accuracy <= 30) {
+                    accText.innerText = "MED"; accText.style.color = "var(--amber)";
+                } else {
+                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
+                }
+            } else {
+                // Alternatif fallback jika OS tak hantar data darjah ralat
+                accText.innerText = event.absolute ? "HIGH" : "MED";
+                accText.style.color = event.absolute ? "var(--green)" : "var(--amber)";
+            }
+
             if (event.webkitCompassHeading) {
                 heading = event.webkitCompassHeading;
             } else if (event.alpha !== null) {
@@ -311,6 +331,7 @@
 
             const pointerAxis = document.getElementById('compassPointer');
 
+            // KAWALAN REAL-TIME UNTUK LED QIBLA
             if (Math.abs(relativeAngle) < 5) {
                 if (!isLocked) {
                     isLocked = true;
@@ -318,11 +339,11 @@
                     document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
                     
-                    // Aktifkan class warna hijau daripada kod baru anda
                     pointerAxis.classList.add('aligned');
-                    
                     document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
                     document.getElementById('arrows-icon').innerHTML = "👍";
+                    
+                    // Nyalakan LED Qibla hanya bila betul-betul tepat!
                     updateLED('led-qibla', 'green');
                     
                     if (navigator.vibrate) {
@@ -337,10 +358,11 @@
                     document.getElementById('instruction-card').style.backgroundColor = "#141414";
                     document.getElementById('instruction-card').style.borderColor = "var(--border)";
                     
-                    // Buang warna hijau kembali kepada emas asal
                     pointerAxis.classList.remove('aligned');
                     
-                    updateLED('led-qibla', '#222222');
+                    // Padamkan balik LED Qibla bila tersasar jauh
+                    updateLED('led-qibla', 'off');
+                    
                     clearInterval(vibrateInterval);
                     if (navigator.vibrate) navigator.vibrate(0);
                 }
