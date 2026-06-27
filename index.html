@@ -3,488 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaabah Finder - International Premium</title>
+    <title>Kaabah Finder - Global Premium v3.6</title>
     <style>
-        :root {
-            --gold: #d4af37;
-            --bg: #121212;
-            --card: #1a1a1a;
-            --border: #282828;
-            --green: #2ecc71;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: var(--bg);
-            color: #ffffff;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            height: 100vh;
-            box-sizing: border-box;
-            padding: 24px;
-            transition: background-color 0.4s ease;
-        }
-
-        /* BRANDING ELEMENT */
-        .brand-container {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .brand-logo {
-            font-size: 3rem;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-        }
-
-        .brand-title {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--gold);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin: 0;
-        }
-
-        .brand-tagline {
-            color: #888888;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-top: 6px;
-        }
-
-        /* WELCOME SCREEN (CHECKLIST ACCORDING TO IMAGE 10eb34ff-3648-4215-aa9c-f9cae9ccbdd0) */
-        #start-screen {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-            max-width: 360px;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .checklist-card {
-            width: 100%;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            box-sizing: border-box;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-        }
-
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #e0e0e0;
-            margin: 14px 0;
-            text-align: left;
-        }
-
-        .checklist-item::before {
-            content: '✓';
-            color: var(--green);
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
-
-        .btn-action {
-            width: 100%;
-            font-size: 1.1rem;
-            font-weight: bold;
-            padding: 16px;
-            border: none;
-            border-radius: 50px;
-            background: var(--gold);
-            color: #121212;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(212,175,55,0.3);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: transform 0.1s, background-color 0.2s;
-        }
-
-        .btn-action:active {
-            transform: scale(0.97);
-            background-color: #bfa030;
-        }
-
-        .slogan-footer {
-            font-size: 0.8rem;
-            color: #555555;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        /* MAIN APP SCREEN */
-        #app-screen {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* ADVANCED COMPASS STRUCTURE */
-        .compass-outer-wrapper {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px 0;
-        }
-
-        .compass-container {
-            position: relative;
-            width: 260px;
-            height: 260px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 3px solid var(--gold);
-            border-radius: 50%;
-            background: radial-gradient(circle, #1c1c1c 0%, #0a0a0a 100%);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 25px rgba(212,175,55,0.15);
-        }
-
-        /* High-Definition Ticks Engine */
-        .compass-ticks {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: repeating-conic-gradient(
-                from 0deg,
-                var(--gold) 0deg 1deg,
-                transparent 1deg 6deg
-            );
-            -webkit-mask: radial-gradient(circle, transparent 91%, black 92%);
-            mask: radial-gradient(circle, transparent 91%, black 92%);
-            opacity: 0.4;
-        }
-
-        #kaabah-marker {
-            position: absolute;
-            top: -24px;
-            font-size: 2.6rem;
-            z-index: 25;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
-        }
-
-        .compass-cardinal {
-            position: absolute;
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--gold);
-            z-index: 5;
-        }
-        .cardinal-n { top: 26px; } 
-        .cardinal-s { bottom: 18px; }
-        .cardinal-e { right: 20px; }
-        .cardinal-w { left: 20px; }
-
-        /* Premium Sleek Tapered Needle (3D Effect) */
-        .needle-wrapper {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            will-change: transform;
-            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        #arrow {
-            width: 0;
-            height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-bottom: 105px solid var(--gold);
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
-            position: relative;
-            transform: translateY(-45px); 
-        }
-
-        #arrow::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -14px;
-            width: 0;
-            height: 0;
-            border-left: 14px solid transparent;
-            border-right: 0px solid transparent;
-            border-bottom: 105px solid rgba(0,0,0,0.15); /* Shadow side for 3D depth */
-        }
-
-        /* DIRECTION BANNER CARD */
-        #instruction-card {
-            width: 100%;
-            max-width: 360px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        #status-text {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: 0.5px;
-        }
-
-        #arrows-icon {
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-        }
-
-        /* ROW DATA PANEL */
-        .dashboard {
-            width: 100%;
-            max-width: 360px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .panel-row {
-            display: flex;
-            justify-content: space-between;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 12px 18px;
-            border-radius: 12px;
-            align-items: center;
-        }
-
-        .panel-label {
-            font-size: 0.85rem;
-            color: #aaa;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .panel-value {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        /* 4-GRID PANEL SYSTEM ENGINE STATUS (IMAGE 1000041444.jpg STYLE) */
-        .engine-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr) 1.3fr;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .grid-tile {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 8px 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .tile-label {
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: #888888;
-            letter-spacing: 0.5px;
-        }
-
-        .led-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--green);
-        }
-
-        .accuracy-value {
-            font-size: 0.78rem;
-            font-weight: 800;
-            color: var(--green);
-            letter-spacing: 0.5px;
-        }
+        :root { --gold: #d4af37; --bg: #121212; --card: #1a1a1a; --border: #282828; --green: #2ecc71; }
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background-color: var(--bg); color: #fff; text-align: center; display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100vh; box-sizing: border-box; padding: 24px; transition: background-color 0.4s; overflow: hidden; }
+        .brand-container { margin-top: 10px; display: flex; flex-direction: column; align-items: center; }
+        .brand-logo { font-size: 3rem; margin-bottom: 8px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
+        .brand-title { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin: 0; }
+        .brand-tagline { color: #888; font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 6px; }
+        
+        /* WELCOME SCREEN */
+        #start-screen { display: flex; flex-direction: column; height: 100%; width: 100%; max-width: 360px; justify-content: space-between; align-items: center; }
+        .checklist-card { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 500; color: #e0e0e0; margin: 14px 0; text-align: left; }
+        .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; font-size: 1.1rem; }
+        .btn-action { width: 100%; font-size: 1.1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; box-shadow: 0 8px 20px rgba(212,175,55,0.3); letter-spacing: 1px; text-transform: uppercase; transition: transform 0.1s, background-color 0.2s; }
+        .btn-action:active { transform: scale(0.97); background-color: #bfa030; }
+        .slogan-footer { font-size: 0.8rem; color: #555; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
+        
+        /* MAIN APP */
+        #app-screen { display: none; flex-direction: column; height: 100%; width: 100%; justify-content: space-between; align-items: center; }
+        .compass-ring { position: relative; width: 280px; height: 280px; display: flex; justify-content: center; align-items: center; margin: 10px 0; border: 3px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, #1c1c1c 0%, #0a0a0a 100%); box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 25px rgba(212,175,55,0.15); }
+        .compass-ticks { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: repeating-conic-gradient(from 0deg, var(--gold) 0deg 1deg, transparent 1deg 6deg); -webkit-mask: radial-gradient(circle, transparent 91%, black 92%); opacity: 0.4; }
+        #arrow { width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-bottom: 105px solid var(--gold); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94); transform-origin: center bottom; }
+        #kaabah-marker { position: absolute; top: -24px; font-size: 2.6rem; z-index: 25; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
+        .cardinal { position: absolute; font-size: 1.15rem; font-weight: 800; color: var(--gold); }
+        .cardinal-n { top: 26px; } .cardinal-s { bottom: 18px; } .cardinal-e { right: 20px; } .cardinal-w { left: 20px; }
+        #instruction-card { width: 100%; max-width: 360px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        #status-text { font-size: 1.4rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        .dashboard { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 8px; }
+        .panel-row { display: flex; justify-content: space-between; background: var(--card); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; align-items: center; }
+        .panel-label { font-size: 0.85rem; color: #aaa; } .panel-value { font-size: 0.95rem; font-weight: 700; color: #fff; }
+        .engine-grid { display: grid; grid-template-columns: repeat(3, 1fr) 1.3fr; gap: 8px; width: 100%; }
+        .grid-tile { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .tile-label { font-size: 0.68rem; font-weight: 700; color: #888; }
+        .led-dot { width: 8px; height: 8px; background-color: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
+        .accuracy-value { font-size: 0.78rem; font-weight: 800; color: var(--green); }
     </style>
 </head>
 <body>
-
-    <!-- SKRIN MULA (WELCOME SCREEN) -->
+    <!-- START SCREEN -->
     <div id="start-screen">
         <div class="brand-container">
             <div class="brand-logo">🕋</div>
             <h1 class="brand-title">Kaabah Finder</h1>
             <div class="brand-tagline">Verified Qiblah Navigation System</div>
         </div>
-
         <div class="checklist-card">
             <div class="checklist-item">Place phone on flat surface</div>
             <div class="checklist-item">Keep away from metal objects</div>
             <div class="checklist-item">Enable GPS location</div>
             <div class="checklist-item">Hold device steady</div>
         </div>
-
         <div style="width: 100%;">
             <button class="btn-action" onclick="initApp()">Start Finder</button>
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
     </div>
-
-    <!-- SKRIN UTAMA (MAIN INTERFACE) -->
+    <!-- MAIN APP SCREEN -->
     <div id="app-screen">
         <div class="brand-container">
             <h1 class="brand-title" style="font-size: 1.2rem; letter-spacing: 2px;">Kaabah Finder</h1>
         </div>
-
-        <!-- INSTRUMEN DIAL KOMPAS -->
-        <div class="compass-outer-wrapper">
-            <div id="kaabah-marker">🕋</div> 
-            <div class="compass-container">
-                <div class="compass-ticks"></div>
-                <div class="compass-cardinal cardinal-n">N</div>
-                <div class="compass-cardinal cardinal-e">E</div>
-                <div class="compass-cardinal cardinal-s">S</div>
-                <div class="compass-cardinal cardinal-w">W</div>
-                
-                <div class="needle-wrapper" id="needle-plate">
-                    <div id="arrow"></div>
-                </div>
-            </div>
+        <div class="compass-ring">
+            <div id="kaabah-marker">🕋</div>
+            <div class="compass-ticks"></div>
+            <div class="cardinal cardinal-n">N</div> <div class="cardinal cardinal-s">S</div> <div class="cardinal cardinal-e">E</div> <div class="cardinal cardinal-w">W</div>
+            <div id="arrow"></div>
         </div>
-
-        <!-- BANNER ARAHAN PUSINGAN -->
-        <div id="instruction-card">
-            <div id="arrows-icon">⏳</div>
-            <span id="status-text">INITIALIZING GPS...</span>
-        </div>
-
-        <!-- PANEL MAKLUMAT & STATUS 4-GRID -->
+        <div id="instruction-card"> <div id="arrows-icon">⏳</div> <span id="status-text">WAITING...</span> </div>
         <div class="dashboard">
-            <div class="panel-row">
-                <div class="panel-label">🌐 Distance to Kaabah</div>
-                <div id="distance-text" class="panel-value" style="color: var(--gold);">Calculating...</div>
-            </div>
-            <div class="panel-row">
-                <div class="panel-label">📍 Current Location</div>
-                <div id="location-text" class="panel-value">Detecting...</div>
-            </div>
-            
-            <!-- SEBIJI MACAM IMAGE 1000041444.jpg -->
+            <div class="panel-row"> <div class="panel-label">🌐 Distance</div> <div id="distance-text" class="panel-value" style="color: var(--gold);">Waiting...</div> </div>
+            <div class="panel-row"> <div class="panel-label">📍 Location</div> <div id="location-text" class="panel-value">Waiting...</div> </div>
             <div class="engine-grid">
-                <div class="grid-tile"><div class="tile-label">GPS</div><div class="led-dot"></div></div>
-                <div class="grid-tile"><div class="tile-label">SENSOR</div><div class="led-dot"></div></div>
-                <div class="grid-tile"><div class="tile-label">QIBLA</div><div class="led-dot"></div></div>
-                <div class="grid-tile"><div class="tile-label">ACCURACY</div><div class="accuracy-value">HIGH</div></div>
+                <div class="grid-tile"><div class="tile-label">GPS</div><div id="gps-led" class="led-dot" style="background:#444; box-shadow:none;"></div></div>
+                <div class="grid-tile"><div class="tile-label">SENSOR</div><div id="sensor-led" class="led-dot" style="background:#444; box-shadow:none;"></div></div>
+                <div class="grid-tile"><div class="tile-label">QIBLA</div><div id="qibla-led" class="led-dot" style="background:#444; box-shadow:none;"></div></div>
+                <div class="grid-tile"><div class="tile-label">ACCURACY</div><div class="accuracy-value">LOW</div></div>
             </div>
         </div>
     </div>
-
     <script>
-        const KAABAH_LAT = 21.422522;
-        const KAABAH_LNG = 39.826122;
-
-        let userLat, userLng;
-        let qiblaBearing = 0;
-        let isLocked = false;
-        let vibrateInterval;
-
-        let smoothedHeading = null;
-        const SMOOTHING_FACTOR = 0.12; 
+        const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
+        let qiblaBearing = 0, smoothedHeading = null, isLocked = false, vibrateInterval;
 
         function initApp() {
+            console.log("Initializing App...");
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'flex';
+            document.getElementById('status-text').innerText = "CONNECTING GPS...";
+            
             if (!navigator.geolocation) {
-                alert("GPS is not supported by your device.");
+                document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
                 return;
             }
 
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('app-screen').style.display = 'flex';
-
             navigator.geolocation.getCurrentPosition(position => {
-                userLat = position.coords.latitude;
-                userLng = position.coords.longitude;
+                console.log("GPS Success!");
+                const { latitude, longitude } = position.coords;
+                qiblaBearing = calculateQibla(latitude, longitude);
+                document.getElementById('distance-text').innerText = `${Math.round(calculateDistance(latitude, longitude)).toLocaleString()} KM`;
+                getAreaName(latitude, longitude);
+                document.getElementById('gps-led').style.background = '#2ecc71';
+                document.getElementById('gps-led').style.shadow = '0 0 8px #2ecc71';
                 
-                qiblaBearing = calculateQibla(userLat, userLng);
-                let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
-                
-                document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
-                getAreaName(userLat, userLng);
+                document.getElementById('status-text').innerText = "CALIBRATING SENSOR...";
                 startCompass();
-            }, error => {
-                document.getElementById('status-text').innerText = "GPS REQUIRED";
-            });
-        }
-
-        function getAreaName(lat, lng) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`)
-                .then(response => response.json())
-                .then(data => {
-                    let areaName = "";
-                    if(data.address) {
-                        areaName = data.address.suburb || data.address.town || data.address.city || data.address.state || "Detected";
-                    } else {
-                        areaName = `${lat.toFixed(4)}°, ${lng.toFixed(4)}°`;
-                    }
-                    document.getElementById('location-text').innerText = areaName;
-                })
-                .catch(() => {
-                    document.getElementById('location-text').innerText = `Global Position Secured`;
-                });
-        }
-
-        function calculateQibla(lat, lng) {
-            let phi1 = lat * Math.PI / 180;
-            let phi2 = KAABAH_LAT * Math.PI / 180;
-            let lam1 = lng * Math.PI / 180;
-            let lam2 = KAABAH_LNG * Math.PI / 180;
-            let num = Math.sin(lam2 - lam1);
-            let denom = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1);
-            return (Math.atan2(num, denom) * 180 / Math.PI + 360) % 360;
-        }
-
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; 
-            let dLat = (lat2 - lat1) * Math.PI / 180;
-            let dLon = (lon2 - lon1) * Math.PI / 180;
-            let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
+            }, () => {
+                document.getElementById('status-text').innerText = "GPS DENIED";
+                alert("GPS permission is REQUIRED for Kaabah direction.");
+            }, { enableHighAccuracy: true });
         }
 
         function startCompass() {
@@ -492,6 +120,9 @@
                 DeviceOrientationEvent.requestPermission().then(state => {
                     if (state === 'granted') {
                         window.addEventListener('deviceorientation', handleOrientation, true);
+                    } else {
+                        document.getElementById('status-text').innerText = "SENSOR DENIED";
+                        alert("Sensor permission is REQUIRED.");
                     }
                 });
             } else {
@@ -500,13 +131,15 @@
         }
 
         function handleOrientation(event) {
-            let heading = event.alpha; 
-            if (event.webkitCompassHeading) heading = event.webkitCompassHeading;
-            if (heading === null || heading === undefined) return;
-
-            if (!event.webkitCompassHeading) {
-                heading = (360 - heading) % 360;
+            let heading;
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading; // iOS
+            } else {
+                heading = 360 - event.alpha; // Android (adjusted)
+                if (heading === 360) heading = 0;
             }
+            if (heading === null || heading === undefined) return;
+            document.getElementById('sensor-led').style.background = '#2ecc71';
 
             if (smoothedHeading === null) {
                 smoothedHeading = heading;
@@ -514,54 +147,63 @@
                 let diff = heading - smoothedHeading;
                 if (diff > 180) diff -= 360;
                 if (diff < -180) diff += 360;
-                smoothedHeading += SMOOTHING_FACTOR * diff;
+                smoothedHeading += 0.12 * diff;
                 smoothedHeading = (smoothedHeading + 360) % 360;
             }
 
-            let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
-            document.getElementById('needle-plate').style.transform = `rotate(${arrowRotation}deg)`;
+            const arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
+            document.getElementById('arrow').style.transform = `rotate(${arrowRotation}deg)`;
 
-            let displayAngle = arrowRotation;
-            if (displayAngle > 180) displayAngle -= 360;
-
-            // SISTEM KUNCI AMAN (Tolerance 6 deg)
-            if (Math.abs(displayAngle) < 6) {
-                if (!isLocked) {
-                    isLocked = true;
-                    document.body.style.backgroundColor = "#073b24"; // Premium Deep Emerald
-                    document.getElementById('instruction-card').style.background = var(--green);
-                    document.getElementById('instruction-card').style.borderColor = "#4ade80";
-                    document.getElementById('arrow').style.borderBottomColor = var(--green);
-                    document.getElementById('arrow').style.filter = "drop-shadow(0 0 15px #2ecc71)";
-                    document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
-                    document.getElementById('arrows-icon').innerHTML = "👍";
-                    
-                    if (navigator.vibrate) {
-                        navigator.vibrate(400);
-                        vibrateInterval = setInterval(() => navigator.vibrate(400), 600);
-                    }
-                }
+            if (Math.abs(arrowRotation > 180 ? arrowRotation-360 : arrowRotation) < 6) {
+                lockCompass();
             } else {
-                if (isLocked) {
-                    isLocked = false;
-                    document.body.style.backgroundColor = var(--bg); 
-                    document.getElementById('instruction-card').style.background = var(--card);
-                    document.getElementById('instruction-card').style.borderColor = var(--border);
-                    document.getElementById('arrow').style.borderBottomColor = var(--gold);
-                    document.getElementById('arrow').style.filter = "drop-shadow(0 4px 10px rgba(0,0,0,0.7))";
-                    clearInterval(vibrateInterval);
-                    if (navigator.vibrate) navigator.vibrate(0);
-                }
-
-                let roundedAngle = Math.abs(Math.round(displayAngle));
-                if (displayAngle > 0) {
-                    document.getElementById('status-text').innerText = `Turn Right ${roundedAngle}°`;
-                    document.getElementById('arrows-icon').innerHTML = "➡️";
-                } else {
-                    document.getElementById('status-text').innerText = `Turn Left ${roundedAngle}°`;
-                    document.getElementById('arrows-icon').innerHTML = "⬅️";
-                }
+                unlockCompass(arrowRotation);
             }
+        }
+
+        function calculateQibla(lat, lng) {
+            let phi1 = lat * Math.PI / 180, phi2 = KAABAH_LAT * Math.PI / 180;
+            let dLam = (KAABAH_LNG - lng) * Math.PI / 180;
+            let num = Math.sin(dLam);
+            let denom = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(dLam);
+            return (Math.atan2(num, denom) * 180 / Math.PI + 360) % 360;
+        }
+
+        function calculateDistance(lat, lng) {
+            const dLat = (KAABAH_LAT - lat) * Math.PI / 180, dLon = (KAABAH_LNG - lng) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat*Math.PI/180)*Math.cos(KAABAH_LAT*Math.PI/180)*Math.sin(dLon/2)**2;
+            return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function getAreaName(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`)
+                .then(r => r.json()).then(d => document.getElementById('location-text').innerText = d.address ? (d.address.city || d.address.town || d.address.suburb) : `${lat.toFixed(2)}, ${lng.toFixed(2)}`)
+                .catch(() => document.getElementById('location-text').innerText = 'Location Secured');
+        }
+
+        function lockCompass() {
+            if (!isLocked) {
+                isLocked = true;
+                document.body.style.backgroundColor = "#073b24"; // Green bg
+                document.getElementById('arrow').style.borderBottomColor = var(--green);
+                document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
+                document.getElementById('arrows-icon').innerHTML = "👍";
+                document.getElementById('qibla-led').style.background = var(--green);
+                if (navigator.vibrate) { navigator.vibrate(400); vibrateInterval = setInterval(() => navigator.vibrate(400), 600); }
+            }
+        }
+
+        function unlockCompass(rotation) {
+            if (isLocked) {
+                isLocked = false;
+                document.body.style.backgroundColor = var(--bg);
+                document.getElementById('arrow').style.borderBottomColor = var(--gold);
+                document.getElementById('qibla-led').style.background = '#444';
+                clearInterval(vibrateInterval); if (navigator.vibrate) navigator.vibrate(0);
+            }
+            const angle = rotation > 180 ? rotation - 360 : rotation;
+            document.getElementById('status-text').innerText = `Turn ${angle > 0 ? 'Right' : 'Left'} ${Math.abs(Math.round(angle))}°`;
+            document.getElementById('arrows-icon').innerHTML = angle > 0 ? "➡️" : "⬅️";
         }
     </script>
 </body>
