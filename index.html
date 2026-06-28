@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Ultra Firm & Refresh v6.3</title>
+    <title>Kaabah Finder - Dual Action Symmetry v6.4</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -68,8 +68,8 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 24px; font-weight: 600; }
 
-        /* COMPASS AREA WITH KAABAH OUTSIDE */
-        .compass-outer-wrapper { position: relative; width: 240px; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
+        /* COMPASS AREA WITH FLOATING SIDES BUTTONS (REF: 1000041812.jpg) */
+        .compass-outer-wrapper { position: relative; width: 100%; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
         #kaabah-outer { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.4rem; z-index: 15; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
         .compass-container { 
@@ -93,6 +93,18 @@
         .cardinal-s { bottom: 10px; color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; } 
         .cardinal-w { left: 14px; color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; }
 
+        /* FLOATING SIDE ACTION BUTTONS STYLE */
+        .side-action-btn {
+            position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: rgba(20, 20, 20, 0.75); border: 1px solid var(--border);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; cursor: pointer; z-index: 20; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.2s ease; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+        }
+        .side-action-btn:active { background: #222; transform: scale(0.92); border-color: #444; }
+        .btn-side-left { left: 4px; }
+        .btn-side-right { right: 4px; }
+
         /* NEEDLE STRUCTURE */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
         .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
@@ -115,13 +127,10 @@
         .info-right-val { font-weight: 700; color: #ffffff; }
         .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
 
-        /* 4-GRID DIAGNOSTICS WITH INTERACTIVE REFRESH BUTTON */
+        /* 4-GRID DIAGNOSTICS - KEMBALI ASAL & SIMETRI */
         .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
-        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 10px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
-        .status-tile.interactive { cursor: pointer; transition: background 0.2s, border-color 0.2s; position: relative; }
-        .status-tile.interactive:active { background: #1f1f1f; border-color: #444; }
+        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 12px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
         .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
-        .tile-sub-label { font-size: 0.5rem; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: -3px; }
         .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
         .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
 
@@ -135,7 +144,7 @@
             border: 1px solid var(--border); border-radius: 14px; background: #141414; 
             color: #444444; letter-spacing: 1px; text-transform: uppercase; 
             cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; 
-            margin-top: 6px; /* Memberi ruang bernafas agar gelombang beacon tidak menimpa grid atas */
+            margin-top: 6px;
         }
         
         .btn-pray-status.active { 
@@ -146,7 +155,7 @@
             animation: pulse-beacon 1.8s infinite ease-in-out;
         }
 
-        /* EFFECT BEACON PULSE (DIKECILKAN RADIUS KE 10PX SUPAYA MAKSIMUM REKABENTUK ADALAH KEMAS) */
+        /* EFFECT BEACON PULSE RADIUS 10PX */
         @keyframes pulse-beacon {
             0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6); }
             70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
@@ -168,6 +177,7 @@
 <body>
 
     <div class="main-wrapper">
+        <!-- SKRIN MULA -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -188,12 +198,16 @@
             </div>
         </div>
 
+        <!-- SKRIN UTAMA -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
             </div>
 
             <div class="compass-outer-wrapper">
+                <!-- BUTANG KIRI: BACK TO START SCREEN (IKON ANAK PANAH PUSING BALIK) -->
+                <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
+                
                 <div id="kaabah-outer">🕋</div>
                 <div class="compass-container">
                     <div class="ticks-container" id="ticks"></div>
@@ -206,6 +220,9 @@
                         <div class="pointer-axis" id="compassPointer"></div>
                     </div>
                 </div>
+
+                <!-- BUTANG KANAN: REFRESH SENSORS (IKON ANAK PANAH BULAT) -->
+                <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
             <div id="instruction-card" class="direction-box">
@@ -230,21 +247,20 @@
                 </div>
             </div>
 
+            <!-- 4-GRID STATUS (DIBERSIHKAN SEMULA SUPAYA SIMETRI KEMAS) -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
-                <div class="status-tile interactive" onclick="refreshSensors()" title="Click to reset compass hardware">
-                    <span class="tile-label">SENSOR</span>
-                    <div id="led-sensor" class="led-dot"></div>
-                    <span class="tile-sub-label">🔄 Click Reset</span>
-                </div>
+                <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">QIBLA</span><div id="led-qibla" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
             </div>
 
+            <!-- BUTANG READY TO PRAY -->
             <button id="pray-status-btn" class="btn-pray-status" onclick="openSpiritualScreen()">Ready to Pray</button>
         </div>
     </div>
 
+    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-thanks">Terima kasih kerana menggunakan Kaabah Finder.<br>Selamat menunaikan ibadah solat.</div>
@@ -261,7 +277,7 @@
         let isLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // HEAVY SMOOTHING UNTUK ANTILOMPAT TILT TANGAN
+        // HEAVY TILT SMOOTHING 0.05 ANTI-LOMPAT
         let smoothedBeta = null, smoothedGamma = null;
 
         // GENERATOR DIAL KOMPAS
@@ -347,11 +363,10 @@
             }
         }
 
-        // FUNGSI UTAMA MANUAL REFRESH SENSOR APABILA KOMPAS STUCK / HALANG GANGGUAN MAGNET
+        // FUNGSI MANUAL REFRESH SENSOR DENGAN ANIMASI SPIN PADA IKON SISI KANAN
         function refreshSensors() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
             
-            // Set semula semua nilai memori rujukan penapis kecondongan & kompas
             smoothedHeading = null;
             smoothedBeta = null;
             smoothedGamma = null;
@@ -359,12 +374,37 @@
             
             resetQiblaLock();
             
-            document.getElementById('status-text').innerHTML = "<span class='spinning'>🔄</span> REFRESHING SENSORS...";
+            const refreshIcon = document.getElementById('refresh-btn-ui');
+            refreshIcon.classList.add('spinning');
+            
+            document.getElementById('status-text').innerText = "REFRESHING HARDWARE...";
             updateLED('led-sensor', 'amber');
             
             setTimeout(() => {
                 setupSensor();
+                refreshIcon.classList.remove('spinning');
             }, 800);
+        }
+
+        // FUNGSI BACK TO START PAGE (BUTANG SISI KIRI)
+        function goBackToStart() {
+            window.removeEventListener('deviceorientation', handleOrientation, true);
+            resetQiblaLock();
+            
+            smoothedHeading = null;
+            smoothedBeta = null;
+            smoothedGamma = null;
+            gpsReady = false;
+            sensorReady = false;
+            
+            updateLED('led-gps', 'off');
+            updateLED('led-sensor', 'off');
+            updateLED('led-qibla', 'off');
+            document.getElementById('val-accuracy').innerText = "WAIT";
+            document.getElementById('val-accuracy').style.color = "#555555";
+            
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'flex';
         }
 
         function handleOrientation(event) {
@@ -372,14 +412,12 @@
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            // HEAVY SMOOTHING (PEKALI 0.05) BAGI MENGELAKKAN AMARAN TILT MELOMPAT APABILA TANGAN MEMUSING TELEFON
             if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
             else {
                 smoothedBeta += 0.05 * (rawBeta - smoothedBeta);
                 smoothedGamma += 0.05 * (rawGamma - smoothedGamma);
             }
 
-            // AMBIL HAD TOLERANSI: APABILA LOCK AKTIF, KITA BERI BONUS KELONGGARAN EKSTRA SUPAYA MARKER TAK GHAIB
             let currentTolerance = isLocked ? 25 : 20;
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
@@ -397,7 +435,6 @@
                 updateLED('led-sensor', 'green');
             }
 
-            // COMFORTING ACCURACY UI TERM
             const accText = document.getElementById('val-accuracy');
             if (event.webkitCompassAccuracy) {
                 let accuracy = event.webkitCompassAccuracy;
@@ -447,7 +484,7 @@
             const pointerAxis = document.getElementById('compassPointer');
             const prayBtn = document.getElementById('pray-status-btn');
 
-            // PRINSIP HYSTERESIS (DWI-PAGAR): MASUK PINTU KETAT (< 5°), KELUAR PINTU LONGGAR (> 12°)
+            // HYSTERESIS DWI-PAGAR: MASUK PINTU < 5°, LEPAS PINTU > 12°
             let errorMargin = isLocked ? 12 : 5;
 
             if (Math.abs(relativeAngle) < errorMargin) {
@@ -492,12 +529,6 @@
                 updateLED('led-qibla', 'off');
                 clearInterval(vibrateInterval);
                 if (navigator.vibrate) navigator.vibrate(0);
-            }
-        }
-
-        function openSpiritualScreen() {
-            if (document.getElementById('pray-status-btn').classList.contains('active')) {
-                document.getElementById('spiritual-modal').style.display = 'flex';
             }
         }
 
