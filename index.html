@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Clean Radar v7.0</title>
+    <title>Kaabah Finder - Symmetric Radar v7.1</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -62,7 +62,7 @@
         /* COMPASS AREA WITH REVERTED AND CLEAN RADAR STRUCTURE */
         .compass-outer-wrapper { position: relative; width: 100%; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
         
-        /* KAABAH ICON CORE STYLE (FIXED BACK AT THE TOP) */
+        /* KAABAH ICON CORE STYLE */
         #kaabah-outer { 
             position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
             font-size: 1.4rem; z-index: 15; 
@@ -70,7 +70,7 @@
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* HIGH INTENSITY BEACON PULSE UNTUK KAABAH ICON (BULLSEYE DETECTED) */
+        /* HIGH INTENSITY BEACON PULSE UNTUK KAABAH ICON */
         #kaabah-outer.perfect-lock {
             transform: translateX(-50%) scale(1.3);
             animation: kaabah-glow-pulse 1.0s infinite ease-in-out;
@@ -108,7 +108,7 @@
         .btn-side-left { left: 4px; }
         .btn-side-right { right: 4px; }
 
-        /* NEEDLE STRUCTURE (ROTATES DYNAMICALLY) */
+        /* NEEDLE STRUCTURE */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
         .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
         .pointer-axis::before {
@@ -118,8 +118,15 @@
         }
         .pointer-axis.aligned::before { border-bottom-color: var(--green); }
 
-        .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; }
-        .direction-icon { font-size: 1.4rem; display: flex; align-items: center; }
+        /* NEW SYMMETRIC DYNAMIC DIRECTION BOX */
+        .direction-box { 
+            width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; 
+            padding: 14px 10px; font-size: 1.25rem; font-weight: 800; 
+            display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; 
+            box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; 
+        }
+        .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
+        .dir-center-text { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; text-align: center; }
 
         /* INFO CARD ROW */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
@@ -222,9 +229,11 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
+            <!-- NEW SYMMETRIC INTERFACE CARD -->
             <div id="instruction-card" class="direction-box">
-                <span id="arrows-icon" class="direction-icon">⏳</span>
-                <span id="status-text">INITIALIZING...</span>
+                <span id="icon-left" class="dir-side-icon">⏳</span>
+                <span id="status-text" class="dir-center-text">INITIALIZING...</span>
+                <span id="icon-right" class="dir-side-icon">⏳</span>
             </div>
 
             <div class="united-card">
@@ -252,7 +261,7 @@
                 <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
             </div>
 
-            <!-- BUTANG READY TO PRAY DENGAN BEACON KUNING/PUTIH BILA AKTIF -->
+            <!-- BUTANG READY TO PRAY -->
             <button id="pray-status-btn" class="btn-pray-status" onclick="openSpiritualScreen()">Ready to Pray</button>
         </div>
     </div>
@@ -302,15 +311,18 @@
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
             document.getElementById('status-text').innerText = "CONNECTING GPS...";
+            document.getElementById('icon-left').innerHTML = "⏳";
+            document.getElementById('icon-right').innerHTML = "⏳";
             updateLED('led-gps', 'amber');
 
-            // FIX GPS WAIT BUG
             const accText = document.getElementById('val-accuracy');
             accText.innerText = "WAIT";
             accText.style.color = "#555555";
 
             if (!navigator.geolocation) {
                 document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
                 updateLED('led-gps', 'red');
                 return;
             }
@@ -338,6 +350,8 @@
                 setupSensor();
             }, error => {
                 document.getElementById('status-text').innerText = "GPS SIGNAL ERROR";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
                 updateLED('led-gps', 'red');
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
@@ -351,6 +365,8 @@
                                 window.addEventListener('deviceorientation', handleOrientation, true);
                             } else {
                                 document.getElementById('status-text').innerText = "SENSOR DENIED";
+                                document.getElementById('icon-left').innerHTML = "❌";
+                                document.getElementById('icon-right').innerHTML = "❌";
                                 updateLED('led-sensor', 'red');
                             }
                         }).catch(() => { updateLED('led-sensor', 'red'); });
@@ -359,6 +375,8 @@
                 }
             } else {
                 document.getElementById('status-text').innerText = "NO SENSOR HARDWARE";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
                 updateLED('led-sensor', 'red');
             }
         }
@@ -377,6 +395,8 @@
             refreshIcon.classList.add('spinning');
             
             document.getElementById('status-text').innerText = "REFRESHING HARDWARE...";
+            document.getElementById('icon-left').innerHTML = "⏳";
+            document.getElementById('icon-right').innerHTML = "⏳";
             updateLED('led-sensor', 'amber');
             
             setTimeout(() => {
@@ -423,11 +443,20 @@
             if (isTegak) {
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
-                if(!isLocked) document.getElementById('status-text').innerText = "⚠️ PHONE VERTICAL";
+                if(!isLocked) {
+                    document.getElementById('status-text').innerText = "PHONE VERTICAL";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
+                }
             } else if (!isFlat) {
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
-                if(!isLocked) document.getElementById('status-text').innerText = "⚠️ TILTED / UNSTEADY";
+                if(!isLocked) {
+                    // RESOLVED: SYMMETRIC WARNING STATES
+                    document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
+                }
             } else {
                 sensorReady = true;
                 updateLED('led-sensor', 'green');
@@ -435,7 +464,6 @@
 
             const accText = document.getElementById('val-accuracy');
             
-            // FIX ACCURACY LOCK UNTIL GPS COMES GREEN
             if (!gpsReady) {
                 accText.innerText = "WAIT";
                 accText.style.color = "#555555";
@@ -500,10 +528,13 @@
                     document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
                     pointerAxis.classList.add('aligned');
-                    document.getElementById('status-text').innerText = "🤲 QIBLAH ALIGNED 🤲";
-                    document.getElementById('arrows-icon').innerHTML = "🤲";
-                    updateLED('led-qibla', 'green');
                     
+                    // RESOLVED: SYMMETRIC PERFECT LOCK STATE
+                    document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
+                    document.getElementById('icon-left').innerHTML = "🤲";
+                    document.getElementById('icon-right').innerHTML = "🤲";
+                    
+                    updateLED('led-qibla', 'green');
                     prayBtn.classList.add('active');
                     
                     if (navigator.vibrate) {
@@ -523,11 +554,12 @@
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
                 if (relativeAngle > 0) {
                     document.getElementById('status-text').innerText = `PUSING KANAN ${roundedAngle}°`;
-                    document.getElementById('arrows-icon').innerHTML = "↪️";
+                    document.getElementById('icon-left').innerHTML = "↪️";
+                    document.getElementById('icon-right').innerHTML = ""; // Kosongkan kanan untuk fokus pusingan
                 } else {
-                    // FIXED TYPO LIRI TO KIRI HERE
                     document.getElementById('status-text').innerText = `PUSING KIRI ${roundedAngle}°`;
-                    document.getElementById('arrows-icon').innerHTML = "↩️";
+                    document.getElementById('icon-left').innerHTML = "↩️";
+                    document.getElementById('icon-right').innerHTML = ""; // Kosongkan kanan untuk fokus pusingan
                 }
             }
         }
