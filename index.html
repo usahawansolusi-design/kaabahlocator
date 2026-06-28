@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Muktamad v6.0</title>
+    <title>Kaabah Finder - Mesra Pengguna v6.1</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -122,7 +122,7 @@
         .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
         .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
 
-        /* READY TO PRAY BUTTON - GAYA DINAMIK */
+        /* READY TO PRAY BUTTON */
         .btn-pray-status { width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; border: 1px solid var(--border); border-radius: 14px; background: #141414; color: #444444; letter-spacing: 1px; text-transform: uppercase; cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; }
         .btn-pray-status.active { background: var(--green); color: #051a0e; border-color: #4ade80; cursor: pointer; box-shadow: 0 4px 15px rgba(46,204,113,0.4); }
 
@@ -218,7 +218,7 @@
         </div>
     </div>
 
-    <!-- SKRIN POP-UP PENUTUP (SPIRITUAL SCREEN) -->
+    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-thanks">Terima kasih kerana menggunakan Kaabah Finder.<br>Selamat menunaikan ibadah solat.</div>
@@ -323,10 +323,10 @@
             let beta = event.beta || 0;
             let gamma = event.gamma || 0;
 
-            let isFlat = Math.abs(beta) < 6 && Math.abs(gamma) < 6;
+            // PELONGGARAN PARAMETER: TOLERANSI SEHINGGA 20 DARJAH (MESRA WARGA EMAS & TANGAN MANUSIA)
+            let isFlat = Math.abs(beta) < 20 && Math.abs(gamma) < 20;
             let isTegak = Math.abs(beta) > 65;
 
-            // BACKGROUND CONTROL BACKEND LOGIC (BUaccessIBH VISUAL DIREMOVE)
             if (isTegak) {
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
@@ -340,16 +340,16 @@
                 updateLED('led-sensor', 'green');
             }
 
-            // ACCURACY DISPLAY
+            // PENYELARASAN DISPLAY ACCURACY (MENUKAR 'MED' KEPADA 'GOOD' YANG LEBIH POSITIF)
             const accText = document.getElementById('val-accuracy');
             if (event.webkitCompassAccuracy) {
                 let accuracy = event.webkitCompassAccuracy;
                 if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
-                else if (accuracy > 15 && accuracy <= 30) { accText.innerText = "MED"; accText.style.color = "var(--amber)"; }
+                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
                 else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
             } else {
-                accText.innerText = event.absolute ? "HIGH" : "MED";
-                accText.style.color = event.absolute ? "var(--green)" : "var(--amber)";
+                accText.innerText = "GOOD";
+                accText.style.color = "var(--green)";
             }
 
             const needlePlate = document.getElementById('needle-plate');
@@ -388,7 +388,6 @@
             const pointerAxis = document.getElementById('compassPointer');
             const prayBtn = document.getElementById('pray-status-btn');
 
-            // LOCK ALIGNMENT SYSTEM
             if (Math.abs(relativeAngle) < 5) {
                 if (!isLocked) {
                     isLocked = true;
@@ -400,7 +399,6 @@
                     document.getElementById('arrows-icon').innerHTML = "🤲";
                     updateLED('led-qibla', 'green');
                     
-                    // AKTIFKAN BUTANG READY TO PRAY
                     prayBtn.classList.add('active');
                     
                     if (navigator.vibrate) {
