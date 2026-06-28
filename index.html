@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Mesra Pengguna v6.1</title>
+    <title>Kaabah Finder - Stabil & Beacon v6.2</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -122,9 +122,23 @@
         .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
         .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
 
-        /* READY TO PRAY BUTTON */
-        .btn-pray-status { width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; border: 1px solid var(--border); border-radius: 14px; background: #141414; color: #444444; letter-spacing: 1px; text-transform: uppercase; cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; }
-        .btn-pray-status.active { background: var(--green); color: #051a0e; border-color: #4ade80; cursor: pointer; box-shadow: 0 4px 15px rgba(46,204,113,0.4); }
+        /* READY TO PRAY BUTTON WITH BEACON PULSE ANIMATION */
+        .btn-pray-status { width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; border: 1px solid var(--border); border-radius: 14px; background: #141414; color: #444444; letter-spacing: 1px; text-transform: uppercase; cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; position: relative; }
+        
+        .btn-pray-status.active { 
+            background: var(--green); 
+            color: #051a0e; 
+            border-color: #4ade80; 
+            cursor: pointer; 
+            animation: pulse-beacon 1.8s infinite ease-in-out;
+        }
+
+        /* EFFECT BEACON (PULSING LOGIC) */
+        @keyframes pulse-beacon {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+            70% { box-shadow: 0 0 0 14px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
 
         /* SPIRITUAL SCREEN POP-UP (MODAL) */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
@@ -235,6 +249,9 @@
         let isLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
+        // VARIABEL FILTER REDAMAN UNTUK TILT SENSOR (ANTI-LOMPAT)
+        let smoothedBeta = null, smoothedGamma = null;
+
         // GENERATOR DIAL KOMPAS
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -320,12 +337,20 @@
 
         function handleOrientation(event) {
             let heading = null;
-            let beta = event.beta || 0;
-            let gamma = event.gamma || 0;
+            let rawBeta = event.beta || 0;
+            let rawGamma = event.gamma || 0;
 
-            // PELONGGARAN PARAMETER: TOLERANSI SEHINGGA 20 DARJAH (MESRA WARGA EMAS & TANGAN MANUSIA)
-            let isFlat = Math.abs(beta) < 20 && Math.abs(gamma) < 20;
-            let isTegak = Math.abs(beta) > 65;
+            // LOW-PASS FILTER JALANAN UNTUK MEMASTIKAN DATA TILT TIDAK MELOMPAT TIAP KALI TELEFON DIPUSING
+            if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
+            else {
+                smoothedBeta += 0.15 * (rawBeta - smoothedBeta);
+                smoothedGamma += 0.15 * (rawGamma - smoothedGamma);
+            }
+
+            // APABILA DI-LOCK, KITA BERI BONUS TOLERANSI $5^\circ$ TAMBAHAN AGAR MARKER TIDAK GHAIB SECARA MENGEJUT
+            let currentTolerance = isLocked ? 25 : 20;
+            let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
+            let isTegak = Math.abs(smoothedBeta) > 65;
 
             if (isTegak) {
                 sensorReady = false;
@@ -340,7 +365,7 @@
                 updateLED('led-sensor', 'green');
             }
 
-            // PENYELARASAN DISPLAY ACCURACY (MENUKAR 'MED' KEPADA 'GOOD' YANG LEBIH POSITIF)
+            // ACCURACY DISPLAY RE-STYLING
             const accText = document.getElementById('val-accuracy');
             if (event.webkitCompassAccuracy) {
                 let accuracy = event.webkitCompassAccuracy;
@@ -354,7 +379,8 @@
 
             const needlePlate = document.getElementById('needle-plate');
             if (!gpsReady || !sensorReady) {
-                needlePlate.style.opacity = "0.15"; 
+                // APABILA TILT BERMASALAH SEWAKTU SUDAH DI-LOCK, KITA JANGAN KABURKAN COMPASS SECARA DRASTIK
+                if(!isLocked) needlePlate.style.opacity = "0.15";
                 resetQiblaLock();
                 return; 
             }
