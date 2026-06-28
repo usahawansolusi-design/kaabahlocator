@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Stabil & Beacon v6.2</title>
+    <title>Kaabah Finder - Ultra Firm & Refresh v6.3</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -115,15 +115,28 @@
         .info-right-val { font-weight: 700; color: #ffffff; }
         .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
 
-        /* 4-GRID DIAGNOSTICS */
+        /* 4-GRID DIAGNOSTICS WITH INTERACTIVE REFRESH BUTTON */
         .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
         .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 10px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
+        .status-tile.interactive { cursor: pointer; transition: background 0.2s, border-color 0.2s; position: relative; }
+        .status-tile.interactive:active { background: #1f1f1f; border-color: #444; }
         .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
+        .tile-sub-label { font-size: 0.5rem; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-top: -3px; }
         .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
         .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
 
-        /* READY TO PRAY BUTTON WITH BEACON PULSE ANIMATION */
-        .btn-pray-status { width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; border: 1px solid var(--border); border-radius: 14px; background: #141414; color: #444444; letter-spacing: 1px; text-transform: uppercase; cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; position: relative; }
+        /* REFRESH ICON SPINNING ANIMATION */
+        .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* READY TO PRAY BUTTON - DIJARAKKAN DAN DIKECILKAN EXTENSION BOX-SHADOW AGAR TIDAK BERTINDIH */
+        .btn-pray-status { 
+            width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; 
+            border: 1px solid var(--border); border-radius: 14px; background: #141414; 
+            color: #444444; letter-spacing: 1px; text-transform: uppercase; 
+            cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; 
+            margin-top: 6px; /* Memberi ruang bernafas agar gelombang beacon tidak menimpa grid atas */
+        }
         
         .btn-pray-status.active { 
             background: var(--green); 
@@ -133,10 +146,10 @@
             animation: pulse-beacon 1.8s infinite ease-in-out;
         }
 
-        /* EFFECT BEACON (PULSING LOGIC) */
+        /* EFFECT BEACON PULSE (DIKECILKAN RADIUS KE 10PX SUPAYA MAKSIMUM REKABENTUK ADALAH KEMAS) */
         @keyframes pulse-beacon {
-            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
-            70% { box-shadow: 0 0 0 14px rgba(46, 204, 113, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
             100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
         }
 
@@ -155,7 +168,6 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- SKRIN MULA -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -176,7 +188,6 @@
             </div>
         </div>
 
-        <!-- SKRIN UTAMA -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -219,20 +230,21 @@
                 </div>
             </div>
 
-            <!-- 4-GRID STATUS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
-                <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
+                <div class="status-tile interactive" onclick="refreshSensors()" title="Click to reset compass hardware">
+                    <span class="tile-label">SENSOR</span>
+                    <div id="led-sensor" class="led-dot"></div>
+                    <span class="tile-sub-label">🔄 Click Reset</span>
+                </div>
                 <div class="status-tile"><span class="tile-label">QIBLA</span><div id="led-qibla" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
             </div>
 
-            <!-- BUTANG READY TO PRAY -->
             <button id="pray-status-btn" class="btn-pray-status" onclick="openSpiritualScreen()">Ready to Pray</button>
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-thanks">Terima kasih kerana menggunakan Kaabah Finder.<br>Selamat menunaikan ibadah solat.</div>
@@ -249,7 +261,7 @@
         let isLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // VARIABEL FILTER REDAMAN UNTUK TILT SENSOR (ANTI-LOMPAT)
+        // HEAVY SMOOTHING UNTUK ANTILOMPAT TILT TANGAN
         let smoothedBeta = null, smoothedGamma = null;
 
         // GENERATOR DIAL KOMPAS
@@ -335,19 +347,39 @@
             }
         }
 
+        // FUNGSI UTAMA MANUAL REFRESH SENSOR APABILA KOMPAS STUCK / HALANG GANGGUAN MAGNET
+        function refreshSensors() {
+            window.removeEventListener('deviceorientation', handleOrientation, true);
+            
+            // Set semula semua nilai memori rujukan penapis kecondongan & kompas
+            smoothedHeading = null;
+            smoothedBeta = null;
+            smoothedGamma = null;
+            sensorReady = false;
+            
+            resetQiblaLock();
+            
+            document.getElementById('status-text').innerHTML = "<span class='spinning'>🔄</span> REFRESHING SENSORS...";
+            updateLED('led-sensor', 'amber');
+            
+            setTimeout(() => {
+                setupSensor();
+            }, 800);
+        }
+
         function handleOrientation(event) {
             let heading = null;
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            // LOW-PASS FILTER JALANAN UNTUK MEMASTIKAN DATA TILT TIDAK MELOMPAT TIAP KALI TELEFON DIPUSING
+            // HEAVY SMOOTHING (PEKALI 0.05) BAGI MENGELAKKAN AMARAN TILT MELOMPAT APABILA TANGAN MEMUSING TELEFON
             if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
             else {
-                smoothedBeta += 0.15 * (rawBeta - smoothedBeta);
-                smoothedGamma += 0.15 * (rawGamma - smoothedGamma);
+                smoothedBeta += 0.05 * (rawBeta - smoothedBeta);
+                smoothedGamma += 0.05 * (rawGamma - smoothedGamma);
             }
 
-            // APABILA DI-LOCK, KITA BERI BONUS TOLERANSI $5^\circ$ TAMBAHAN AGAR MARKER TIDAK GHAIB SECARA MENGEJUT
+            // AMBIL HAD TOLERANSI: APABILA LOCK AKTIF, KITA BERI BONUS KELONGGARAN EKSTRA SUPAYA MARKER TAK GHAIB
             let currentTolerance = isLocked ? 25 : 20;
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
@@ -355,17 +387,17 @@
             if (isTegak) {
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
-                document.getElementById('status-text').innerText = "⚠️ PHONE VERTICAL";
+                if(!isLocked) document.getElementById('status-text').innerText = "⚠️ PHONE VERTICAL";
             } else if (!isFlat) {
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
-                document.getElementById('status-text').innerText = "⚠️ TILTED / UNSTEADY";
+                if(!isLocked) document.getElementById('status-text').innerText = "⚠️ TILTED / UNSTEADY";
             } else {
                 sensorReady = true;
                 updateLED('led-sensor', 'green');
             }
 
-            // ACCURACY DISPLAY RE-STYLING
+            // COMFORTING ACCURACY UI TERM
             const accText = document.getElementById('val-accuracy');
             if (event.webkitCompassAccuracy) {
                 let accuracy = event.webkitCompassAccuracy;
@@ -379,9 +411,10 @@
 
             const needlePlate = document.getElementById('needle-plate');
             if (!gpsReady || !sensorReady) {
-                // APABILA TILT BERMASALAH SEWAKTU SUDAH DI-LOCK, KITA JANGAN KABURKAN COMPASS SECARA DRASTIK
-                if(!isLocked) needlePlate.style.opacity = "0.15";
-                resetQiblaLock();
+                if(!isLocked) {
+                    needlePlate.style.opacity = "0.15";
+                    resetQiblaLock();
+                }
                 return; 
             }
 
@@ -414,7 +447,10 @@
             const pointerAxis = document.getElementById('compassPointer');
             const prayBtn = document.getElementById('pray-status-btn');
 
-            if (Math.abs(relativeAngle) < 5) {
+            // PRINSIP HYSTERESIS (DWI-PAGAR): MASUK PINTU KETAT (< 5°), KELUAR PINTU LONGGAR (> 12°)
+            let errorMargin = isLocked ? 12 : 5;
+
+            if (Math.abs(relativeAngle) < errorMargin) {
                 if (!isLocked) {
                     isLocked = true;
                     document.body.style.backgroundColor = "#073b24"; 
@@ -462,6 +498,18 @@
         function openSpiritualScreen() {
             if (document.getElementById('pray-status-btn').classList.contains('active')) {
                 document.getElementById('spiritual-modal').style.display = 'flex';
+            }
+        }
+
+        function cancelVibration() {
+             clearInterval(vibrateInterval);
+             if (navigator.vibrate) navigator.vibrate(0);
+        }
+
+        function openSpiritualScreen() {
+            if (document.getElementById('pray-status-btn').classList.contains('active')) {
+                document.getElementById('spiritual-modal').style.display = 'flex';
+                cancelVibration();
             }
         }
 
