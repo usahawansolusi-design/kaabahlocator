@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Dynamic Dial v6.6</title>
+    <title>Kaabah Finder - Clean Radar v7.0</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -59,50 +59,18 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 24px; font-weight: 600; }
 
-        /* COMPASS AREA WITH DYNAMIC DIAL STRUCTURE */
+        /* COMPASS AREA WITH REVERTED AND CLEAN RADAR STRUCTURE */
         .compass-outer-wrapper { position: relative; width: 100%; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
         
-        .compass-container { 
-            position: relative; width: 210px; height: 210px; 
-            display: flex; justify-content: center; align-items: center; 
-            border: 2px solid rgba(212, 175, 55, 0.4); border-radius: 50%; 
-            background-color: #000000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            overflow: visible;
-        }
-
-        /* DYNAMIC DIAL PLATE (THE ONE THAT ROTATES) */
-        #dynamic-dial-plate {
-            position: absolute; width: 100%; height: 100%;
-            border-radius: 50%;
-            will-change: transform;
-            transition: opacity 0.3s ease;
-            opacity: 0.2; /* Dimmed until sensors are fully ready */
-        }
-        
-        .ticks-container { position: absolute; width: 100%; height: 100%; border-radius: 50%; }
-        .tick {
-            position: absolute; width: 1.5px; height: 5px;
-            background-color: rgba(212, 175, 55, 0.3);
-            left: 50%; transform-origin: bottom center; bottom: 50%;
-        }
-        .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.7); }
-
-        .compass-cardinal { position: absolute; font-size: 1.15rem; font-weight: 700; color: var(--gold); z-index: 5; }
-        .cardinal-n { top: 12px; left: 50%; transform: translateX(-50%); } 
-        .cardinal-e { right: 14px; top: 50%; transform: translateY(-50%); color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; } 
-        .cardinal-s { bottom: 12px; left: 50%; transform: translateX(-50%); color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; } 
-        .cardinal-w { left: 14px; top: 50%; transform: translateY(-50%); color: rgba(212, 175, 55, 0.3); font-weight: 400; font-size: 0.95rem; }
-
-        /* KAABAH ICON PLACED INSIDE THE ROTATING DIAL VIA JAVASCRIPT */
+        /* KAABAH ICON CORE STYLE (FIXED BACK AT THE TOP) */
         #kaabah-outer { 
-            position: absolute; top: -14px; left: 50%; transform: translateX(-50%); 
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
             font-size: 1.4rem; z-index: 15; 
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: none; /* Hidden until GPS sets the bearing placement */
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* HIGH INTENSITY BEACON PULSE (BULLSEYE DETECTED) */
+        /* HIGH INTENSITY BEACON PULSE UNTUK KAABAH ICON (BULLSEYE DETECTED) */
         #kaabah-outer.perfect-lock {
             transform: translateX(-50%) scale(1.3);
             animation: kaabah-glow-pulse 1.0s infinite ease-in-out;
@@ -113,19 +81,20 @@
             100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
         }
 
-        /* FIXED POINTER / JARUM PAKU MATI AT 12 O'CLOCK */
-        .fixed-needle-container {
-            position: absolute; width: 100%; height: 100%;
-            top: 0; left: 0; display: flex; justify-content: center; align-items: center;
-            z-index: 12; pointer-events: none;
+        .compass-container { 
+            position: relative; width: 210px; height: 210px; 
+            display: flex; justify-content: center; align-items: center; 
+            border: 2px solid rgba(212, 175, 55, 0.4); border-radius: 50%; 
+            background-color: #000000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-        .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
-        .pointer-axis::before {
-            content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
-            border-left: 6px solid transparent; border-right: 6px solid transparent;
-            border-bottom: 86px solid #FFD700;
+        
+        .ticks-container { position: absolute; width: 100%; height: 100%; border-radius: 50%; }
+        .tick {
+            position: absolute; width: 1.5px; height: 5px;
+            background-color: rgba(212, 175, 55, 0.3);
+            left: 50%; transform-origin: bottom center; bottom: 50%;
         }
-        .pointer-axis.aligned::before { border-bottom-color: var(--green); }
+        .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.7); }
 
         /* FLOATING SIDE ACTION BUTTONS STYLE */
         .side-action-btn {
@@ -138,6 +107,16 @@
         .side-action-btn:active { background: #222; transform: scale(0.92); border-color: #444; }
         .btn-side-left { left: 4px; }
         .btn-side-right { right: 4px; }
+
+        /* NEEDLE STRUCTURE (ROTATES DYNAMICALLY) */
+        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
+        .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
+        .pointer-axis::before {
+            content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+            border-left: 6px solid transparent; border-right: 6px solid transparent;
+            border-bottom: 76px solid #FFD700;
+        }
+        .pointer-axis.aligned::before { border-bottom-color: var(--green); }
 
         .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; }
         .direction-icon { font-size: 1.4rem; display: flex; align-items: center; }
@@ -220,7 +199,7 @@
             </div>
         </div>
 
-        <!-- MAIN APP SCREEN -->
+        <!-- MAIN APP APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -230,19 +209,11 @@
                 <!-- BUTANG KIRI: BACK TO START SCREEN -->
                 <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
                 
+                <div id="kaabah-outer">🕋</div>
                 <div class="compass-container">
-                    <!-- THE ROTATING DIAL ELEMENT -->
-                    <div id="dynamic-dial-plate">
-                        <div id="kaabah-outer">🕋</div>
-                        <div class="ticks-container" id="ticks"></div>
-                        <div class="compass-cardinal cardinal-n">N</div>
-                        <div class="compass-cardinal cardinal-e">E</div>
-                        <div class="compass-cardinal cardinal-s">S</div>
-                        <div class="compass-cardinal cardinal-w">W</div>
-                    </div>
-
-                    <!-- FIXED CENTER POINTER (STAYS AT 12 O'CLOCK) -->
-                    <div class="fixed-needle-container">
+                    <div class="ticks-container" id="ticks"></div>
+                    
+                    <div class="needle-wrapper" id="needle-plate">
                         <div class="pointer-axis" id="compassPointer"></div>
                     </div>
                 </div>
@@ -273,7 +244,7 @@
                 </div>
             </div>
 
-            <!-- 4-GRID STATUS -->
+            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -281,7 +252,7 @@
                 <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
             </div>
 
-            <!-- BUTANG READY TO PRAY -->
+            <!-- BUTANG READY TO PRAY DENGAN BEACON KUNING/PUTIH BILA AKTIF -->
             <button id="pray-status-btn" class="btn-pray-status" onclick="openSpiritualScreen()">Ready to Pray</button>
         </div>
     </div>
@@ -305,7 +276,6 @@
 
         let smoothedBeta = null, smoothedGamma = null;
 
-        // Generate ticks dynamically
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
             const tick = document.createElement('div');
@@ -334,7 +304,7 @@
             document.getElementById('status-text').innerText = "CONNECTING GPS...";
             updateLED('led-gps', 'amber');
 
-            // FIX: Ensure accuracy stays at WAIT until GPS responds cleanly
+            // FIX GPS WAIT BUG
             const accText = document.getElementById('val-accuracy');
             accText.innerText = "WAIT";
             accText.style.color = "#555555";
@@ -353,12 +323,6 @@
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
                 document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
                 
-                // Position the Kaabah Icon dynamically on the rotating plate array
-                const kaabahIcon = document.getElementById('kaabah-outer');
-                kaabahIcon.style.transformOrigin = "bottom center";
-                kaabahIcon.style.transform = `translateX(-50%) rotate(${qiblaBearing}deg) translateY(-84px)`;
-                kaabahIcon.style.display = 'block';
-
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
                     .then(res => res.json())
                     .then(data => {
@@ -436,8 +400,6 @@
             updateLED('led-qibla', 'off');
             document.getElementById('val-accuracy').innerText = "WAIT";
             document.getElementById('val-accuracy').style.color = "#555555";
-            document.getElementById('dynamic-dial-plate').style.opacity = "0.2";
-            document.getElementById('kaabah-outer').style.display = 'none';
             
             document.getElementById('app-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'flex';
@@ -473,7 +435,7 @@
 
             const accText = document.getElementById('val-accuracy');
             
-            // FIX BUG IN IMAGE 3: Lock accuracy reading to WAIT unless GPS is fully established
+            // FIX ACCURACY LOCK UNTIL GPS COMES GREEN
             if (!gpsReady) {
                 accText.innerText = "WAIT";
                 accText.style.color = "#555555";
@@ -490,16 +452,16 @@
                 accText.style.color = "var(--green)";
             }
 
-            const dialPlate = document.getElementById('dynamic-dial-plate');
+            const needlePlate = document.getElementById('needle-plate');
             if (!sensorReady) {
                 if(!isLocked) {
-                    dialPlate.style.opacity = "0.15";
+                    needlePlate.style.opacity = "0.15";
                     resetQiblaLock();
                 }
                 return; 
             }
 
-            dialPlate.style.opacity = "1";
+            needlePlate.style.opacity = "1";
 
             if (event.webkitCompassHeading) {
                 heading = event.webkitCompassHeading;
@@ -519,12 +481,10 @@
                 smoothedHeading = (smoothedHeading + 360) % 360;
             }
 
-            // DYNAMIC DIAL ROTATION SYSTEM (Counter Earth rotation)
-            let dialRotation = (360 - smoothedHeading) % 360;
-            dialPlate.style.transform = `rotate(${dialRotation}deg)`;
+            let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
+            needlePlate.style.transform = `rotate(${arrowRotation}deg)`;
 
-            // CALCULATE DISTANCE TO FIXED TOP TARGET POINTER (12 O'Clock)
-            let relativeAngle = (qiblaBearing - smoothedHeading + 360) % 360;
+            let relativeAngle = arrowRotation;
             if (relativeAngle > 180) relativeAngle -= 360;
 
             const pointerAxis = document.getElementById('compassPointer');
@@ -552,14 +512,10 @@
                     }
                 }
 
-                // CRITICAL TARGET LOCK (BULLSEYE DETECTOR COUPLING)
                 if (Math.abs(relativeAngle) <= 1.5) {
                     kaabahIcon.classList.add('perfect-lock');
-                    // Reset translation context together with scale animations cleanly
-                    kaabahIcon.style.transform = `translateX(-50%) rotate(${qiblaBearing}deg) translateY(-84px) scale(1.3)`;
                 } else {
                     kaabahIcon.classList.remove('perfect-lock');
-                    kaabahIcon.style.transform = `translateX(-50%) rotate(${qiblaBearing}deg) translateY(-84px) scale(1.0)`;
                 }
 
             } else {
@@ -569,18 +525,15 @@
                     document.getElementById('status-text').innerText = `PUSING KANAN ${roundedAngle}°`;
                     document.getElementById('arrows-icon').innerHTML = "↪️";
                 } else {
-                    document.getElementById('status-text').innerText = `PUSING LIRI ${roundedAngle}°`;
+                    // FIXED TYPO LIRI TO KIRI HERE
+                    document.getElementById('status-text').innerText = `PUSING KIRI ${roundedAngle}°`;
                     document.getElementById('arrows-icon').innerHTML = "↩️";
                 }
             }
         }
 
         function resetQiblaLock() {
-            const kaabahIcon = document.getElementById('kaabah-outer');
-            if (kaabahIcon) {
-                kaabahIcon.classList.remove('perfect-lock');
-                kaabahIcon.style.transform = `translateX(-50%) rotate(${qiblaBearing}deg) translateY(-84px) scale(1.0)`;
-            }
+            document.getElementById('kaabah-outer').classList.remove('perfect-lock');
             if (isLocked) {
                 isLocked = false;
                 document.body.style.backgroundColor = "var(--bg)"; 
