@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Dual Action Symmetry v6.4</title>
+    <title>Kaabah Finder - Bullseye Target v6.5</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -33,24 +33,15 @@
             height: 100%; max-height: 100%;
         }
 
-        /* STARTING PAGE - PERFECT CENTER */
+        /* STARTING PAGE */
         #start-screen {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-            height: 100%;
+            display: flex; flex-direction: column; width: 100%;
+            justify-content: center; align-items: center; gap: 24px; height: 100%;
         }
 
         #app-screen { 
-            display: none; 
-            flex-direction: column; 
-            width: 100%; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 12px; 
+            display: none; flex-direction: column; width: 100%; 
+            justify-content: center; align-items: center; gap: 12px; 
         }
 
         .brand-container { display: flex; flex-direction: column; align-items: center; }
@@ -68,9 +59,27 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 24px; font-weight: 600; }
 
-        /* COMPASS AREA WITH FLOATING SIDES BUTTONS (REF: 1000041812.jpg) */
+        /* COMPASS AREA WITH FLOATING SIDES BUTTONS */
         .compass-outer-wrapper { position: relative; width: 100%; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
-        #kaabah-outer { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.4rem; z-index: 15; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        
+        /* KAABAH ICON CORE STYLE */
+        #kaabah-outer { 
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
+            font-size: 1.4rem; z-index: 15; 
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* NEW: HIGH INTENSITY BEACON PULSE UNTUK KAABAH ICON (BULLSEYE DETECTED) */
+        #kaabah-outer.perfect-lock {
+            transform: translateX(-50%) scale(1.3);
+            animation: kaabah-glow-pulse 1.0s infinite ease-in-out;
+        }
+        @keyframes kaabah-glow-pulse {
+            0% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
+            50% { filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 22px #ffd700); }
+            100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
+        }
 
         .compass-container { 
             position: relative; width: 210px; height: 210px; 
@@ -118,7 +127,7 @@
         .direction-box { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; }
         .direction-icon { font-size: 1.4rem; display: flex; align-items: center; }
 
-        /* INFO CARD ROW (HORIZONTAL) */
+        /* INFO CARD ROW */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
         .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.95rem; }
         .info-left { display: flex; align-items: center; gap: 8px; color: #aaaaaa; font-weight: 500; }
@@ -127,18 +136,17 @@
         .info-right-val { font-weight: 700; color: #ffffff; }
         .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
 
-        /* 4-GRID DIAGNOSTICS - KEMBALI ASAL & SIMETRI */
+        /* 4-GRID DIAGNOSTICS */
         .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
         .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 12px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
         .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
         .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
         .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
 
-        /* REFRESH ICON SPINNING ANIMATION */
         .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* READY TO PRAY BUTTON - DIJARAKKAN DAN DIKECILKAN EXTENSION BOX-SHADOW AGAR TIDAK BERTINDIH */
+        /* READY TO PRAY BUTTON WITH HIGH CONTRAST GOLD/WHITE BEACON */
         .btn-pray-status { 
             width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; 
             border: 1px solid var(--border); border-radius: 14px; background: #141414; 
@@ -152,17 +160,17 @@
             color: #051a0e; 
             border-color: #4ade80; 
             cursor: pointer; 
-            animation: pulse-beacon 1.8s infinite ease-in-out;
+            animation: pulse-beacon-gold-white 1.4s infinite ease-in-out;
         }
 
-        /* EFFECT BEACON PULSE RADIUS 10PX */
-        @keyframes pulse-beacon {
-            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6); }
-            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        /* MODIFIED: HIGHLY ATTRACTIVE GOLD & WHITE GLOW RADIUS EFFECTS */
+        @keyframes pulse-beacon-gold-white {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.85), 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0), 0 0 0 22px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* SPIRITUAL SCREEN POP-UP (MODAL) */
+        /* SPIRITUAL SCREEN POP-UP */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
         .modal-content { max-width: 310px; display: flex; flex-direction: column; gap: 28px; animation: fadeIn 0.5s ease forwards; }
         .modal-thanks { font-size: 1.15rem; font-weight: 700; color: var(--green); letter-spacing: 0.5px; line-height: 1.5; }
@@ -177,7 +185,7 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- SKRIN MULA -->
+        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -198,14 +206,14 @@
             </div>
         </div>
 
-        <!-- SKRIN UTAMA -->
+        <!-- MAIN APP APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
             </div>
 
             <div class="compass-outer-wrapper">
-                <!-- BUTANG KIRI: BACK TO START SCREEN (IKON ANAK PANAH PUSING BALIK) -->
+                <!-- BUTANG KIRI: BACK TO START SCREEN -->
                 <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
                 
                 <div id="kaabah-outer">🕋</div>
@@ -221,7 +229,7 @@
                     </div>
                 </div>
 
-                <!-- BUTANG KANAN: REFRESH SENSORS (IKON ANAK PANAH BULAT) -->
+                <!-- BUTANG KANAN: REFRESH SENSORS -->
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
@@ -247,7 +255,7 @@
                 </div>
             </div>
 
-            <!-- 4-GRID STATUS (DIBERSIHKAN SEMULA SUPAYA SIMETRI KEMAS) -->
+            <!-- 4-GRID STATUS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -255,7 +263,7 @@
                 <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
             </div>
 
-            <!-- BUTANG READY TO PRAY -->
+            <!-- BUTANG READY TO PRAY DENGAN BEACON KUNING/PUTIH BILA AKTIF -->
             <button id="pray-status-btn" class="btn-pray-status" onclick="openSpiritualScreen()">Ready to Pray</button>
         </div>
     </div>
@@ -277,10 +285,8 @@
         let isLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // HEAVY TILT SMOOTHING 0.05 ANTI-LOMPAT
         let smoothedBeta = null, smoothedGamma = null;
 
-        // GENERATOR DIAL KOMPAS
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
             const tick = document.createElement('div');
@@ -363,7 +369,6 @@
             }
         }
 
-        // FUNGSI MANUAL REFRESH SENSOR DENGAN ANIMASI SPIN PADA IKON SISI KANAN
         function refreshSensors() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
             
@@ -386,7 +391,6 @@
             }, 800);
         }
 
-        // FUNGSI BACK TO START PAGE (BUTANG SISI KIRI)
         function goBackToStart() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
             resetQiblaLock();
@@ -483,8 +487,9 @@
 
             const pointerAxis = document.getElementById('compassPointer');
             const prayBtn = document.getElementById('pray-status-btn');
+            const kaabahIcon = document.getElementById('kaabah-outer');
 
-            // HYSTERESIS DWI-PAGAR: MASUK PINTU < 5°, LEPAS PINTU > 12°
+            // HYSTERESIS SYSTEM
             let errorMargin = isLocked ? 12 : 5;
 
             if (Math.abs(relativeAngle) < errorMargin) {
@@ -505,6 +510,15 @@
                         vibrateInterval = setInterval(() => navigator.vibrate(300), 700);
                     }
                 }
+
+                // NEW FEATURE: CRITICAL TARGET LOCK (BULLSEYE DETECTOR)
+                // Hanya menyala jika ralat sudut tersangat halus <= 1.5 darjah!
+                if (Math.abs(relativeAngle) <= 1.5) {
+                    kaabahIcon.classList.add('perfect-lock');
+                } else {
+                    kaabahIcon.classList.remove('perfect-lock');
+                }
+
             } else {
                 resetQiblaLock();
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
@@ -519,6 +533,7 @@
         }
 
         function resetQiblaLock() {
+            document.getElementById('kaabah-outer').classList.remove('perfect-lock');
             if (isLocked) {
                 isLocked = false;
                 document.body.style.backgroundColor = "var(--bg)"; 
