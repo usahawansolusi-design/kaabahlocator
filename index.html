@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v7.2</title>
+    <title>Kaabah Finder - Universal Symmetric v7.3</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -36,7 +36,7 @@
         /* STARTING PAGE */
         #start-screen {
             display: flex; flex-direction: column; width: 100%;
-            justify-content: center; align-items: center; gap: 20px; height: 100%;
+            justify-content: center; align-items: center; gap: 14px; height: 100%;
         }
 
         #app-screen { 
@@ -51,34 +51,34 @@
 
         .app-header { font-size: 1.25rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 
-        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; box-sizing: border-box; }
-        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 12px 0; text-align: left; }
+        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px; padding: 14px 20px; box-sizing: border-box; }
+        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
         
         .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
         
-        .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 14px; font-weight: 600; }
+        .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-        /* PRE-EMPTIVE CALIBRATION BOX (IMAGE Rujukan 1000041860.jpg) */
+        /* PRE-EMPTIVE CALIBRATION BOX - RE-ENFORCED FOR BETTER VISIBILITY */
         .calib-guide-box {
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
-            padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 12px;
+            padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
         }
         .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
         .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
         
-        /* PURE CSS INFINITY 8 ANIMATION */
-        .infinity-container { position: relative; width: 60px; height: 30px; margin-top: 4px; }
+        /* ADJUSTMENT 1: GIANT CSS INFINITY 8 ANIMATION (Rabun-Friendly) */
+        .infinity-container { position: relative; width: 140px; height: 55px; margin-top: 6px; }
         .infinity-path {
-            width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.2);
-            stroke-width: 2; stroke-dasharray: 4 2;
+            width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.3);
+            stroke-width: 2.5; stroke-dasharray: 5 3;
         }
         .infinity-pointer {
-            position: absolute; width: 8px; height: 8px; background: var(--gold);
+            position: absolute; width: 12px; height: 12px; background: #ffffff;
             border-radius: 50%; top: 0; left: 0;
-            offset-path: path('M 15 15 C 15 25, 5 25, 5 15 C 5 5, 15 5, 30 15 C 45 25, 55 25, 55 15 C 55 5, 45 5, 30 15 Z');
+            offset-path: path('M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z');
             animation: moveInfinity 2.5s infinite linear;
-            box-shadow: 0 0 8px var(--gold), 0 0 15px #ffffff;
+            box-shadow: 0 0 10px #ffffff, 0 0 20px var(--gold), 0 0 30px var(--gold);
         }
         @keyframes moveInfinity { 100% { offset-distance: 100%; } }
 
@@ -193,14 +193,24 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* SPIRITUAL SCREEN POP-UP */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
-        .modal-content { max-width: 310px; display: flex; flex-direction: column; gap: 28px; animation: fadeIn 0.5s ease forwards; }
-        .modal-thanks { font-size: 1.15rem; font-weight: 700; color: var(--green); letter-spacing: 0.5px; line-height: 1.5; }
-        .modal-divider { width: 40px; height: 2px; background: var(--gold); margin: 0 auto; }
-        .modal-verse { font-size: 1rem; font-weight: 500; color: #e0e0e0; line-height: 1.7; font-style: italic; }
-        .modal-reference { font-size: 0.8rem; font-weight: 700; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
-        .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 10px 24px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; }
+        /* SPIRITUAL SCREEN POP-UP (MODAL MODIFIED FOR TEXT EXTRA CARE) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; }
+        
+        /* ADJUSTMENT 2: INTEGRATED AND HIGHLIGHTED BRAND TEXT */
+        .modal-thanks-lead { font-size: 1.15rem; font-weight: 700; color: var(--green); line-height: 1.4; margin: 0; }
+        .brand-highlight { font-size: 1.35rem; font-weight: 900; color: var(--gold); display: inline-block; white-space: nowrap; letter-spacing: 0.5px; margin-top: 4px; }
+        .modal-thanks-sub { font-size: 1.05rem; font-weight: 700; color: var(--green); margin: 4px 0 0 0; }
+        
+        .modal-divider { width: 50px; height: 2px; background: rgba(255, 255, 255, 0.2); margin: 6px auto; }
+        
+        /* ADJUSTMENT 3: BILINGUAL VERSE STYLING */
+        .verse-container { display: flex; flex-direction: column; gap: 12px; text-align: center; padding: 0 4px; }
+        .modal-verse-en { font-size: 0.88rem; font-weight: 500; color: #bbbbbb; line-height: 1.5; font-style: italic; margin: 0; }
+        .modal-verse-my { font-size: 0.92rem; font-weight: 600; color: #ffffff; line-height: 1.5; margin: 0; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; }
+        
+        .modal-reference { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+        .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -229,9 +239,11 @@
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
+                
+                <!-- ADJUSTMENT 1: GIANT ACCESSIBLE INFINITY TRACK -->
                 <div class="infinity-container">
-                    <svg class="infinity-path" viewBox="0 0 60 30">
-                        <path d="M 15 15 C 15 25, 5 25, 5 15 C 5 5, 15 5, 30 15 C 45 25, 55 25, 55 15 C 55 5, 45 5, 30 15 Z"/>
+                    <svg class="infinity-path" viewBox="0 0 140 55">
+                        <path d="M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z"/>
                     </svg>
                     <div class="infinity-pointer"></div>
                 </div>
@@ -297,12 +309,24 @@
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP -->
+    <!-- SPIRITUAL MODAL POP-UP (BILINGUAL & ACCESSIBLE) -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-thanks">Thank you for using Kaabah Finder.<br>Have a blessed prayer.</div>
+            <!-- ADJUSTMENT 2: HIGHLIGHTED ONE-SENTENCE PRODUCT HIGHLIGHT -->
+            <div>
+                <p class="modal-thanks-lead">Thank you for using</p>
+                <span class="brand-highlight">Kaabah Finder</span>
+                <p class="modal-thanks-sub">Have a blessed prayer.</p>
+            </div>
+            
             <div class="modal-divider"></div>
-            <div class="modal-verse">"Indeed, prayer has been decreed upon the believers a decree of specified times."</div>
+            
+            <!-- ADJUSTMENT 3: BILINGUAL VERSE FOR ELDERLY GENERATION -->
+            <div class="verse-container">
+                <p class="modal-verse-en">"Indeed, prayer has been decreed upon the believers a decree of specified times."</p>
+                <p class="modal-verse-my">"Sesungguhnya solat itu adalah satu kewajipan yang ditentukan waktunya atas orang-orang yang beriman."</p>
+            </div>
+            
             <div class="modal-reference">Surah An-Nisa': 103</div>
             <button class="btn-back" onclick="closeSpiritualScreen()">Return</button>
         </div>
@@ -314,10 +338,10 @@
         let isLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // UNIVERSAL TUNING VALUES (Mesra Oppo A5 & Semua Peranti)
+        // UNIVERSAL TUNING VALUES
         let smoothedBeta = null, smoothedGamma = null;
-        const FILTER_FACTOR = 0.20; // Lebih responsif, tiada lagi 'stuck lag'
-        const FLAT_TOLERANCE = 25;  // Meluaskan zon selamat genggaman rata tangan
+        const FILTER_FACTOR = 0.20; 
+        const FLAT_TOLERANCE = 25;  
 
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -463,7 +487,6 @@
 
             if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
             else {
-                // UNIVERSAL RESPONSE FILTER
                 smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
                 smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
             }
@@ -476,7 +499,6 @@
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
                 if(!isLocked) {
-                    // FULL SYMMETRIC WARNING STATES
                     document.getElementById('status-text').innerText = "PHONE VERTICAL";
                     document.getElementById('icon-left').innerHTML = "⚠️";
                     document.getElementById('icon-right').innerHTML = "⚠️";
@@ -485,7 +507,6 @@
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
                 if(!isLocked) {
-                    // FULL SYMMETRIC WARNING STATES
                     document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
                     document.getElementById('icon-left').innerHTML = "⚠️";
                     document.getElementById('icon-right').innerHTML = "⚠️";
@@ -561,7 +582,6 @@
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
                     pointerAxis.classList.add('aligned');
                     
-                    // FULL SYMMETRIC PERFECT LOCK STATE
                     document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
                     document.getElementById('icon-left').innerHTML = "🤲";
                     document.getElementById('icon-right').innerHTML = "🤲";
@@ -585,12 +605,10 @@
                 resetQiblaLock();
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
                 if (relativeAngle > 0) {
-                    // FULL SYMMETRIC TURN DIRECTIONS (ENGLISH)
                     document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
                     document.getElementById('icon-left').innerHTML = "↪️";
                     document.getElementById('icon-right').innerHTML = "↪️";
                 } else {
-                    // FULL SYMMETRIC TURN DIRECTIONS (ENGLISH)
                     document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
                     document.getElementById('icon-left').innerHTML = "↩️";
                     document.getElementById('icon-right').innerHTML = "↩️";
