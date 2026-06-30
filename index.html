@@ -14,6 +14,7 @@
             --red: #e74c3c;
             --amber: #f39c12;
             --dim-gray: #222222;
+            --magnet-red: #d32f2f; /* Ditambah: Warna merah garang untuk gangguan magnet */
         }
 
         body {
@@ -495,10 +496,37 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
+            // Tambahan Logik: Cek herotan magnet berdasarkan accuracy sensor
+            let isMagneticAnomaly = false;
+            const accText = document.getElementById('val-accuracy');
+            
+            if (!gpsReady) {
+                accText.innerText = "WAIT";
+                accText.style.color = "#555555";
+                return;
+            }
+
+            if (event.webkitCompassAccuracy) {
+                let accuracy = event.webkitCompassAccuracy;
+                if (accuracy > 0 && accuracy <= 15) { 
+                    accText.innerText = "HIGH"; accText.style.color = "var(--green)"; 
+                } else if (accuracy > 15 && accuracy <= 45) { 
+                    accText.innerText = "GOOD"; accText.style.color = "var(--green)"; 
+                } else { 
+                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
+                    isMagneticAnomaly = true; // Set true jika dikesan ada gangguan besi/magnet
+                }
+            } else {
+                accText.innerText = "GOOD";
+                accText.style.color = "var(--green)";
+            }
+
             if (isTegak) {
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
-                if(!isLocked) {
+                if(!isLocked && !isMagneticAnomaly) {
+                    document.getElementById('instruction-card').style.backgroundColor = "#141414";
+                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
                     document.getElementById('status-text').innerText = "PHONE VERTICAL";
                     document.getElementById('icon-left').innerHTML = "⚠️";
                     document.getElementById('icon-right').innerHTML = "⚠️";
@@ -506,7 +534,9 @@
             } else if (!isFlat) {
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
-                if(!isLocked) {
+                if(!isLocked && !isMagneticAnomaly) {
+                    document.getElementById('instruction-card').style.backgroundColor = "#141414";
+                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
                     document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
                     document.getElementById('icon-left').innerHTML = "⚠️";
                     document.getElementById('icon-right').innerHTML = "⚠️";
@@ -516,28 +546,19 @@
                 updateLED('led-sensor', 'green');
             }
 
-            const accText = document.getElementById('val-accuracy');
-            if (!gpsReady) {
-                accText.innerText = "WAIT";
-                accText.style.color = "#555555";
-                return;
-            }
-
-            if (event.webkitCompassAccuracy) {
-                let accuracy = event.webkitCompassAccuracy;
-                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
-                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
-                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
-            } else {
-                accText.innerText = "GOOD";
-                accText.style.color = "var(--green)";
-            }
-
             const needlePlate = document.getElementById('needle-plate');
             if (!sensorReady) {
                 if(!isLocked) {
                     needlePlate.style.opacity = "0.15";
                     resetQiblaLock();
+                }
+                // Keutamaan paparan: Tunjuk amaran magnet herot walaupun keadaan senget
+                if (isMagneticAnomaly && !isLocked) {
+                    document.getElementById('instruction-card').style.backgroundColor = "var(--magnet-red)";
+                    document.getElementById('instruction-card').style.borderColor = "#ff4d4d";
+                    document.getElementById('status-text').innerText = "MAGNET DISTORTION! DO FIGURE-8 WAVE";
+                    document.getElementById('icon-left').innerHTML = "🧲";
+                    document.getElementById('icon-right').innerHTML = "🧲";
                 }
                 return; 
             }
@@ -603,15 +624,29 @@
 
             } else {
                 resetQiblaLock();
-                let roundedAngle = Math.abs(Math.round(relativeAngle));
-                if (relativeAngle > 0) {
-                    document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
-                    document.getElementById('icon-left').innerHTML = "↪️";
-                    document.getElementById('icon-right').innerHTML = "↪️";
-                } else {
-                    document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
-                    document.getElementById('icon-left').innerHTML = "↩️";
-                    document.getElementById('icon-right').innerHTML = "↩️";
+                
+                // JIKA GANGGUAN MAGNET (Kotak tengah bertukar merah garang)
+                if (isMagneticAnomaly) {
+                    document.getElementById('instruction-card').style.backgroundColor = "var(--magnet-red)";
+                    document.getElementById('instruction-card').style.borderColor = "#ff4d4d";
+                    document.getElementById('status-text').innerText = "MAGNET DISTORTION! DO FIGURE-8 WAVE";
+                    document.getElementById('icon-left').innerHTML = "🧲";
+                    document.getElementById('icon-right').innerHTML = "🧲";
+                } 
+                // KEADAAN NORMAL (Tunjuk pusing kiri/kanan macam biasa)
+                else {
+                    document.getElementById('instruction-card').style.backgroundColor = "#141414";
+                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
+                    let roundedAngle = Math.abs(Math.round(relativeAngle));
+                    if (relativeAngle > 0) {
+                        document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
+                        document.getElementById('icon-left').innerHTML = "↪️";
+                        document.getElementById('icon-right').innerHTML = "↪️";
+                    } else {
+                        document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
+                        document.getElementById('icon-left').innerHTML = "↩️";
+                        document.getElementById('icon-right').innerHTML = "↩️";
+                    }
                 }
             }
         }
