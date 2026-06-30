@@ -438,6 +438,18 @@
                 document.getElementById('icon-right').innerHTML = "❌";
                 updateLED('led-sensor', 'red');
             }
+
+            // Pasang pengesan khas Android jika peranti minta kalibrasi magnet
+            window.addEventListener('compassneedscalibration', function(e) {
+                e.preventDefault();
+                triggerAndroidCompassAnomaly();
+            }, true);
+        }
+
+        let androidForceAnomaly = false;
+        function triggerAndroidCompassAnomaly() {
+            androidForceAnomaly = true;
+            setTimeout(() => { androidForceAnomaly = false; }, 8000); // Set amaran tamat selepas 8 saat gerakan
         }
 
         function refreshSensors() {
@@ -446,6 +458,7 @@
             smoothedBeta = null;
             smoothedGamma = null;
             sensorReady = false;
+            androidForceAnomaly = false;
             resetQiblaLock();
             
             const refreshIcon = document.getElementById('refresh-btn-ui');
@@ -470,6 +483,7 @@
             smoothedGamma = null;
             gpsReady = false;
             sensorReady = false;
+            androidForceAnomaly = false;
             
             updateLED('led-gps', 'off');
             updateLED('led-sensor', 'off');
@@ -496,7 +510,7 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
-            // Tambahan Logik: Cek herotan magnet berdasarkan accuracy sensor
+            // --- PENGESANAN DUET GANGGUAN MAGNET (iOS & Android) ---
             let isMagneticAnomaly = false;
             const accText = document.getElementById('val-accuracy');
             
@@ -506,7 +520,8 @@
                 return;
             }
 
-            if (event.webkitCompassAccuracy) {
+            // Logik iOS (Menggunakan darjah ralat webkit)
+            if (event.webkitCompassAccuracy !== undefined && event.webkitCompassAccuracy !== null) {
                 let accuracy = event.webkitCompassAccuracy;
                 if (accuracy > 0 && accuracy <= 15) { 
                     accText.innerText = "HIGH"; accText.style.color = "var(--green)"; 
@@ -514,11 +529,27 @@
                     accText.innerText = "GOOD"; accText.style.color = "var(--green)"; 
                 } else { 
                     accText.innerText = "LOW"; accText.style.color = "var(--red)";
-                    isMagneticAnomaly = true; // Set true jika dikesan ada gangguan besi/magnet
+                    isMagneticAnomaly = true; 
                 }
-            } else {
-                accText.innerText = "GOOD";
-                accText.style.color = "var(--green)";
+            } 
+            // Logik Android (Membaca isyarat ketepatan standard Chrome/Android)
+            else if (event.accuracy !== undefined && event.accuracy !== null) {
+                let accValue = event.accuracy; // Nilai standard pulangan integer/teks
+                if (accValue === 0 || accValue === 1 || accValue === 'unreliable' || accValue === 'low') {
+                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
+                    isMagneticAnomaly = true;
+                } else {
+                    accText.innerText = "GOOD"; accText.style.color = "var(--green)";
+                }
+            }
+            // Pelindung Sandaran Keselamatan Android (Failsafe)
+            else {
+                if (androidForceAnomaly) {
+                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
+                    isMagneticAnomaly = true;
+                } else {
+                    accText.innerText = "GOOD"; accText.style.color = "var(--green)";
+                }
             }
 
             if (isTegak) {
@@ -552,7 +583,6 @@
                     needlePlate.style.opacity = "0.15";
                     resetQiblaLock();
                 }
-                // Keutamaan paparan: Tunjuk amaran magnet herot walaupun keadaan senget
                 if (isMagneticAnomaly && !isLocked) {
                     document.getElementById('instruction-card').style.backgroundColor = "var(--magnet-red)";
                     document.getElementById('instruction-card').style.borderColor = "#ff4d4d";
@@ -625,7 +655,6 @@
             } else {
                 resetQiblaLock();
                 
-                // JIKA GANGGUAN MAGNET (Kotak tengah bertukar merah garang)
                 if (isMagneticAnomaly) {
                     document.getElementById('instruction-card').style.backgroundColor = "var(--magnet-red)";
                     document.getElementById('instruction-card').style.borderColor = "#ff4d4d";
@@ -633,7 +662,6 @@
                     document.getElementById('icon-left').innerHTML = "🧲";
                     document.getElementById('icon-right').innerHTML = "🧲";
                 } 
-                // KEADAAN NORMAL (Tunjuk pusing kiri/kanan macam biasa)
                 else {
                     document.getElementById('instruction-card').style.backgroundColor = "#141414";
                     document.getElementById('instruction-card').style.borderColor = "var(--border)";
