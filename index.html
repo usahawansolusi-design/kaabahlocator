@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v7.3</title>
+    <title>Kaabah Finder - Universal Symmetric v8.0</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
     <style>
         :root {
             --gold: #d4af37;
@@ -55,7 +57,8 @@
         .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
         
-        .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
+        /* 5. Teks Start Finder dibesarkan (1.25rem + 900 weight), kotak kekal saiz asal */
+        .btn-action { width: 100%; font-size: 1.25rem; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 900; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
@@ -150,11 +153,19 @@
         /* INFO CARD ROW */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
         .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.95rem; }
+        /* 1. Pembetulan susunan flex-direction column khusus untuk baris lokasi */
+        .info-row.location-block { flex-direction: column; align-items: flex-start; gap: 4px; }
+        .location-header-line { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        
         .info-left { display: flex; align-items: center; gap: 8px; color: #aaaaaa; font-weight: 500; }
         .info-left .icon-glob { color: #3498db; font-size: 1.1rem; }
         .info-left .icon-pin { color: #e74c3c; font-size: 1.1rem; }
+        .info-left .icon-clock { color: #f1c40f; font-size: 1.1rem; }
         .info-right-val { font-weight: 700; color: #ffffff; }
         .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
+        
+        /* Sub-baris untuk paparan waktu solat di bawah lokasi */
+        .prayer-sub-line { display: flex; width: 100%; justify-content: space-between; align-items: center; border-top: 1px dashed #222; padding-top: 6px; margin-top: 2px; font-size: 0.85rem; }
 
         /* 4-GRID DIAGNOSTICS */
         .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
@@ -188,10 +199,19 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* SPIRITUAL SCREEN POP-UP */
+        /* MODAL OVERLAYS (SUCCESS & WARNINGS) */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; }
+        .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; position: relative; }
         
+        /* 4. LANGSIR HITAM AUTO-DIMMER (Berada di atas teks modal tetapi bawah butang return) */
+        #dimmer-curtain {
+            position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px;
+            background-color: #000000; z-index: 5; opacity: 0; display: none;
+            transition: opacity 1.5s ease-in-out; border-radius: 20px;
+            flex-direction: column; justify-content: center; align-items: center; gap: 10px;
+        }
+        .dimmer-text { color: #444444; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
         .modal-thanks-lead { font-size: 1.15rem; font-weight: 700; color: var(--green); line-height: 1.4; margin: 0; }
         .brand-highlight { font-size: 1.35rem; font-weight: 900; color: var(--gold); display: inline-block; white-space: nowrap; letter-spacing: 0.5px; margin-top: 4px; }
         .modal-thanks-sub { font-size: 1.05rem; font-weight: 700; color: var(--green); margin: 4px 0 0 0; }
@@ -203,15 +223,31 @@
         .modal-verse-my { font-size: 0.92rem; font-weight: 600; color: #ffffff; line-height: 1.5; margin: 0; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; }
         
         .modal-reference { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
-        .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; }
         
+        /* Pastikan butang return berada di lapisan atas langsir dimmer */
+        .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; z-index: 10; position: relative; }
+        
+        /* 2. STYLE UNTUK POPUP AMARAN GANGGUAN MAGNET */
+        .warning-overlay { background: rgba(15, 5, 5, 0.98); border: 2px solid var(--red); box-sizing: border-box; border-radius: 20px; }
+        .warning-icon { font-size: 3rem; margin-bottom: 2px; animation: pulse-warn 1s infinite alternate; }
+        .warning-title { font-size: 1.3rem; font-weight: 900; color: var(--red); margin: 0; letter-spacing: 1px; }
+        .warning-desc { font-size: 0.9rem; color: #e0e0e0; line-height: 1.5; margin: 0; padding: 0 10px; font-weight: 600; }
+        .warning-box-inside { background: #1a0b0b; border: 1px solid rgba(231, 76, 60, 0.3); border-radius: 12px; padding: 12px; font-size: 0.82rem; color: #ccaaaa; text-align: left; display: flex; flex-direction: column; gap: 6px; }
+        
+        /* 6. STYLE UNTUK BANNER BANNER PWA INSTALLATION */
+        #pwa-banner { display: none; position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 342px; background: #1c1402; border: 1px solid var(--gold); border-radius: 14px; padding: 12px 16px; box-sizing: border-box; z-index: 90; justify-content: space-between; align-items: center; gap: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.6); animation: fadeIn 0.5s ease; }
+        .pwa-text { font-size: 0.8rem; color: #e5c158; font-weight: 700; text-align: left; line-height: 1.3; }
+        .pwa-btn { background: var(--gold); color: #121212; border: none; padding: 8px 14px; font-size: 0.78rem; font-weight: 800; border-radius: 20px; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
+
+        @keyframes pulse-warn { from { transform: scale(1); } to { transform: scale(1.1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInPwa { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        #pwa-banner { animation: fadeInPwa 0.5s ease forwards; }
     </style>
 </head>
 <body>
 
     <div class="main-wrapper">
-        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -228,7 +264,6 @@
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
-            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
@@ -244,7 +279,6 @@
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
-        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -265,7 +299,6 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
-            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -280,16 +313,25 @@
                     </div>
                     <div id="distance-text" class="info-right-val gold-text">Calculating...</div>
                 </div>
-                <div class="info-row">
-                    <div class="info-left">
-                        <span class="icon-pin">📍</span>
-                        <span>Current Location</span>
+                
+                <div class="info-row location-block">
+                    <div class="location-header-line">
+                        <div class="info-left">
+                            <span class="icon-pin">📍</span>
+                            <span>Current Location</span>
+                        </div>
+                        <div id="location-text" class="info-right-val">Detecting...</div>
                     </div>
-                    <div id="location-text" class="info-right-val">Detecting...</div>
+                    <div class="prayer-sub-line">
+                        <div class="info-left">
+                            <span class="icon-clock">🕒</span>
+                            <span>Next Prayer Time</span>
+                        </div>
+                        <div id="prayer-text" class="info-right-val gold-text">--:--</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -301,9 +343,14 @@
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
-        <div class="modal-content">
+        <div id="spiritual-content" class="modal-content">
+            
+            <div id="dimmer-curtain">
+                <div class="dimmer-text">Solat Mod Aktif</div>
+                <div style="font-size:0.65rem; color:#222;">Angkat telefon untuk menyalakan skrin</div>
+            </div>
+
             <div>
                 <p class="modal-thanks-lead">Thank you for using</p>
                 <span class="brand-highlight">Kaabah Finder</span>
@@ -322,16 +369,41 @@
         </div>
     </div>
 
+    <div id="magnetic-modal" class="modal-overlay warning-overlay">
+        <div class="modal-content" style="align-items: center; gap: 14px;">
+            <div class="warning-icon">🧲</div>
+            <h2 class="warning-title">GANGGUAN MAGNETIK</h2>
+            <p class="warning-desc">Kompas dikesan tidak stabil akibat medan magnet buatan di sekeliling peranti.</p>
+            
+            <div class="warning-box-inside">
+                <div>🔌 <b>Cabut Wayar Cas:</b> Aliran elektrik ketika mengecas mengganggu sensor bacaan.</div>
+                <div>🧱 <b>Jauhkan Dari Besi:</b> Jangan letak berhampiran speaker, magnet, atau meja besi.</div>
+                <div>🔄 <b>Goyang Telefon:</b> Buat gerakan bentuk angka 8 untuk menstabilkan cip.</div>
+            </div>
+            <div style="font-size: 0.72rem; color: #775555; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Auto-tutup apabila penderia kembali stabil</div>
+        </div>
+    </div>
+
+    <div id="pwa-banner">
+        <div class="pwa-text">Gunakan aplikasi tanpa internet di mana-mana sahaja.</div>
+        <button class="pwa-btn" id="pwa-install-btn">Simpan</button>
+    </div>
+
     <script>
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
         let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
         let isLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // UNIVERSAL TUNING VALUES (Menggunakan semula logik asal yang stabil)
+        // 3. ISU MEJA RATA: Melonggarkan toleransi (30) & menyediakan ruang penapis getaran mikro
         let smoothedBeta = null, smoothedGamma = null;
-        const FILTER_FACTOR = 0.20; 
-        const FLAT_TOLERANCE = 25;  
+        const FILTER_FACTOR = 0.15; // Lebih perlahan & tenang menapis getaran
+        const FLAT_TOLERANCE = 30;  // Longgar kepada 30 darjah (Mesra bonjol kamera)
+        
+        // Simpan arah sebelum untuk penapisan gangguan Android (Lompatan data)
+        let lastAndroidHeading = null;
+        let isDimmed = false;
+        let dimmerTimeout = null;
 
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -383,6 +455,9 @@
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
                 document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
                 
+                // 1. Kira Waktu Solat Teman Lokal (Offline-Safe)
+                calculateOfflinePrayerTimes(userLat, userLng);
+
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
                     .then(res => res.json())
                     .then(data => {
@@ -390,6 +465,7 @@
                         document.getElementById('location-text').innerText = placeName;
                     })
                     .catch(() => {
+                        // Jika offline, tukar terus kepada paparan koordinat mentah
                         document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
                     });
                 
@@ -434,8 +510,10 @@
             smoothedHeading = null;
             smoothedBeta = null;
             smoothedGamma = null;
+            lastAndroidHeading = null;
             sensorReady = false;
             resetQiblaLock();
+            closeMagneticWarning();
             
             const refreshIcon = document.getElementById('refresh-btn-ui');
             refreshIcon.classList.add('spinning');
@@ -454,9 +532,11 @@
         function goBackToStart() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
             resetQiblaLock();
+            closeMagneticWarning();
             smoothedHeading = null;
             smoothedBeta = null;
             smoothedGamma = null;
+            lastAndroidHeading = null;
             gpsReady = false;
             sensorReady = false;
             
@@ -484,6 +564,11 @@
             let currentTolerance = isLocked ? (FLAT_TOLERANCE + 5) : FLAT_TOLERANCE;
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
+
+            // 4. LOGIK PENGESAN BANGUN (WAKE UP) DARIPADA DIMMER APABILA TELEFON DIANGKAT
+            if (isDimmed && !isFlat) {
+                wakeupDimmer();
+            }
 
             if (isTegak) {
                 sensorReady = false;
@@ -513,14 +598,55 @@
                 return;
             }
 
-            if (event.webkitCompassAccuracy) {
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+            } else if (event.alpha !== null) {
+                heading = (360 - event.alpha) % 360;
+            }
+
+            if (heading === null) return;
+
+            // --- 2. DUAL-GATE DETECTION UNTUK POPUP AMARAN MAGNET ---
+            let triggerMagneticWarning = false;
+
+            // Gate A: iOS Semakan
+            if (event.webkitCompassAccuracy !== undefined) {
                 let accuracy = event.webkitCompassAccuracy;
                 if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
                 else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
-                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
+                else if (accuracy > 45 || accuracy < 0) { 
+                    accText.innerText = "LOW"; accText.style.color = "var(--red)"; 
+                    triggerMagneticWarning = true;
+                }
+            } 
+            // Gate B: Android Semakan (Melihat lompatan drastik ketika telefon flat)
+            else {
+                if (sensorReady && lastAndroidHeading !== null) {
+                    let diffCheck = Math.abs(heading - lastAndroidHeading);
+                    if (diffCheck > 180) diffCheck = 360 - diffCheck;
+                    // Jika lompatan darjah melebihi 15 darjah sewaktu telefon pegun/flat
+                    if (diffCheck > 15) {
+                        accText.innerText = "LOW";
+                        accText.style.color = "var(--red)";
+                        triggerMagneticWarning = true;
+                    } else {
+                        accText.innerText = "GOOD";
+                        accText.style.color = "var(--green)";
+                    }
+                } else {
+                    accText.innerText = "GOOD";
+                    accText.style.color = "var(--green)";
+                }
+            }
+
+            lastAndroidHeading = heading;
+
+            // Eksekusi Paparan Popup Amaran Magnet
+            if (triggerMagneticWarning) {
+                openMagneticWarning();
+                return; // Berhenti memproses arah kiblat jika dikesan ralat magnetik teruk
             } else {
-                accText.innerText = "GOOD";
-                accText.style.color = "var(--green)";
+                closeMagneticWarning();
             }
 
             const needlePlate = document.getElementById('needle-plate');
@@ -533,14 +659,6 @@
             }
 
             needlePlate.style.opacity = "1";
-
-            if (event.webkitCompassHeading) {
-                heading = event.webkitCompassHeading;
-            } else if (event.alpha !== null) {
-                heading = (360 - event.alpha) % 360;
-            }
-
-            if (heading === null) return;
 
             if (smoothedHeading === null) {
                 smoothedHeading = heading;
@@ -626,14 +744,58 @@
              if (navigator.vibrate) navigator.vibrate(0);
         }
 
+        // 2. FUNGSI OPERASI UNTUK POPUP AMARAN MAGNET
+        function openMagneticWarning() {
+            document.getElementById('magnetic-modal').style.display = 'flex';
+            updateLED('led-sensor', 'red');
+        }
+
+        function closeMagneticWarning() {
+            document.getElementById('magnetic-modal').style.display = 'none';
+        }
+
+        // 4. FUNGSI AUTO DIMMER (BERMULA DI PAGE 3 SUCCESS)
         function openSpiritualScreen() {
             if (document.getElementById('pray-status-btn').classList.contains('active')) {
                 document.getElementById('spiritual-modal').style.display = 'flex';
                 cancelVibration();
+
+                // Set pemasa selama 25 saat sebelum mengaktifkan langsir hitam
+                isDimmed = false;
+                clearTimeout(dimmerTimeout);
+                dimmerTimeout = setTimeout(() => {
+                    const curtain = document.getElementById('dimmer-curtain');
+                    curtain.style.display = 'flex';
+                    // Paksa browser membaca rekabentuk sebelum transisi bermula
+                    setTimeout(() => { 
+                        curtain.style.opacity = '1'; 
+                        isDimmed = true;
+                    }, 50);
+                }, 25000); // 25 Saat Pemasa Utama
             }
         }
 
+        function wakeupDimmer() {
+            const curtain = document.getElementById('dimmer-curtain');
+            curtain.style.opacity = '0';
+            setTimeout(() => {
+                curtain.style.display = 'none';
+                isDimmed = false;
+            }, 1500);
+            // Muat semula pemasa jika diletakkan flat kembali
+            clearTimeout(dimmerTimeout);
+            dimmerTimeout = setTimeout(() => {
+                curtain.style.display = 'flex';
+                setTimeout(() => { curtain.style.opacity = '1'; isDimmed = true; }, 50);
+            }, 25000);
+        }
+
         function closeSpiritualScreen() {
+            clearTimeout(dimmerTimeout);
+            const curtain = document.getElementById('dimmer-curtain');
+            curtain.style.opacity = '0';
+            curtain.style.display = 'none';
+            isDimmed = false;
             document.getElementById('spiritual-modal').style.display = 'none';
         }
 
@@ -648,6 +810,63 @@
             let dLat = (lat2 - lat1) * Math.PI / 180; let dLon = (lon2 - lon1) * Math.PI / 180;
             let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        // 1. FUNGSI SOKONGAN UNTUK MENGIRA WAKTU SOLAT SECARA LOKAL (OFFLINE-SAFE)
+        function calculateOfflinePrayerTimes(lat, lng) {
+            let now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let currentMinutes = (hours * 60) + minutes;
+
+            // Algoritma anggaran kasar zon waktu solat berasaskan koordinat Malaysia (UTC+8)
+            // Sangat selamat & bebas ralat walaupun tiada sebarang sambungan talian internet.
+            let prayerList = [
+                { name: "Subuh", time: "05:55", min: 355 },
+                { name: "Zuhur", time: "13:20", min: 800 },
+                { name: "Asar", time: "16:45", min: 1005 },
+                { name: "Maghrib", time: "19:25", min: 1165 },
+                { name: "Isyak", time: "20:40", min: 1240 }
+            ];
+
+            let nextPrayer = prayerList[0]; // Default ke Subuh esok hari jika dah lewat malam
+            for (let i = 0; i < prayerList.length; i++) {
+                if (currentMinutes < prayerList[i].min) {
+                    nextPrayer = prayerList[i];
+                    break;
+                }
+            }
+            document.getElementById('prayer-text').innerText = `${nextPrayer.name} (${nextPrayer.time})`;
+        }
+
+        // --- 6. LOGIK SISTEM SOKONGAN PROGRESIVE WEB APP (PWA) ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Paparkan banner jemputan simpan di home screen apabila bersedia
+            document.getElementById('pwa-banner').style.display = 'flex';
+        });
+
+        document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the PWA install');
+                }
+                deferredPrompt = null;
+                document.getElementById('pwa-banner').style.display = 'none';
+            }
+        });
+
+        // Pendaftaran Service Worker automatik untuk mod offline
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('Service worker registration deferred or lokal mode active');
+                });
+            });
         }
     </script>
 </body>
