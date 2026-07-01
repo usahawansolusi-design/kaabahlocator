@@ -14,7 +14,6 @@
             --red: #e74c3c;
             --amber: #f39c12;
             --dim-gray: #222222;
-            --magnet-red: #d32f2f; /* Ditambah: Warna merah garang untuk gangguan magnet */
         }
 
         body {
@@ -68,7 +67,7 @@
         .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
         .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
         
-        /* ADJUSTMENT 1: GIANT CSS INFINITY 8 ANIMATION (Rabun-Friendly) */
+        /* GIANT CSS INFINITY 8 ANIMATION (Rabun-Friendly) */
         .infinity-container { position: relative; width: 140px; height: 55px; margin-top: 6px; }
         .infinity-path {
             width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.3);
@@ -194,18 +193,16 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* SPIRITUAL SCREEN POP-UP (MODAL MODIFIED FOR TEXT EXTRA CARE) */
+        /* SPIRITUAL SCREEN POP-UP */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; }
         
-        /* ADJUSTMENT 2: INTEGRATED AND HIGHLIGHTED BRAND TEXT */
         .modal-thanks-lead { font-size: 1.15rem; font-weight: 700; color: var(--green); line-height: 1.4; margin: 0; }
         .brand-highlight { font-size: 1.35rem; font-weight: 900; color: var(--gold); display: inline-block; white-space: nowrap; letter-spacing: 0.5px; margin-top: 4px; }
         .modal-thanks-sub { font-size: 1.05rem; font-weight: 700; color: var(--green); margin: 4px 0 0 0; }
         
         .modal-divider { width: 50px; height: 2px; background: rgba(255, 255, 255, 0.2); margin: 6px auto; }
         
-        /* ADJUSTMENT 3: BILINGUAL VERSE STYLING */
         .verse-container { display: flex; flex-direction: column; gap: 12px; text-align: center; padding: 0 4px; }
         .modal-verse-en { font-size: 0.88rem; font-weight: 500; color: #bbbbbb; line-height: 1.5; font-style: italic; margin: 0; }
         .modal-verse-my { font-size: 0.92rem; font-weight: 600; color: #ffffff; line-height: 1.5; margin: 0; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; }
@@ -219,7 +216,6 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -236,12 +232,10 @@
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
-            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX (Bawah Button) -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
                 
-                <!-- ADJUSTMENT 1: GIANT ACCESSIBLE INFINITY TRACK -->
                 <div class="infinity-container">
                     <svg class="infinity-path" viewBox="0 0 140 55">
                         <path d="M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z"/>
@@ -253,7 +247,6 @@
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
-        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -274,7 +267,6 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
-            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -298,7 +290,6 @@
                 </div>
             </div>
 
-            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -310,10 +301,8 @@
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP (BILINGUAL & ACCESSIBLE) -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
-            <!-- ADJUSTMENT 2: HIGHLIGHTED ONE-SENTENCE PRODUCT HIGHLIGHT -->
             <div>
                 <p class="modal-thanks-lead">Thank you for using</p>
                 <span class="brand-highlight">Kaabah Finder</span>
@@ -322,7 +311,6 @@
             
             <div class="modal-divider"></div>
             
-            <!-- ADJUSTMENT 3: BILINGUAL VERSE FOR ELDERLY GENERATION -->
             <div class="verse-container">
                 <p class="modal-verse-en">"Indeed, prayer has been decreed upon the believers a decree of specified times."</p>
                 <p class="modal-verse-my">"Sesungguhnya solat itu adalah satu kewajipan yang ditentukan waktunya atas orang-orang yang beriman."</p>
@@ -342,7 +330,7 @@
         // UNIVERSAL TUNING VALUES
         let smoothedBeta = null, smoothedGamma = null;
         const FILTER_FACTOR = 0.20; 
-        const FLAT_TOLERANCE = 25;  
+        const ADULT_TOLERANCE = 3; // Menggunakan toleransi ±3 darjah agar lebih mesra warga emas
 
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -438,18 +426,6 @@
                 document.getElementById('icon-right').innerHTML = "❌";
                 updateLED('led-sensor', 'red');
             }
-
-            // Pasang pengesan khas Android jika peranti minta kalibrasi magnet
-            window.addEventListener('compassneedscalibration', function(e) {
-                e.preventDefault();
-                triggerAndroidCompassAnomaly();
-            }, true);
-        }
-
-        let androidForceAnomaly = false;
-        function triggerAndroidCompassAnomaly() {
-            androidForceAnomaly = true;
-            setTimeout(() => { androidForceAnomaly = false; }, 8000); // Set amaran tamat selepas 8 saat gerakan
         }
 
         function refreshSensors() {
@@ -458,7 +434,6 @@
             smoothedBeta = null;
             smoothedGamma = null;
             sensorReady = false;
-            androidForceAnomaly = false;
             resetQiblaLock();
             
             const refreshIcon = document.getElementById('refresh-btn-ui');
@@ -483,7 +458,6 @@
             smoothedGamma = null;
             gpsReady = false;
             sensorReady = false;
-            androidForceAnomaly = false;
             
             updateLED('led-gps', 'off');
             updateLED('led-sensor', 'off');
@@ -500,81 +474,67 @@
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
-            else {
+            if (smoothedBeta === null) { 
+                smoothedBeta = rawBeta; 
+                smoothedGamma = rawGamma; 
+            } else {
                 smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
                 smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
             }
 
-            let currentTolerance = isLocked ? (FLAT_TOLERANCE + 5) : FLAT_TOLERANCE;
-            let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
-            let isTegak = Math.abs(smoothedBeta) > 65;
+            // Ambil data darjah live yang telah dimalarkan
+            let pitch = Math.round(smoothedBeta);  
+            let roll = Math.round(smoothedGamma);  
 
-            // --- PENGESANAN DUET GANGGUAN MAGNET (iOS & Android) ---
-            let isMagneticAnomaly = false;
+            const statusText = document.getElementById('status-text');
+            const iconLeft = document.getElementById('icon-left');
+            const iconRight = document.getElementById('icon-right');
+
+            // Logika semakan kedudukan mendatar (Flat Check)
+            let isFlat = Math.abs(pitch) <= ADULT_TOLERANCE && Math.abs(roll) <= ADULT_TOLERANCE;
+
+            if (!isFlat) {
+                sensorReady = false;
+                updateLED('led-sensor', 'amber');
+                
+                if (!isLocked) {
+                    // Step 1: Betulkan paksi depan/belakang dulu (Pitch)
+                    if (pitch > ADULT_TOLERANCE) {
+                        statusText.innerText = `TUNDUKKAN KE DEPAN: ${pitch}°`;
+                        iconLeft.innerHTML = "📉"; iconRight.innerHTML = "📉";
+                    } else if (pitch < -ADULT_TOLERANCE) {
+                        statusText.innerText = `ANGKAT KE ATAS: ${Math.abs(pitch)}°`;
+                        iconLeft.innerHTML = "📈"; iconRight.innerHTML = "📈";
+                    } 
+                    // Step 2: Seterusnya betulkan paksi kiri/kanan (Roll)
+                    else if (roll > ADULT_TOLERANCE) {
+                        statusText.innerText = `SENGETKAN KE KIRI: ${roll}°`;
+                        iconLeft.innerHTML = "↩️"; iconRight.innerHTML = "↩️";
+                    } else if (roll < -ADULT_TOLERANCE) {
+                        statusText.innerText = `SENGETKAN KE KANAN: ${Math.abs(roll)}°`;
+                        iconLeft.innerHTML = "↪️"; iconRight.innerHTML = "↪️";
+                    }
+                }
+            } else {
+                sensorReady = true;
+                updateLED('led-sensor', 'green');
+            }
+
             const accText = document.getElementById('val-accuracy');
-            
             if (!gpsReady) {
                 accText.innerText = "WAIT";
                 accText.style.color = "#555555";
                 return;
             }
 
-            // Logik iOS (Menggunakan darjah ralat webkit)
-            if (event.webkitCompassAccuracy !== undefined && event.webkitCompassAccuracy !== null) {
+            if (event.webkitCompassAccuracy) {
                 let accuracy = event.webkitCompassAccuracy;
-                if (accuracy > 0 && accuracy <= 15) { 
-                    accText.innerText = "HIGH"; accText.style.color = "var(--green)"; 
-                } else if (accuracy > 15 && accuracy <= 45) { 
-                    accText.innerText = "GOOD"; accText.style.color = "var(--green)"; 
-                } else { 
-                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
-                    isMagneticAnomaly = true; 
-                }
-            } 
-            // Logik Android (Membaca isyarat ketepatan standard Chrome/Android)
-            else if (event.accuracy !== undefined && event.accuracy !== null) {
-                let accValue = event.accuracy; // Nilai standard pulangan integer/teks
-                if (accValue === 0 || accValue === 1 || accValue === 'unreliable' || accValue === 'low') {
-                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
-                    isMagneticAnomaly = true;
-                } else {
-                    accText.innerText = "GOOD"; accText.style.color = "var(--green)";
-                }
-            }
-            // Pelindung Sandaran Keselamatan Android (Failsafe)
-            else {
-                if (androidForceAnomaly) {
-                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
-                    isMagneticAnomaly = true;
-                } else {
-                    accText.innerText = "GOOD"; accText.style.color = "var(--green)";
-                }
-            }
-
-            if (isTegak) {
-                sensorReady = false;
-                updateLED('led-sensor', 'red');
-                if(!isLocked && !isMagneticAnomaly) {
-                    document.getElementById('instruction-card').style.backgroundColor = "#141414";
-                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
-                    document.getElementById('status-text').innerText = "PHONE VERTICAL";
-                    document.getElementById('icon-left').innerHTML = "⚠️";
-                    document.getElementById('icon-right').innerHTML = "⚠️";
-                }
-            } else if (!isFlat) {
-                sensorReady = false;
-                updateLED('led-sensor', 'amber');
-                if(!isLocked && !isMagneticAnomaly) {
-                    document.getElementById('instruction-card').style.backgroundColor = "#141414";
-                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
-                    document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
-                    document.getElementById('icon-left').innerHTML = "⚠️";
-                    document.getElementById('icon-right').innerHTML = "⚠️";
-                }
+                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
+                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
+                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
             } else {
-                sensorReady = true;
-                updateLED('led-sensor', 'green');
+                accText.innerText = "GOOD";
+                accText.style.color = "var(--green)";
             }
 
             const needlePlate = document.getElementById('needle-plate');
@@ -582,13 +542,6 @@
                 if(!isLocked) {
                     needlePlate.style.opacity = "0.15";
                     resetQiblaLock();
-                }
-                if (isMagneticAnomaly && !isLocked) {
-                    document.getElementById('instruction-card').style.backgroundColor = "var(--magnet-red)";
-                    document.getElementById('instruction-card').style.borderColor = "#ff4d4d";
-                    document.getElementById('status-text').innerText = "MAGNET DISTORTION! DO FIGURE-8 WAVE";
-                    document.getElementById('icon-left').innerHTML = "🧲";
-                    document.getElementById('icon-right').innerHTML = "🧲";
                 }
                 return; 
             }
@@ -633,9 +586,9 @@
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
                     pointerAxis.classList.add('aligned');
                     
-                    document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
-                    document.getElementById('icon-left').innerHTML = "🤲";
-                    document.getElementById('icon-right').innerHTML = "🤲";
+                    statusText.innerText = "QIBLAH ALIGNED";
+                    iconLeft.innerHTML = "🤲";
+                    iconRight.innerHTML = "🤲";
                     
                     updateLED('led-qibla', 'green');
                     prayBtn.classList.add('active');
@@ -654,27 +607,15 @@
 
             } else {
                 resetQiblaLock();
-                
-                if (isMagneticAnomaly) {
-                    document.getElementById('instruction-card').style.backgroundColor = "var(--magnet-red)";
-                    document.getElementById('instruction-card').style.borderColor = "#ff4d4d";
-                    document.getElementById('status-text').innerText = "MAGNET DISTORTION! DO FIGURE-8 WAVE";
-                    document.getElementById('icon-left').innerHTML = "🧲";
-                    document.getElementById('icon-right').innerHTML = "🧲";
-                } 
-                else {
-                    document.getElementById('instruction-card').style.backgroundColor = "#141414";
-                    document.getElementById('instruction-card').style.borderColor = "var(--border)";
-                    let roundedAngle = Math.abs(Math.round(relativeAngle));
-                    if (relativeAngle > 0) {
-                        document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
-                        document.getElementById('icon-left').innerHTML = "↪️";
-                        document.getElementById('icon-right').innerHTML = "↪️";
-                    } else {
-                        document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
-                        document.getElementById('icon-left').innerHTML = "↩️";
-                        document.getElementById('icon-right').innerHTML = "↩️";
-                    }
+                let roundedAngle = Math.abs(Math.round(relativeAngle));
+                if (relativeAngle > 0) {
+                    statusText.innerText = `TURN RIGHT ${roundedAngle}°`;
+                    iconLeft.innerHTML = "↪️";
+                    iconRight.innerHTML = "↪️";
+                } else {
+                    statusText.innerText = `TURN LEFT ${roundedAngle}°`;
+                    iconLeft.innerHTML = "↩️";
+                    iconRight.innerHTML = "↩️";
                 }
             }
         }
