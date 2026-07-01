@@ -1,0 +1,9 @@
+{
+  "name": "Kaabah Finder Universal",
+  "short_name": "QiblahFinder",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait"
+}
