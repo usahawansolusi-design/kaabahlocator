@@ -59,7 +59,7 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-        /* PRE-EMPTIVE CALIBRATION BOX - RE-ENFORCED FOR BETTER VISIBILITY */
+        /* PRE-EMPTIVE CALIBRATION BOX */
         .calib-guide-box {
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
             padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -67,7 +67,6 @@
         .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
         .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
         
-        /* GIANT CSS INFINITY 8 ANIMATION (Rabun-Friendly) */
         .infinity-container { position: relative; width: 140px; height: 55px; margin-top: 6px; }
         .infinity-path {
             width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.3);
@@ -82,10 +81,9 @@
         }
         @keyframes moveInfinity { 100% { offset-distance: 100%; } }
 
-        /* COMPASS AREA WITH REVERTED AND CLEAN RADAR STRUCTURE */
+        /* COMPASS AREA */
         .compass-outer-wrapper { position: relative; width: 100%; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
         
-        /* KAABAH ICON CORE STYLE */
         #kaabah-outer { 
             position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
             font-size: 1.4rem; z-index: 15; 
@@ -93,7 +91,6 @@
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* HIGH INTENSITY BEACON PULSE UNTUK KAABAH ICON */
         #kaabah-outer.perfect-lock {
             transform: translateX(-50%) scale(1.3);
             animation: kaabah-glow-pulse 1.0s infinite ease-in-out;
@@ -119,7 +116,6 @@
         }
         .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.7); }
 
-        /* FLOATING SIDE ACTION BUTTONS STYLE */
         .side-action-btn {
             position: absolute; bottom: 10px; width: 44px; height: 44px;
             background: rgba(20, 20, 20, 0.75); border: 1px solid var(--border);
@@ -141,7 +137,7 @@
         }
         .pointer-axis.aligned::before { border-bottom-color: var(--green); }
 
-        /* FULL SYMMETRIC DYNAMIC DIRECTION BOX */
+        /* DIRECTION BOX */
         .direction-box { 
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; 
             padding: 14px 10px; font-size: 1.25rem; font-weight: 800; 
@@ -170,7 +166,6 @@
         .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* READY TO PRAY BUTTON WITH HIGH CONTRAST BEACON */
         .btn-pray-status { 
             width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; 
             border: 1px solid var(--border); border-radius: 14px; background: #141414; 
@@ -216,6 +211,7 @@
 <body>
 
     <div class="main-wrapper">
+        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -232,6 +228,7 @@
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
+            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
@@ -247,6 +244,7 @@
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
+        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -267,6 +265,7 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
+            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -290,6 +289,7 @@
                 </div>
             </div>
 
+            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -301,6 +301,7 @@
         </div>
     </div>
 
+    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div>
@@ -327,10 +328,10 @@
         let isLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // UNIVERSAL TUNING VALUES
+        // UNIVERSAL TUNING VALUES (Menggunakan semula logik asal yang stabil)
         let smoothedBeta = null, smoothedGamma = null;
         const FILTER_FACTOR = 0.20; 
-        const ADULT_TOLERANCE = 3; // Menggunakan toleransi ±3 darjah agar lebih mesra warga emas
+        const FLAT_TOLERANCE = 25;  
 
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -474,46 +475,31 @@
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            if (smoothedBeta === null) { 
-                smoothedBeta = rawBeta; 
-                smoothedGamma = rawGamma; 
-            } else {
+            if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
+            else {
                 smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
                 smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
             }
 
-            // Ambil data darjah live yang telah dimalarkan
-            let pitch = Math.round(smoothedBeta);  
-            let roll = Math.round(smoothedGamma);  
+            let currentTolerance = isLocked ? (FLAT_TOLERANCE + 5) : FLAT_TOLERANCE;
+            let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
+            let isTegak = Math.abs(smoothedBeta) > 65;
 
-            const statusText = document.getElementById('status-text');
-            const iconLeft = document.getElementById('icon-left');
-            const iconRight = document.getElementById('icon-right');
-
-            // Logika semakan kedudukan mendatar (Flat Check)
-            let isFlat = Math.abs(pitch) <= ADULT_TOLERANCE && Math.abs(roll) <= ADULT_TOLERANCE;
-
-            if (!isFlat) {
+            if (isTegak) {
+                sensorReady = false;
+                updateLED('led-sensor', 'red');
+                if(!isLocked) {
+                    document.getElementById('status-text').innerText = "PHONE VERTICAL";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
+                }
+            } else if (!isFlat) {
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
-                
-                if (!isLocked) {
-                    // Step 1: Betulkan paksi depan/belakang dulu (Pitch)
-                    if (pitch > ADULT_TOLERANCE) {
-                        statusText.innerText = `TUNDUKKAN KE DEPAN: ${pitch}°`;
-                        iconLeft.innerHTML = "📉"; iconRight.innerHTML = "📉";
-                    } else if (pitch < -ADULT_TOLERANCE) {
-                        statusText.innerText = `ANGKAT KE ATAS: ${Math.abs(pitch)}°`;
-                        iconLeft.innerHTML = "📈"; iconRight.innerHTML = "📈";
-                    } 
-                    // Step 2: Seterusnya betulkan paksi kiri/kanan (Roll)
-                    else if (roll > ADULT_TOLERANCE) {
-                        statusText.innerText = `SENGETKAN KE KIRI: ${roll}°`;
-                        iconLeft.innerHTML = "↩️"; iconRight.innerHTML = "↩️";
-                    } else if (roll < -ADULT_TOLERANCE) {
-                        statusText.innerText = `SENGETKAN KE KANAN: ${Math.abs(roll)}°`;
-                        iconLeft.innerHTML = "↪️"; iconRight.innerHTML = "↪️";
-                    }
+                if(!isLocked) {
+                    document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
                 }
             } else {
                 sensorReady = true;
@@ -586,9 +572,9 @@
                     document.getElementById('instruction-card').style.borderColor = "#4ade80";
                     pointerAxis.classList.add('aligned');
                     
-                    statusText.innerText = "QIBLAH ALIGNED";
-                    iconLeft.innerHTML = "🤲";
-                    iconRight.innerHTML = "🤲";
+                    document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
+                    document.getElementById('icon-left').innerHTML = "🤲";
+                    document.getElementById('icon-right').innerHTML = "🤲";
                     
                     updateLED('led-qibla', 'green');
                     prayBtn.classList.add('active');
@@ -609,13 +595,13 @@
                 resetQiblaLock();
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
                 if (relativeAngle > 0) {
-                    statusText.innerText = `TURN RIGHT ${roundedAngle}°`;
-                    iconLeft.innerHTML = "↪️";
-                    iconRight.innerHTML = "↪️";
+                    document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
+                    document.getElementById('icon-left').innerHTML = "↪️";
+                    document.getElementById('icon-right').innerHTML = "↪️";
                 } else {
-                    statusText.innerText = `TURN LEFT ${roundedAngle}°`;
-                    iconLeft.innerHTML = "↩️";
-                    iconRight.innerHTML = "↩️";
+                    document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
+                    document.getElementById('icon-left').innerHTML = "↩️";
+                    document.getElementById('icon-right').innerHTML = "↩️";
                 }
             }
         }
