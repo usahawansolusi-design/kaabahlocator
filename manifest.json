@@ -1,9 +1,18 @@
 {
   "name": "Kaabah Finder Universal",
-  "short_name": "QiblahFinder",
-  "start_url": "index.html",
+  "short_name": "Kaabah Finder",
+  "description": "Verified Qiblah Navigation System",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
-  "orientation": "portrait"
+  "theme-color": "#0a0a0a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3004/3004455.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
