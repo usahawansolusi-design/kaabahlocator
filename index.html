@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v9.0</title>
-    <!-- 6. KEPERLUAN SISTEM PWA -->
+    <title>Kaabah Finder - Universal Symmetric v9.5</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a0a0a">
     <style>
@@ -58,7 +57,6 @@
         .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
         
-        /* 5. FON START FINDER DIBESARKAN (1.25rem, WEIGHT 900) - KOTAK KEKAL */
         .btn-action { width: 100%; font-size: 1.25rem; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 900; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
@@ -131,13 +129,13 @@
         .btn-side-left { left: 4px; }
         .btn-side-right { right: 4px; }
 
-        /* NEEDLE STRUCTURE */
+        /* NEEDLE STRUCTURE - PANJANG DIUBAH DARI 76px KE 92px (MENCUCUK TICKS) */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
         .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
         .pointer-axis::before {
             content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
             border-left: 6px solid transparent; border-right: 6px solid transparent;
-            border-bottom: 76px solid #FFD700;
+            border-bottom: 92px solid #FFD700; /* Jarum dipanjangkan gila biar sentuh bulatan luar */
         }
         .pointer-axis.aligned::before { border-bottom-color: var(--green); }
 
@@ -155,7 +153,6 @@
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
         .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.95rem; }
         
-        /* 1. SUSUNAN LOKASI DAN WAKTU SOLAT */
         .info-row.location-block { flex-direction: column; align-items: flex-start; gap: 4px; }
         .location-header-line { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         
@@ -173,7 +170,7 @@
         .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 12px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
         .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
         .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
-        .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
+        .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; transition: color 0.3s; }
 
         .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -200,11 +197,10 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* MODAL OVERLAYS (HALIMUNAN - TIDAK GANGGU LAYOUT) */
+        /* MODAL OVERLAYS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; position: relative; }
+        .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; position: relative; }
         
-        /* 4. LANGSIR HITAM AUTO-DIMMER */
         #dimmer-curtain {
             position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px;
             background-color: #000000; z-index: 5; opacity: 0; display: none;
@@ -226,14 +222,14 @@
         .modal-reference { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
         .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; z-index: 10; position: relative; }
         
-        /* 2. STYLE UNTUK POPUP AMARAN METAL OBJECT DETECTED */
+        /* POPUP DETEKSI OBJEK BESI */
         .warning-overlay { background: rgba(15, 5, 5, 0.98); border: 2px solid var(--red); box-shadow: 0 0 30px rgba(231,76,60,0.3); }
         .warning-icon { font-size: 3.2rem; margin-bottom: 2px; animation: pulse-warn 0.8s infinite alternate; }
         .warning-title { font-size: 1.3rem; font-weight: 900; color: var(--red); margin: 0; letter-spacing: 1px; text-transform: uppercase; }
         .warning-desc { font-size: 0.92rem; color: #ffffff; line-height: 1.5; margin: 0; padding: 0 10px; font-weight: 700; }
         .warning-box-inside { background: #1a0b0b; border: 1px solid rgba(231, 76, 60, 0.3); border-radius: 12px; padding: 14px; font-size: 0.85rem; color: #e5cccc; text-align: left; display: flex; flex-direction: column; gap: 8px; }
         
-        /* 6. STYLE UNTUK PWA INSTALL BANNER */
+        /* PWA INSTALL BANNER */
         #pwa-banner { display: none; position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 342px; background: #1c1402; border: 1px solid var(--gold); border-radius: 14px; padding: 12px 16px; box-sizing: border-box; z-index: 90; justify-content: space-between; align-items: center; gap: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
         .pwa-text { font-size: 0.8rem; color: #e5c158; font-weight: 700; text-align: left; line-height: 1.3; }
         .pwa-btn { background: var(--gold); color: #121212; border: none; padding: 8px 14px; font-size: 0.78rem; font-weight: 800; border-radius: 20px; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
@@ -357,7 +353,7 @@
         </div>
     </div>
 
-    <!-- 2. POPUP DETEKSI OBJEK BESI / LOGAM -->
+    <!-- POPUP DETEKSI OBJEK BESI -->
     <div id="magnetic-modal" class="modal-overlay warning-overlay">
         <div class="modal-content" style="align-items: center; gap: 14px;">
             <div class="warning-icon">🧲</div>
@@ -384,16 +380,19 @@
         let isAlmostLocked = false, isPerfectLocked = false, vibrateInterval;
         let gpsReady = false, sensorReady = false, isDimmed = false, dimmerTimeout = null;
 
-        // 3. ISU MEJA RATA & PENAPIS GETARAN MIKRO
+        // TIMBANG AIR PARAMETERS
         let smoothedBeta = null, smoothedGamma = null;
         const FILTER_FACTOR = 0.15;
-        const FLAT_TOLERANCE = 30; // Longgar kepada 30 darjah
+        const FLAT_TOLERANCE = 30; 
 
-        // LOGIK SYSTEM FILTER BYPASS UNTUK DETEKSI BESI DAN STUCK
+        // LOGIK ANTI-KELIP & STUCK PARAMETERS
         let lastRawHeading = null;
         let lastRawTimestamp = 0;
         let lastMovementTimestamp = Date.now();
         let isStuckModeActive = false;
+        
+        let metalDetectedTime = 0; // Hold-timer untuk amaran objek besi
+        const METAL_HOLD_DURATION = 3000; // Wajib kekal tayang selama 3 saat
 
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -401,6 +400,35 @@
             tick.className = (i % 30 === 0) ? 'tick major' : 'tick';
             tick.style.transform = `translateX(-50%) rotate(${i}deg) translateY(${(i % 30 === 0) ? '-94px' : '-99px'})`;
             ticksContainer.appendChild(tick);
+        }
+
+        // PENGURUSAN STATUS PENYELARASAN WARNA PSIKOLOGI (DIAGNOSTICS MASTER)
+        function updateDiagnosticsUI(sensorState) {
+            const accText = document.getElementById('val-accuracy');
+            
+            // 1. Semak jika GPS bermasalah dahulu (GPS Override)
+            if (!gpsReady) {
+                updateLED('led-sensor', 'off');
+                updateLED('led-qibla', 'off');
+                accText.innerText = "BAD";
+                accText.style.color = "var(--red)";
+                return;
+            }
+
+            // 2. Selaraskan warna Sensor dan Teks Accuracy mengikut state fizikal
+            if (sensorState === 'vertical' || Date.now() - metalDetectedTime < METAL_HOLD_DURATION) {
+                updateLED('led-sensor', 'red');
+                accText.innerText = "BAD";
+                accText.style.color = "var(--red)";
+            } else if (sensorState === 'tilted') {
+                updateLED('led-sensor', 'amber');
+                accText.innerText = "MED";
+                accText.style.color = "var(--amber)";
+            } else if (sensorState === 'flat') {
+                updateLED('led-sensor', 'green');
+                accText.innerText = "GOOD";
+                accText.style.color = "var(--green)";
+            }
         }
 
         function updateLED(id, state) {
@@ -416,11 +444,14 @@
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
             document.getElementById('status-text').innerText = "CONNECTING GPS...";
+            gpsReady = false;
             updateLED('led-gps', 'amber');
+            updateDiagnosticsUI('none');
 
             if (!navigator.geolocation) {
                 document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
                 updateLED('led-gps', 'red');
+                updateDiagnosticsUI('none');
                 return;
             }
 
@@ -446,6 +477,8 @@
             }, error => {
                 document.getElementById('status-text').innerText = "GPS SIGNAL ERROR";
                 updateLED('led-gps', 'red');
+                gpsReady = false;
+                updateDiagnosticsUI('none');
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
@@ -454,7 +487,7 @@
                 if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                     DeviceOrientationEvent.requestPermission().then(state => {
                         if (state === 'granted') window.addEventListener('deviceorientation', handleOrientation, true);
-                        else updateLED('led-sensor', 'red');
+                        else { updateLED('led-sensor', 'red'); }
                     }).catch(() => { updateLED('led-sensor', 'red'); });
                 } else {
                     window.addEventListener('deviceorientation', handleOrientation, true);
@@ -475,7 +508,7 @@
             else if (event.alpha !== null) rawHeading = (360 - event.alpha) % 360;
             if (rawHeading === null) return;
 
-            // PENAPISAN TIMBANG AIR UNTUK MEJA RATA
+            // PENAPIS TIMBANG AIR
             if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
             else {
                 smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
@@ -486,59 +519,70 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isVertical = Math.abs(smoothedBeta) > 65;
 
-            // 4. AUTO WAKEUP DIMMER
             if (isDimmed && !isFlat) wakeupDimmer();
 
-            // SENSOR STABILITY CHECK
+            // KAWALAN KECEGAPAN JARUM (MALAP KETIKA CONDONG/TEGAK, CERAH BILA READY)
+            const needlePlate = document.getElementById('needle-plate');
+
+            // URUTAN TRAFIK BARU: SEMAK KEDUDUKAN FIZIKAL & UPDATE DIAGNOSTICS DULU
+            let currentDeviceState = 'flat';
             if (isVertical) {
-                sensorReady = false; updateLED('led-sensor', 'red');
+                currentDeviceState = 'vertical';
+                sensorReady = false;
+                needlePlate.style.opacity = "0.2"; // Jarum dimalapkan
                 if(!isAlmostLocked) document.getElementById('status-text').innerText = "PHONE VERTICAL";
             } else if (!isFlat) {
-                sensorReady = false; updateLED('led-sensor', 'amber');
+                currentDeviceState = 'tilted';
+                sensorReady = false;
+                needlePlate.style.opacity = "0.2"; // Jarum dimalapkan
                 if(!isAlmostLocked) document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
             } else {
-                sensorReady = true; updateLED('led-sensor', 'green');
+                currentDeviceState = 'flat';
+                sensorReady = true;
+                // Kecerahan penuh (opacity: 1) akan diaktifkan di bawah hanya jika sistem bebas dari pepijat besi/stuck
             }
 
-            // --- BENTENG 1: DETEKSI OBJEK BESI BERHAMPIRAN (RAW DATA BYPASS) ---
+            // --- BENTENG 1: DETEKSI OBJEK BESI BERHAMPIRAN (DENGAN ANTI-KELIP HOLD TIMER 3 SAAT) ---
             let isMetalDetected = false;
             if (lastRawHeading !== null && sensorReady) {
                 let rawDiff = Math.abs(rawHeading - lastRawHeading);
                 if (rawDiff > 180) rawDiff = 360 - rawDiff;
 
-                // Jika telefon flat tapi data mentah melompat melebihi 18 darjah dalam sekelip mata
                 if (rawDiff > 18 && (now - lastRawTimestamp) < 150) {
                     isMetalDetected = true;
+                    metalDetectedTime = now; // Set penanda masa kali terakhir dikesan besi
                 }
             }
 
-            // Jaga pembacaan iOS Accuracy fallback
             if (event.webkitCompassAccuracy !== undefined && event.webkitCompassAccuracy < 0) {
                 isMetalDetected = true;
+                metalDetectedTime = now;
             }
 
-            if (isMetalDetected) {
+            // Jika sistem sedang dalam fasa "Hold" amaran besi (wajib tayang 3 detik)
+            if (now - metalDetectedTime < METAL_HOLD_DURATION) {
                 document.getElementById('magnetic-modal').style.display = 'flex';
                 resetQiblaLock();
+                needlePlate.style.opacity = "0.2"; // Jarum dibekukan & dimalapkan
+                updateDiagnosticsUI('vertical'); // Paksa diagnosis jadi merah BAD
                 lastRawHeading = rawHeading;
                 lastRawTimestamp = now;
-                return; // BEKUKAN PEMPROSESAN ARAH (JARUM STUCK) DEMI KESELAMATAN
+                return; 
             } else {
                 document.getElementById('magnetic-modal').style.display = 'none';
             }
 
-            // --- BENTENG 2: DETEKSI KOMPAS BEKU (STUCK DETECTION FOR NENEK) ---
+            // --- BENTENG 2: DETEKSI KOMPAS BEKU (STUCK MONITORING) ---
             if (lastRawHeading !== null) {
                 let exactDiff = Math.abs(rawHeading - lastRawHeading);
                 if (exactDiff > 0.0001) {
-                    lastMovementTimestamp = now; // Ada pergerakan makro/mikro
+                    lastMovementTimestamp = now;
                     if (isStuckModeActive) {
                         isStuckModeActive = false;
                         document.getElementById('instruction-card').style.backgroundColor = "#141414";
                         document.getElementById('instruction-card').style.borderColor = "var(--border)";
                     }
                 } else {
-                    // Jika data mati total berterusan melebihi 5 saat
                     if (now - lastMovementTimestamp > 5000 && sensorReady) {
                         isStuckModeActive = true;
                         document.getElementById('instruction-card').style.backgroundColor = "var(--amber)";
@@ -546,7 +590,9 @@
                         document.getElementById('status-text').innerText = "KOMPAS TERGANGGU (STUCK) - GOYANG PERANTI";
                         document.getElementById('icon-left').innerHTML = "⚠️";
                         document.getElementById('icon-right').innerHTML = "⚠️";
-                        if (navigator.vibrate && now % 1000 < 100) navigator.vibrate(100); // Pulse alert
+                        needlePlate.style.opacity = "0.2";
+                        updateDiagnosticsUI('tilted');
+                        if (navigator.vibrate && now % 1000 < 100) navigator.vibrate(100);
                     }
                 }
             }
@@ -554,9 +600,16 @@
             lastRawHeading = rawHeading;
             lastRawTimestamp = now;
 
+            // Kemas kini diagnostik mengikut keadaan peranti yang sah
+            updateDiagnosticsUI(currentDeviceState);
+
+            // Pancung jalan jika sensor belum bersedia sepenuhnya atau stuck
             if (!sensorReady || isStuckModeActive) return;
 
-            // SMOOTHING UNTUK JARUM KOMPAS
+            // NYALAKAN JARUM SANGAT CERAH SEBAB PERANTI SIHAT & RATA BALIK
+            needlePlate.style.opacity = "1";
+
+            // SMOOTHING RUNNING
             if (smoothedHeading === null) { smoothedHeading = rawHeading; }
             else {
                 let diff = rawHeading - smoothedHeading;
@@ -566,8 +619,6 @@
             }
 
             let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
-            const needlePlate = document.getElementById('needle-plate');
-            needlePlate.style.opacity = "1";
             needlePlate.style.transform = `rotate(${arrowRotation}deg)`;
 
             let relativeAngle = arrowRotation;
@@ -576,16 +627,12 @@
             const pointerAxis = document.getElementById('compassPointer');
             const prayBtn = document.getElementById('pray-status-btn');
             const kaabahIcon = document.getElementById('kaabah-outer');
-            const accText = document.getElementById('val-accuracy');
 
-            accText.innerText = "GOOD"; accText.style.color = "var(--green)";
-
-            // --- STRATEGI BARU: ALMOST ALIGN VS PERFECT ALIGN (SYMMETRIC LOCK) ---
-            let almostTolerance = 10.0; // Julat besar untuk skrin bertukar hijau
-            let perfectTolerance = 2.5; // Julat ketat untuk lekat kat Kaabah + Vibrate
+            // KETETAPAN JULAT BARU: ALMOST ALIGN VS PERFECT ALIGN (KUNCI SYMMETRIC)
+            let almostTolerance = 10.0;
+            let perfectTolerance = 1.5; // Julat ditonjol ketat kepada 1.5 darjah demi tuntutan syarak
 
             if (Math.abs(relativeAngle) < almostTolerance) {
-                // FASA 1: ALMOST ALIGN (Skrin bertukar hijau)
                 isAlmostLocked = true;
                 document.body.style.backgroundColor = "#073b24"; 
                 document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
@@ -597,12 +644,11 @@
                 updateLED('led-qibla', 'green');
                 prayBtn.classList.add('active');
 
-                // FASA 2: PERFECT ALIGN (Lekat Kaabah + Nyala Kelip + Vibrate)
+                // SYMMETRIC LOCK: GETARAN BERMULA HANYA JIKA KAABAH MENYALA KELIP (PERFECT KIBLAT)
                 if (Math.abs(relativeAngle) <= perfectTolerance) {
                     if (!isPerfectLocked) {
                         isPerfectLocked = true;
                         kaabahIcon.classList.add('perfect-lock');
-                        // Getaran bermula hanya jika Kaabah menyala kelip
                         if (navigator.vibrate) {
                             navigator.vibrate(300);
                             clearInterval(vibrateInterval);
@@ -610,14 +656,13 @@
                         }
                     }
                 } else {
-                    // Terkeluar dari Kaabah sikit tapi masih dalam julat hijau besar
+                    // Terkeluar daripada koordinat Kaabah gergasi (Getaran padam serentak)
                     isPerfectLocked = false;
                     kaabahIcon.classList.remove('perfect-lock');
                     clearInterval(vibrateInterval);
                 }
 
             } else {
-                // Terkeluar habis dari julat compass
                 resetQiblaLock();
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
                 document.getElementById('status-text').innerText = relativeAngle > 0 ? `TURN RIGHT ${roundedAngle}°` : `TURN LEFT ${roundedAngle}°`;
@@ -662,7 +707,6 @@
             document.getElementById('start-screen').style.display = 'flex';
         }
 
-        // 4. LOGIK PEMASA AUTO DIMMER (25 SAAT SEBELUM GELAP)
         function openSpiritualScreen() {
             if (document.getElementById('pray-status-btn').classList.contains('active')) {
                 document.getElementById('spiritual-modal').style.display = 'flex';
@@ -674,7 +718,7 @@
                     const curtain = document.getElementById('dimmer-curtain');
                     curtain.style.display = 'flex';
                     setTimeout(() => { curtain.style.opacity = '1'; isDimmed = true; }, 50);
-                }, 25000); // 25 Saat Pemasa Selamat Warga Emas
+                }, 25000);
             }
         }
 
