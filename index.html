@@ -148,7 +148,7 @@
         #refresh-btn-ui { display: inline-flex; justify-content: center; align-items: center; line-height: 1; }
 
         /* NEEDLE STRUCTURE */
-        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
+        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 1; }
         .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
         .pointer-axis::before {
             content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
@@ -362,7 +362,7 @@
 
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
         let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
-        let isLocked = false, isVibrating = false, vibrateInterval;
+        let isLocked = false;
         let gpsReady = false, sensorReady = false;
 
         // UNIVERSAL TUNING VALUES
@@ -554,15 +554,36 @@
             document.getElementById('start-screen').style.display = 'flex';
         }
 
-        // =========================================================================
-        // 🕋 DEPARTMENT 1 & 2 ENGINE: STRICT CORE v8.1 + INTERACTION AUDIT v9.0
-        // =========================================================================
+        function runAuditDepartment(bundle) {
+            // Logik pengesan anomali magnetik pasif pasif ringkas
+            if (bundle.heading === lastHeadingAudit && bundle.heading !== null) {
+                stuckCounter++;
+            } else {
+                stuckCounter = 0;
+                magneticAnomalyDetected = false;
+            }
+            lastHeadingAudit = bundle.heading;
+
+            if (stuckCounter > 50) { // Jika heading tidak berubah langsung dalam 50 frame semasa bergerak
+                magneticAnomalyDetected = true;
+            }
+            return magneticAnomalyDetected;
+        }
+
+        function resetQiblaLock() {
+            isLocked = false;
+            kaabahOuter.classList.remove('perfect-lock');
+            compassPointer.classList.remove('aligned');
+            prayStatusBtn.classList.remove('active');
+            prayStatusBtn.disabled = true;
+            updateLED('led-qibla', 'off');
+        }
+
         function handleOrientation(event) {
             let heading = null;
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            // Strict Engine v8.1 Filtering
             if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
             else {
                 smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
@@ -573,14 +594,14 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
-            // Capture raw compass fields
             if (event.webkitCompassHeading) {
                 heading = event.webkitCompassHeading;
             } else if (event.alpha) {
                 heading = (360 - event.alpha) % 360;
             }
 
-            // Passive data compilation for Audit Unit
+            if (heading === null) return;
+
             let auditBundle = {
                 heading: heading,
                 isFlat: isFlat,
@@ -589,206 +610,73 @@
                 gamma: smoothedGamma
             };
 
-            // 🛡️ PLUG IN THE PASSED INTERACTION AUDIT DEPT (v9.0 OVERRIDE)
+            // Jika anomali magnetik dikesan oleh Audit Department
             if (ENABLE_AUDIT_DEPT && runAuditDepartment(auditBundle)) {
-                // If the Audit Department captures an anomaly, it returns true, 
-                // changing the UI warning instantly while the strict needle updates cleanly behind the scenes.
-                if (heading !== null) {
-                    executeStrictNeedleRotation(heading);
-                }
-                return; 
-            }
-
-            // =========================================================================
-            // STRICT v8.1 CORE UI CONSTRAINTS (Runs if Audit is OFF or Passes Cleanly)
-            // =========================================================================
-            if (isTegak) {
-                sensorReady = false;
+                statusText.innerText = "MAGNETIC ANOMALY! WAVING 8";
+                iconLeft.innerHTML = "⚠️"; iconRight.innerHTML = "⚠️";
                 updateLED('led-sensor', 'red');
-                if(!isLocked) {
-                    instructionCard.style.backgroundColor = '#141414'; instructionCard.style.color = '#ffffff';
-                    statusText.innerText = "PHONE VERTICAL";
-                    iconLeft.innerHTML = "⚠️"; iconRight.innerHTML = "⚠️";
-                }
-            } else if (!isFlat) {
-                sensorReady = false;
-                updateLED('led-sensor', 'amber');
-                if(!isLocked) {
-                    instructionCard.style.backgroundColor = '#141414'; instructionCard.style.color = '#ffffff';
-                    statusText.innerText = "TILTED / UNSTEADY";
-                    iconLeft.innerHTML = "⚠️"; iconRight.innerHTML = "⚠️";
-                }
-            } else {
-                sensorReady = true;
-                updateLED('led-sensor', 'green');
-            }
-
-            const accText = document.getElementById('val-accuracy');
-            if (!gpsReady) {
-                accText.innerText = "WAIT"; accText.style.color = "#555555";
                 return;
             }
 
-            // Hardware Accuracy evaluation v8.1
-            if (event.webkitCompassAccuracy) {
-                let accuracy = event.webkitCompassAccuracy;
-                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
-                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
-                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
-                
-                // Anti-Magneto interference trigger point via iOS Accuracy bounds
-                if (accuracy > 45 || accuracy < 0) { magneticAnomalyDetected = true; } 
-                else { magneticAnomalyDetected = false; }
-            } else {
-                accText.innerText = "GOOD"; accText.style.color = "var(--green)";
-            }
+            sensorReady = true;
+            updateLED('led-sensor', 'green');
 
-            if (!sensorReady || heading === null) {
-                if(!isLocked) needlePlate.style.opacity = "0.2";
+            // Kemas kini paparan darjah heading peranti
+            document.getElementById('dash-heading-val').innerText = `${Math.round(heading)}°`;
+
+            if (!isFlat) {
+                statusText.innerText = "PLACE DEVICE FLAT";
+                iconLeft.innerHTML = "📱"; iconRight.innerHTML = "📱";
+                document.getElementById('val-accuracy').innerText = "TILT";
+                document.getElementById('val-accuracy').style.color = "var(--amber)";
+                resetQiblaLock();
                 return;
             }
 
-            executeStrictNeedleRotation(heading);
-        }
+            document.getElementById('val-accuracy').innerText = "GOOD";
+            document.getElementById('val-accuracy').style.color = "var(--green)";
 
-        // Dedicated isolation engine for needle movement tracking (Strictly un-compromised)
-        function executeStrictNeedleRotation(heading) {
-            needlePlate.style.opacity = "1";
+            // Pengiraan putaran piring kompas dan ikon Kaabah
+            // Rumus putaran jarum berpandukan kedudukan Qiblat asal
+            let needleRotation = (qiblaBearing - heading + 360) % 360;
+            needlePlate.style.transform = `rotate(${-heading}deg)`;
+            kaabahOuter.style.transform = `translateX(-50%) rotate(${needleRotation}deg) translateY(-105px) rotate(${-needleRotation}deg)`;
 
-            if (smoothedHeading === null) { smoothedHeading = heading; } 
-            else {
-                let diff = heading - smoothedHeading;
-                if (diff > 180) diff -= 360;
-                if (diff < -180) diff += 360;
-                smoothedHeading += FILTER_FACTOR * diff;
-                smoothedHeading = (smoothedHeading + 360) % 360;
-            }
+            // Menyemak jika peranti tepat menghadap kiblat (Toleransi 2.5 darjah)
+            let diff = Math.abs(heading - qiblaBearing);
+            if (diff > 180) diff = 360 - diff;
 
-            document.getElementById('dash-heading-val').innerText = `${Math.round(smoothedHeading)}°`;
-
-            let qiblaDirectionDiff = qiblaBearing - smoothedHeading;
-            needlePlate.style.transform = `rotate(${qiblaDirectionDiff}deg)`;
-
-            let angularError = Math.abs(qiblaDirectionDiff);
-            if (angularError > 180) angularError = 360 - angularError;
-
-            // Core Alignment Lock Mechanism v8.1
-            if (angularError <= 2.5) {
+            if (diff <= 2.5) {
                 if (!isLocked) {
                     isLocked = true;
-                    instructionCard.style.backgroundColor = 'var(--green)';
-                    instructionCard.style.color = '#051a0e';
-                    statusText.innerText = "QIBLAH ALIGNED";
-                    iconLeft.innerHTML = "🤲"; iconRight.innerHTML = "🤲";
-                    
+                    statusText.innerText = "QIBLA ALIGNED";
+                    iconLeft.innerHTML = "🟢"; iconRight.innerHTML = "🟢";
                     kaabahOuter.classList.add('perfect-lock');
                     compassPointer.classList.add('aligned');
-                    updateLED('led-qibla', 'green');
-                    
                     prayStatusBtn.classList.add('active');
                     prayStatusBtn.disabled = false;
-                    
-                    triggerLockVibration();
+                    updateLED('led-qibla', 'green');
+                    if (navigator.vibrate) navigator.vibrate(200); // Getaran pendek bila locked
                 }
             } else {
-                if (isLocked && angularError > 4.0) {
-                    resetQiblaLock();
-                }
-                if (!isLocked) {
-                    instructionCard.style.backgroundColor = '#141414';
-                    instructionCard.style.color = '#ffffff';
-                    statusText.innerText = "ALIGN WITH NEEDLE";
-                    iconLeft.innerHTML = "🏹"; iconRight.innerHTML = "🏹";
-                }
-            }
-        }
-
-        // =========================================================================
-        // 🛡️ DEPARTMENT 2: PASSIVE AUDIT AND UI OVERRIDE MECHANISM (v9.0)
-        // =========================================================================
-        function runAuditDepartment(audit) {
-            if (!ENABLE_AUDIT_DEPT || !gpsReady) return false;
-
-            // 1. AUDIT CHECK: Kes Senget Mak Bapak Nenek (Tilt Verification)
-            if (audit.isTegak) {
-                overrideAuditUI('#FF8C00', '#000000', '⚠️ PHONE VERTICAL: PLACE FLAT ⚠️', '⚠️', '⚠️');
-                updateLED('led-sensor', 'red');
-                return true;
-            }
-            if (!audit.isFlat) {
-                overrideAuditUI('#FF8C00', '#000000', '⚠️ PHONE TILTED: PLACE FLAT ⚠️', '⚠️', '⚠️');
-                updateLED('led-sensor', 'amber');
-                return true;
-            }
-
-            // 2. AUDIT CHECK: Compass Stuck Tracking (Anti Magneto Lock-freeze)
-            if (audit.heading !== null) {
-                if (Math.round(audit.heading) === Math.round(lastHeadingAudit)) {
-                    stuckCounter++;
+                if (isLocked) resetQiblaLock();
+                
+                // Beri arahan pusing ke kiri atau kanan
+                let angleDiff = qiblaBearing - heading;
+                if (angleDiff < 0) angleDiff += 360;
+                
+                if (angleDiff > 180) {
+                    statusText.innerText = "TURN LEFT";
+                    iconLeft.innerHTML = "⬅️"; iconRight.innerHTML = " ";
                 } else {
-                    stuckCounter = 0;
+                    statusText.innerText = "TURN RIGHT";
+                    iconLeft.innerHTML = " "; iconRight.innerHTML = "➡️";
                 }
-                lastHeadingAudit = audit.heading;
-            }
-
-            // Kitaran 60 frame statik tanpa sebarang pergerakan darjah (Kompas Beku)
-            if (stuckCounter > 60 && !isLocked) {
-                overrideAuditUI('#e74c3c', '#ffffff', '🔄 COMPASS STUCK: WAVE IN 8-SHAPE 🔄', '🔄', '🔄');
-                updateLED('led-sensor', 'red');
-                return true;
-            }
-
-            // 3. AUDIT CHECK: Metal Interference Hardware Anomaly
-            if (magneticAnomalyDetected && !isLocked) {
-                overrideAuditUI('#e74c3c', '#ffffff', '🧲 METAL DETECTED: MOVE 3 STEPS AWAY 🧲', '🧲', '🧲');
-                updateLED('led-sensor', 'red');
-                return true;
-            }
-
-            return false; // All audit checkpoints cleared cleanly!
-        }
-
-        function overrideAuditUI(bgColor, textColor, labelText, iconL, iconR) {
-            instructionCard.style.backgroundColor = bgColor;
-            instructionCard.style.color = textColor;
-            statusText.innerText = labelText;
-            iconLeft.innerHTML = iconL;
-            iconRight.innerHTML = iconR;
-            
-            // Safe fallback layout configurations
-            needlePlate.style.opacity = "0.2";
-            if (isLocked) resetQiblaLock();
-        }
-
-        function resetQiblaLock() {
-            isLocked = false;
-            clearInterval(vibrateInterval);
-            isVibrating = false;
-            
-            kaabahOuter.classList.remove('perfect-lock');
-            compassPointer.classList.remove('aligned');
-            updateLED('led-qibla', 'off');
-            
-            prayStatusBtn.classList.remove('active');
-            prayStatusBtn.disabled = true;
-        }
-
-        function triggerLockVibration() {
-            if (!isVibrating && navigator.vibrate) {
-                isVibrating = true;
-                navigator.vibrate([150, 100, 150]);
-                vibrateInterval = setInterval(() => {
-                    if (isLocked && navigator.vibrate) {
-                        navigator.vibrate(200);
-                    } else {
-                        clearInterval(vibrateInterval);
-                    }
-                }, 1200);
             }
         }
 
         function openSpiritualScreen() {
-            if(isLocked) {
+            if (isLocked) {
                 document.getElementById('spiritual-modal').style.display = 'flex';
             }
         }
