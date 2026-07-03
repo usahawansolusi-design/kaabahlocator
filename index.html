@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kaabah Finder - Universal Symmetric v7.3</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --bg: #0a0a0a;
+            --card: #141414;
+            --border: #222222;
+            --green: #2ecc71;
+            --red: #e74c3c;
+            --amber: #f39c12;
+            --dim-gray: #222222;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg); color: #ffffff; text-align: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100vh; height: -webkit-fill-available;
+            box-sizing: border-box; padding: 16px; overflow: hidden;
+            transition: background-color 0.4s ease;
+        }
+
+        .main-wrapper {
+            width: 100%; max-width: 342px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            height: 100%; max-height: 100%;
+        }
+
+        /* STARTING PAGE */
+        #start-screen {
+            display: flex; flex-direction: column; width: 100%;
+            justify-content: center; align-items: center; gap: 14px; height: 100%;
+        }
+
+        #app-screen { 
+            display: none; flex-direction: column; width: 100%; 
+            justify-content: center; align-items: center; gap: 12px; 
+        }
+
+        .brand-container { display: flex; flex-direction: column; align-items: center; }
+        .brand-logo { font-size: 3.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+        .brand-title-main { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
+        .brand-tagline { color: #888; font-size: 0.7rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 6px; }
+
+        .app-header { font-size: 1.25rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+
+        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px; padding: 14px 20px; box-sizing: border-box; }
+        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
+        .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
+        
+        .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
+        
+        .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
+
+        /* PRE-EMPTIVE CALIBRATION BOX - RE-ENFORCED FOR BETTER VISIBILITY */
+        .calib-guide-box {
+            width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
+            padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
+        .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
+        
+        /* ADJUSTMENT 1: GIANT CSS INFINITY 8 ANIMATION (Rabun-Friendly) */
+        .infinity-container { position: relative; width: 140px; height: 55px; margin-top: 6px; }
+        .infinity-path {
+            width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.3);
+            stroke-width: 2.5; stroke-dasharray: 5 3;
+        }
+        .infinity-pointer {
+            position: absolute; width: 12px; height: 12px; background: #ffffff;
+            border-radius: 50%; top: 0; left: 0;
+            offset-path: path('M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z');
+            animation: moveInfinity 2.5s infinite linear;
+            box-shadow: 0 0 10px #ffffff, 0 0 20px var(--gold), 0 0 30px var(--gold);
+        }
+        @keyframes moveInfinity { 100% { offset-distance: 100%; } }
+
+        /* COMPASS AREA WITH REVERTED AND CLEAN RADAR STRUCTURE */
+        .compass-outer-wrapper { position: relative; width: 100%; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
+        
+        /* KAABAH ICON CORE STYLE */
+        #kaabah-outer { 
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
+            font-size: 1.4rem; z-index: 15; 
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* HIGH INTENSITY BEACON PULSE UNTUK KAABAH ICON */
+        #kaabah-outer.perfect-lock {
+            transform: translateX(-50%) scale(1.3);
+            animation: kaabah-glow-pulse 1.0s infinite ease-in-out;
+        }
+        @keyframes kaabah-glow-pulse {
+            0% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
+            50% { filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 22px #ffd700); }
+            100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
+        }
+
+        .compass-container { 
+            position: relative; width: 210px; height: 210px; 
+            display: flex; justify-content: center; align-items: center; 
+            border: 2px solid rgba(212, 175, 55, 0.4); border-radius: 50%; 
+            background-color: #000000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        
+        .ticks-container { position: absolute; width: 100%; height: 100%; border-radius: 50%; }
+        .tick {
+            position: absolute; width: 1.5px; height: 5px;
+            background-color: rgba(212, 175, 55, 0.3);
+            left: 50%; transform-origin: bottom center; bottom: 50%;
+        }
+        .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.7); }
+
+        /* FLOATING SIDE ACTION BUTTONS STYLE */
+        .side-action-btn {
+            position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: rgba(20, 20, 20, 0.75); border: 1px solid var(--border);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; cursor: pointer; z-index: 20; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.2s ease; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+        }
+        .side-action-btn:active { background: #222; transform: scale(0.92); border-color: #444; }
+        .btn-side-left { left: 4px; }
+        .btn-side-right { right: 4px; }
+
+        /* NEEDLE STRUCTURE */
+        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
+        .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
+        .pointer-axis::before {
+            content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+            border-left: 6px solid transparent; border-right: 6px solid transparent;
+            border-bottom: 76px solid #FFD700;
+        }
+        .pointer-axis.aligned::before { border-bottom-color: var(--green); }
+
+        /* FULL SYMMETRIC DYNAMIC DIRECTION BOX */
+        .direction-box { 
+            width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; 
+            padding: 14px 10px; font-size: 1.25rem; font-weight: 800; 
+            display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; 
+            box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; 
+        }
+        .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
+        .dir-center-text { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; text-align: center; }
+
+        /* INFO CARD ROW */
+        .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.95rem; }
+        .info-left { display: flex; align-items: center; gap: 8px; color: #aaaaaa; font-weight: 500; }
+        .info-left .icon-glob { color: #3498db; font-size: 1.1rem; }
+        .info-left .icon-pin { color: #e74c3c; font-size: 1.1rem; }
+        .info-right-val { font-weight: 700; color: #ffffff; }
+        .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
+
+        /* 4-GRID DIAGNOSTICS */
+        .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 12px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
+        .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
+        .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
+        .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
+
+        .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* READY TO PRAY BUTTON WITH HIGH CONTRAST BEACON */
+        .btn-pray-status { 
+            width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; 
+            border: 1px solid var(--border); border-radius: 14px; background: #141414; 
+            color: #444444; letter-spacing: 1px; text-transform: uppercase; 
+            cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; 
+            margin-top: 6px;
+        }
+        
+        .btn-pray-status.active { 
+            background: var(--green); 
+            color: #051a0e; 
+            border-color: #4ade80; 
+            cursor: pointer; 
+            animation: pulse-beacon-gold-white 1.4s infinite ease-in-out;
+        }
+
+        @keyframes pulse-beacon-gold-white {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.85), 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0), 0 0 0 22px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        /* SPIRITUAL SCREEN POP-UP (MODAL MODIFIED FOR TEXT EXTRA CARE) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; }
+        
+        /* ADJUSTMENT 2: INTEGRATED AND HIGHLIGHTED BRAND TEXT */
+        .modal-thanks-lead { font-size: 1.15rem; font-weight: 700; color: var(--green); line-height: 1.4; margin: 0; }
+        .brand-highlight { font-size: 1.35rem; font-weight: 900; color: var(--gold); display: inline-block; white-space: nowrap; letter-spacing: 0.5px; margin-top: 4px; }
+        .modal-thanks-sub { font-size: 1.05rem; font-weight: 700; color: var(--green); margin: 4px 0 0 0; }
+        
+        .modal-divider { width: 50px; height: 2px; background: rgba(255, 255, 255, 0.2); margin: 6px auto; }
+        
+        /* ADJUSTMENT 3: BILINGUAL VERSE STYLING */
+        .verse-container { display: flex; flex-direction: column; gap: 12px; text-align: center; padding: 0 4px; }
+        .modal-verse-en { font-size: 0.88rem; font-weight: 500; color: #bbbbbb; line-height: 1.5; font-style: italic; margin: 0; }
+        .modal-verse-my { font-size: 0.92rem; font-weight: 600; color: #ffffff; line-height: 1.5; margin: 0; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; }
+        
+        .modal-reference { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+        .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- START PAGE -->
+        <div id="start-screen">
+            <div class="brand-container">
+                <div class="brand-logo">🕋</div>
+                <h1 class="brand-title-main">Kaabah Finder</h1>
+                <div class="brand-tagline">Verified Qiblah Navigation System</div>
+            </div>
+
+            <div class="checklist-card">
+                <div class="checklist-item">Place phone on flat surface</div>
+                <div class="checklist-item">Keep away from metal objects</div>
+                <div class="checklist-item">Enable GPS location</div>
+                <div class="checklist-item">Hold device steady</div>
+            </div>
+
+            <button class="btn-action" onclick="initApp()">Start Finder</button>
+
+            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX (Bawah Button) -->
+            <div class="calib-guide-box">
+                <div class="calib-title">Compass Calibration Tip</div>
+                <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
+                
+                <!-- ADJUSTMENT 1: GIANT ACCESSIBLE INFINITY TRACK -->
+                <div class="infinity-container">
+                    <svg class="infinity-path" viewBox="0 0 140 55">
+                        <path d="M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z"/>
+                    </svg>
+                    <div class="infinity-pointer"></div>
+                </div>
+            </div>
+
+            <div class="slogan-footer">Find. Align. Verify. Pray.</div>
+        </div>
+
+        <!-- MAIN APP SCREEN -->
+        <div id="app-screen">
+            <div class="app-header">
+                <span>🕋</span> KAABAH FINDER <span>🕋</span>
+            </div>
+
+            <div class="compass-outer-wrapper">
+                <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
+                
+                <div id="kaabah-outer">🕋</div>
+                <div class="compass-container">
+                    <div class="ticks-container" id="ticks"></div>
+                    
+                    <div class="needle-wrapper" id="needle-plate">
+                        <div class="pointer-axis" id="compassPointer"></div>
+                    </div>
+                </div>
+
+                <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
+            </div>
+
+            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
+            <div id="instruction-card" class="direction-box">
+                <span id="icon-left" class="dir-side-icon">⏳</span>
+                <span id="status-text" class="dir-center-text">INITIALIZING...</span>
+                <span id="icon-right" class="dir-side-icon">⏳</span>
+            </div>
+
+            <div class="united-card">
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-glob">🌐</span>
+                        <span>Distance to Kaabah</span>
+                    </div>
+                    <div id="distance-text" class="info-right-val gold-text">Calculating...</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-pin">📍</span>
+                        <span>Current Location</span>
+                    </div>
+                    <div id="location-text" class="info-right-val">Detecting...</div>
+                </div>
+            </div>
+
+            <!-- 4-GRID DIAGNOSTICS -->
+            <div class="status-grid">
+                <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">QIBLA</span><div id="led-qibla" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
+            </div>
+
+            <button id="pray-status-btn" class="btn-pray-status" onclick="openSpiritualScreen()">Ready to Pray</button>
+        </div>
+    </div>
+
+    <!-- SPIRITUAL MODAL POP-UP (BILINGUAL & ACCESSIBLE) -->
+    <div id="spiritual-modal" class="modal-overlay">
+        <div class="modal-content">
+            <!-- ADJUSTMENT 2: HIGHLIGHTED ONE-SENTENCE PRODUCT HIGHLIGHT -->
+            <div>
+                <p class="modal-thanks-lead">Thank you for using</p>
+                <span class="brand-highlight">Kaabah Finder</span>
+                <p class="modal-thanks-sub">Have a blessed prayer.</p>
+            </div>
+            
+            <div class="modal-divider"></div>
+            
+            <!-- ADJUSTMENT 3: BILINGUAL VERSE FOR ELDERLY GENERATION -->
+            <div class="verse-container">
+                <p class="modal-verse-en">"Indeed, prayer has been decreed upon the believers a decree of specified times."</p>
+                <p class="modal-verse-my">"Sesungguhnya solat itu adalah satu kewajipan yang ditentukan waktunya atas orang-orang yang beriman."</p>
+            </div>
+            
+            <div class="modal-reference">Surah An-Nisa': 103</div>
+            <button class="btn-back" onclick="closeSpiritualScreen()">Return</button>
+        </div>
+    </div>
+
+    <script>
+        const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
+        let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
+        let isLocked = false, vibrateInterval;
+        let gpsReady = false, sensorReady = false;
+
+        // UNIVERSAL TUNING VALUES
+        let smoothedBeta = null, smoothedGamma = null;
+        const FILTER_FACTOR = 0.20; 
+        const FLAT_TOLERANCE = 25;  
+
+        const ticksContainer = document.getElementById('ticks');
+        for (let i = 0; i < 360; i += 5) {
+            const tick = document.createElement('div');
+            if (i % 30 === 0) {
+                tick.className = 'tick major';
+                tick.style.transform = `translateX(-50%) rotate(${i}deg) translateY(-94px)`;
+            } else {
+                tick.className = 'tick';
+                tick.style.transform = `translateX(-50%) rotate(${i}deg) translateY(-99px)`;
+            }
+            ticksContainer.appendChild(tick);
+        }
+
+        function updateLED(id, state) {
+            const led = document.getElementById(id);
+            if (!led) return;
+            if (state === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 8px var(--green)'; }
+            else if (state === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 8px var(--amber)'; }
+            else if (state === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 8px var(--red)'; }
+            else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
+        }
+
+        function initApp() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'flex';
+            document.getElementById('status-text').innerText = "CONNECTING GPS...";
+            document.getElementById('icon-left').innerHTML = "⏳";
+            document.getElementById('icon-right').innerHTML = "⏳";
+            updateLED('led-gps', 'amber');
+
+            const accText = document.getElementById('val-accuracy');
+            accText.innerText = "WAIT";
+            accText.style.color = "#555555";
+
+            if (!navigator.geolocation) {
+                document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
+                updateLED('led-gps', 'red');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(position => {
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
+                
+                qiblaBearing = calculateQibla(userLat, userLng);
+                let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
+                document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
+                
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
+                    .then(res => res.json())
+                    .then(data => {
+                        let placeName = data.address.suburb || data.address.town || data.address.city || "Unknown Location";
+                        document.getElementById('location-text').innerText = placeName;
+                    })
+                    .catch(() => {
+                        document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+                    });
+                
+                gpsReady = true;
+                updateLED('led-gps', 'green');
+                setupSensor();
+            }, error => {
+                document.getElementById('status-text').innerText = "GPS SIGNAL ERROR";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
+                updateLED('led-gps', 'red');
+            }, { enableHighAccuracy: true, timeout: 10000 });
+        }
+
+        function setupSensor() {
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                window.addEventListener('deviceorientation', handleOrientation, true);
+                            } else {
+                                document.getElementById('status-text').innerText = "SENSOR DENIED";
+                                document.getElementById('icon-left').innerHTML = "❌";
+                                document.getElementById('icon-right').innerHTML = "❌";
+                                updateLED('led-sensor', 'red');
+                            }
+                        }).catch(() => { updateLED('led-sensor', 'red'); });
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation, true);
+                }
+            } else {
+                document.getElementById('status-text').innerText = "NO SENSOR HARDWARE";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
+                updateLED('led-sensor', 'red');
+            }
+        }
+
+        function refreshSensors() {
+            window.removeEventListener('deviceorientation', handleOrientation, true);
+            smoothedHeading = null;
+            smoothedBeta = null;
+            smoothedGamma = null;
+            sensorReady = false;
+            resetQiblaLock();
+            
+            const refreshIcon = document.getElementById('refresh-btn-ui');
+            refreshIcon.classList.add('spinning');
+            
+            document.getElementById('status-text').innerText = "REFRESHING SENSORS...";
+            document.getElementById('icon-left').innerHTML = "⏳";
+            document.getElementById('icon-right').innerHTML = "⏳";
+            updateLED('led-sensor', 'amber');
+            
+            setTimeout(() => {
+                setupSensor();
+                refreshIcon.classList.remove('spinning');
+            }, 800);
+        }
+
+        function goBackToStart() {
+            window.removeEventListener('deviceorientation', handleOrientation, true);
+            resetQiblaLock();
+            smoothedHeading = null;
+            smoothedBeta = null;
+            smoothedGamma = null;
+            gpsReady = false;
+            sensorReady = false;
+            
+            updateLED('led-gps', 'off');
+            updateLED('led-sensor', 'off');
+            updateLED('led-qibla', 'off');
+            document.getElementById('val-accuracy').innerText = "WAIT";
+            document.getElementById('val-accuracy').style.color = "#555555";
+            
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'flex';
+        }
+
+        function handleOrientation(event) {
+            let heading = null;
+            let rawBeta = event.beta || 0;
+            let rawGamma = event.gamma || 0;
+
+            if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
+            else {
+                smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
+                smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
+            }
+
+            let currentTolerance = isLocked ? (FLAT_TOLERANCE + 5) : FLAT_TOLERANCE;
+            let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
+            let isTegak = Math.abs(smoothedBeta) > 65;
+
+            if (isTegak) {
+                sensorReady = false;
+                updateLED('led-sensor', 'red');
+                if(!isLocked) {
+                    document.getElementById('status-text').innerText = "PHONE VERTICAL";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
+                }
+            } else if (!isFlat) {
+                sensorReady = false;
+                updateLED('led-sensor', 'amber');
+                if(!isLocked) {
+                    document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
+                }
+            } else {
+                sensorReady = true;
+                updateLED('led-sensor', 'green');
+            }
+
+            const accText = document.getElementById('val-accuracy');
+            if (!gpsReady) {
+                accText.innerText = "WAIT";
+                accText.style.color = "#555555";
+                return;
+            }
+
+            if (event.webkitCompassAccuracy) {
+                let accuracy = event.webkitCompassAccuracy;
+                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
+                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
+                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
+            } else {
+                accText.innerText = "GOOD";
+                accText.style.color = "var(--green)";
+            }
+
+            const needlePlate = document.getElementById('needle-plate');
+            if (!sensorReady) {
+                if(!isLocked) {
+                    needlePlate.style.opacity = "0.15";
+                    resetQiblaLock();
+                }
+                return; 
+            }
+
+            needlePlate.style.opacity = "1";
+
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+            } else if (event.alpha !== null) {
+                heading = (360 - event.alpha) % 360;
+            }
+
+            if (heading === null) return;
+
+            if (smoothedHeading === null) {
+                smoothedHeading = heading;
+            } else {
+                let diff = heading - smoothedHeading;
+                if (diff > 180) diff -= 360;
+                if (diff < -180) diff += 360;
+                smoothedHeading += 0.25 * diff;
+                smoothedHeading = (smoothedHeading + 360) % 360;
+            }
+
+            let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
+            needlePlate.style.transform = `rotate(${arrowRotation}deg)`;
+
+            let relativeAngle = arrowRotation;
+            if (relativeAngle > 180) relativeAngle -= 360;
+
+            const pointerAxis = document.getElementById('compassPointer');
+            const prayBtn = document.getElementById('pray-status-btn');
+            const kaabahIcon = document.getElementById('kaabah-outer');
+
+            let errorMargin = isLocked ? 10 : 4;
+
+            if (Math.abs(relativeAngle) < errorMargin) {
+                if (!isLocked) {
+                    isLocked = true;
+                    document.body.style.backgroundColor = "#073b24"; 
+                    document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
+                    document.getElementById('instruction-card').style.borderColor = "#4ade80";
+                    pointerAxis.classList.add('aligned');
+                    
+                    document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
+                    document.getElementById('icon-left').innerHTML = "🤲";
+                    document.getElementById('icon-right').innerHTML = "🤲";
+                    
+                    updateLED('led-qibla', 'green');
+                    prayBtn.classList.add('active');
+                    
+                    if (navigator.vibrate) {
+                        navigator.vibrate(300);
+                        vibrateInterval = setInterval(() => navigator.vibrate(300), 700);
+                    }
+                }
+
+                if (Math.abs(relativeAngle) <= 1.5) {
+                    kaabahIcon.classList.add('perfect-lock');
+                } else {
+                    kaabahIcon.classList.remove('perfect-lock');
+                }
+
+            } else {
+                resetQiblaLock();
+                let roundedAngle = Math.abs(Math.round(relativeAngle));
+                if (relativeAngle > 0) {
+                    document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
+                    document.getElementById('icon-left').innerHTML = "↪️";
+                    document.getElementById('icon-right').innerHTML = "↪️";
+                } else {
+                    document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
+                    document.getElementById('icon-left').innerHTML = "↩️";
+                    document.getElementById('icon-right').innerHTML = "↩️";
+                }
+            }
+        }
+
+        function resetQiblaLock() {
+            document.getElementById('kaabah-outer').classList.remove('perfect-lock');
+            if (isLocked) {
+                isLocked = false;
+                document.body.style.backgroundColor = "var(--bg)"; 
+                document.getElementById('instruction-card').style.backgroundColor = "#141414";
+                document.getElementById('instruction-card').style.borderColor = "var(--border)";
+                document.getElementById('compassPointer').classList.remove('aligned');
+                document.getElementById('pray-status-btn').classList.remove('active');
+                updateLED('led-qibla', 'off');
+                clearInterval(vibrateInterval);
+                if (navigator.vibrate) navigator.vibrate(0);
+            }
+        }
+
+        function cancelVibration() {
+             clearInterval(vibrateInterval);
+             if (navigator.vibrate) navigator.vibrate(0);
+        }
+
+        function openSpiritualScreen() {
+            if (document.getElementById('pray-status-btn').classList.contains('active')) {
+                document.getElementById('spiritual-modal').style.display = 'flex';
+                cancelVibration();
+            }
+        }
+
+        function closeSpiritualScreen() {
+            document.getElementById('spiritual-modal').style.display = 'none';
+        }
+
+        function calculateQibla(lat, lng) {
+            let phi1 = lat * Math.PI / 180; let phi2 = KAABAH_LAT * Math.PI / 180;
+            let lam1 = lng * Math.PI / 180; let lam2 = KAABAH_LNG * Math.PI / 180;
+            return (Math.atan2(Math.sin(lam2 - lam1), Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1)) * 180 / Math.PI + 360) % 360;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            let dLat = (lat2 - lat1) * Math.PI / 180; let dLon = (lon2 - lon1) * Math.PI / 180;
+            let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+    </script>
+</body>
+</html>
