@@ -447,51 +447,77 @@
         }
 
         function initApp() {
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('app-screen').style.display = 'flex';
-            statusText.innerText = "CONNECTING GPS...";
-            iconLeft.innerHTML = "⏳"; iconRight.innerHTML = "⏳";
-            updateLED('led-gps', 'amber');
-            updateCurrentPrayerTime();
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'flex';
+    statusText.innerText = "INITIALIZING SENSORS & GPS..."; // Ubah teks permulaan
+    iconLeft.innerHTML = "⏳"; iconRight.innerHTML = "⏳";
+    updateLED('led-gps', 'amber');
+    updateLED('led-sensor', 'amber'); // Hidupkan led sensor sekali
+    updateCurrentPrayerTime();
 
-            const accText = document.getElementById('val-accuracy');
-            accText.innerText = "WAIT"; accText.style.color = "#555555";
+    const accText = document.getElementById('val-accuracy');
+    accText.innerText = "WAIT"; accText.style.color = "#555555";
 
-            if (!navigator.geolocation) {
-                statusText.innerText = "GPS NOT SUPPORTED";
-                iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
-                updateLED('led-gps', 'red');
-                return;
-            }
+    // 🚀 LANGKAH 1: Terus mintak permission SENSOR dulu (Sebab ada direct user-interaction kat sini)
+    if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+            .then(permissionState => {
+                if (permissionState === 'granted') {
+                    window.addEventListener('deviceorientation', handleOrientation, true);
+                    sensorReady = true;
+                    updateLED('led-sensor', 'green');
+                } else {
+                    statusText.innerText = "SENSOR DENIED";
+                    updateLED('led-sensor', 'red');
+                }
+            }).catch(() => { updateLED('led-sensor', 'red'); });
+    } else {
+        // Untuk Android/Pelayar lama yang tak pakai requestPermission
+        window.addEventListener('deviceorientation', handleOrientation, true);
+        sensorReady = true;
+        updateLED('led-sensor', 'green');
+    }
 
-            navigator.geolocation.getCurrentPosition(position => {
-                userLat = position.coords.latitude;
-                userLng = position.coords.longitude;
-                qiblaBearing = calculateQibla(userLat, userLng);
-                document.getElementById('dash-qibla-val').innerText = `${Math.round(qiblaBearing)}°`;
+    // 🚀 LANGKAH 2: Jalan sekali dapatkan GPS
+    if (!navigator.geolocation) {
+        statusText.innerText = "GPS NOT SUPPORTED";
+        updateLED('led-gps', 'red');
+        return;
+    }
 
-                let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
-                document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
-                
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let placeName = data.address.suburb || data.address.town || data.address.city || "Unknown Location";
-                        document.getElementById('location-text').innerText = placeName;
-                    })
-                    .catch(() => {
-                        document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
-                    });
-                
-                gpsReady = true;
-                updateLED('led-gps', 'green');
-                setupSensor();
-            }, error => {
-                statusText.innerText = "GPS SIGNAL ERROR";
-                iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
-                updateLED('led-gps', 'red');
-            }, { enableHighAccuracy: true, timeout: 10000 });
+    navigator.geolocation.getCurrentPosition(position => {
+        userLat = position.coords.latitude;
+        userLng = position.coords.longitude;
+        qiblaBearing = calculateQibla(userLat, userLng);
+        document.getElementById('dash-qibla-val').innerText = `${Math.round(qiblaBearing)}°`;
+
+        let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
+        document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
+        
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
+            .then(res => res.json())
+            .then(data => {
+                let placeName = data.address.suburb || data.address.town || data.address.city || "Unknown Location";
+                document.getElementById('location-text').innerText = placeName;
+            })
+            .catch(() => {
+                document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+            });
+        
+        gpsReady = true;
+        updateLED('led-gps', 'green');
+
+        // Kemaskini status teks di sini supaya perkataan "CONNECTING GPS" tu hilang!
+        if(sensorReady) {
+            statusText.innerText = "ALIGN TO QIBLA";
+            iconLeft.innerHTML = "🧭"; iconRight.innerHTML = "🧭";
         }
+    }, error => {
+        statusText.innerText = "GPS SIGNAL ERROR";
+        updateLED('led-gps', 'red');
+    }, { enableHighAccuracy: true, timeout: 10000 });
+}
+
 
         function setupSensor() {
             if (window.DeviceOrientationEvent) {
