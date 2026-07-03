@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v7.3</title>
+    <title>Kaabah Finder - Universal Symmetric v8.0</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -55,7 +55,8 @@
         .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
         .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
         
-        .btn-action { width: 100%; font-size: 1rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
+        /* PEMBAHARUAN 1: BESARKAN TEXT START FINDER (FONT-SIZE DIUBAH KE 1.4rem, BOX KEKAL) */
+        .btn-action { width: 100%; font-size: 1.4rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
@@ -67,7 +68,7 @@
         .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
         .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
         
-        /* ADJUSTMENT 1: GIANT CSS INFINITY 8 ANIMATION (Rabun-Friendly) */
+        /* CSS INFINITY 8 ANIMATION */
         .infinity-container { position: relative; width: 140px; height: 55px; margin-top: 6px; }
         .infinity-path {
             width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.3);
@@ -126,18 +127,29 @@
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
             font-size: 1.2rem; cursor: pointer; z-index: 20; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             transition: all 0.2s ease; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            box-sizing: border-box;
         }
         .side-action-btn:active { background: #222; transform: scale(0.92); border-color: #444; }
         .btn-side-left { left: 4px; }
         .btn-side-right { right: 4px; }
 
+        /* PEMBAHARUAN 5: ELEMEN DALAM BUTANG REFRESH DI-CENTERKAN SUPAYA SPIN BERADA PADA PAKSI TENGAH */
+        #refresh-btn-ui {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+        }
+
         /* NEEDLE STRUCTURE */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
         .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
+        
+        /* PEMBAHARUAN 2: PANJANGKAN JARUM KOMPAS (BORDER-BOTTOM DIUBAH DARI 76px KE 92px SUPAYA SENTUH TICK) */
         .pointer-axis::before {
             content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
             border-left: 6px solid transparent; border-right: 6px solid transparent;
-            border-bottom: 76px solid #FFD700;
+            border-bottom: 92px solid #FFD700;
         }
         .pointer-axis.aligned::before { border-bottom-color: var(--green); }
 
@@ -157,6 +169,8 @@
         .info-left { display: flex; align-items: center; gap: 8px; color: #aaaaaa; font-weight: 500; }
         .info-left .icon-glob { color: #3498db; font-size: 1.1rem; }
         .info-left .icon-pin { color: #e74c3c; font-size: 1.1rem; }
+        /* STYLE KHAS UNTUK ICON SOLAT */
+        .info-left .icon-prayer { color: var(--gold); font-size: 1.1rem; }
         .info-right-val { font-weight: 700; color: #ffffff; }
         .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
 
@@ -193,18 +207,16 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* SPIRITUAL SCREEN POP-UP (MODAL MODIFIED FOR TEXT EXTRA CARE) */
+        /* SPIRITUAL SCREEN POP-UP */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; }
         
-        /* ADJUSTMENT 2: INTEGRATED AND HIGHLIGHTED BRAND TEXT */
         .modal-thanks-lead { font-size: 1.15rem; font-weight: 700; color: var(--green); line-height: 1.4; margin: 0; }
         .brand-highlight { font-size: 1.35rem; font-weight: 900; color: var(--gold); display: inline-block; white-space: nowrap; letter-spacing: 0.5px; margin-top: 4px; }
         .modal-thanks-sub { font-size: 1.05rem; font-weight: 700; color: var(--green); margin: 4px 0 0 0; }
         
         .modal-divider { width: 50px; height: 2px; background: rgba(255, 255, 255, 0.2); margin: 6px auto; }
         
-        /* ADJUSTMENT 3: BILINGUAL VERSE STYLING */
         .verse-container { display: flex; flex-direction: column; gap: 12px; text-align: center; padding: 0 4px; }
         .modal-verse-en { font-size: 0.88rem; font-weight: 500; color: #bbbbbb; line-height: 1.5; font-style: italic; margin: 0; }
         .modal-verse-my { font-size: 0.92rem; font-weight: 600; color: #ffffff; line-height: 1.5; margin: 0; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; }
@@ -235,12 +247,11 @@
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
-            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX (Bawah Button) -->
+            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
                 
-                <!-- ADJUSTMENT 1: GIANT ACCESSIBLE INFINITY TRACK -->
                 <div class="infinity-container">
                     <svg class="infinity-path" viewBox="0 0 140 55">
                         <path d="M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z"/>
@@ -295,6 +306,14 @@
                     </div>
                     <div id="location-text" class="info-right-val">Detecting...</div>
                 </div>
+                <!-- PEMBAHARUAN 4: PAPARAN WAKTU SOLAT SEMASA DI BAWAH CURRENT LOCATION -->
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-prayer">🕌</span>
+                        <span>Current Prayer</span>
+                    </div>
+                    <div id="prayer-time-text" class="info-right-val gold-text">Detecting...</div>
+                </div>
             </div>
 
             <!-- 4-GRID DIAGNOSTICS -->
@@ -309,10 +328,9 @@
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP (BILINGUAL & ACCESSIBLE) -->
+    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
-            <!-- ADJUSTMENT 2: HIGHLIGHTED ONE-SENTENCE PRODUCT HIGHLIGHT -->
             <div>
                 <p class="modal-thanks-lead">Thank you for using</p>
                 <span class="brand-highlight">Kaabah Finder</span>
@@ -321,7 +339,6 @@
             
             <div class="modal-divider"></div>
             
-            <!-- ADJUSTMENT 3: BILINGUAL VERSE FOR ELDERLY GENERATION -->
             <div class="verse-container">
                 <p class="modal-verse-en">"Indeed, prayer has been decreed upon the believers a decree of specified times."</p>
                 <p class="modal-verse-my">"Sesungguhnya solat itu adalah satu kewajipan yang ditentukan waktunya atas orang-orang yang beriman."</p>
@@ -335,7 +352,7 @@
     <script>
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
         let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
-        let isLocked = false, vibrateInterval;
+        let isLocked = false, isVibrating = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
         // UNIVERSAL TUNING VALUES
@@ -365,6 +382,25 @@
             else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
+        // FUNGSI LOGIK MENGIRA WAKTU SOLAT SEMASA BERDASARKAN WAKTU PERANTI (ESTIMATED SIMULATION)
+        function updateCurrentPrayerTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const timeVal = hours * 60 + minutes;
+            let currentPrayer = "Syuruk/Dhuha";
+
+            // Anggaran kasar waktu solat universal di Malaysia/Rantau Asia Tenggara
+            if (timeVal >= 330 && timeVal < 420) { currentPrayer = "Subuh"; }
+            else if (timeVal >= 420 && timeVal < 790) { currentPrayer = "Syuruk / Dhuha"; }
+            else if (timeVal >= 790 && timeVal < 980) { currentPrayer = "Zuhur"; }
+            else if (timeVal >= 980 && timeVal < 1160) { currentPrayer = "Asar"; }
+            else if (timeVal >= 1160 && timeVal < 1230) { currentPrayer = "Maghrib"; }
+            else if (timeVal >= 1230 || timeVal < 330) { currentPrayer = "Isyak"; }
+
+            document.getElementById('prayer-time-text').innerText = currentPrayer;
+        }
+
         function initApp() {
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
@@ -372,6 +408,9 @@
             document.getElementById('icon-left').innerHTML = "⏳";
             document.getElementById('icon-right').innerHTML = "⏳";
             updateLED('led-gps', 'amber');
+
+            // Kemas kini paparan waktu solat sebaik sahaja aplikasi dimulakan
+            updateCurrentPrayerTime();
 
             const accText = document.getElementById('val-accuracy');
             accText.innerText = "WAIT";
@@ -439,6 +478,7 @@
             }
         }
 
+        // PEMBAHARUAN 5: TUKAR ICON JADI JAM PASIR SEMASA REFRESH & SPIN CENTER
         function refreshSensors() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
             smoothedHeading = null;
@@ -448,6 +488,7 @@
             resetQiblaLock();
             
             const refreshIcon = document.getElementById('refresh-btn-ui');
+            refreshIcon.innerText = "⏳"; // Tukar kepada icon jam pasir semasa pusing
             refreshIcon.classList.add('spinning');
             
             document.getElementById('status-text').innerText = "REFRESHING SENSORS...";
@@ -458,6 +499,7 @@
             setTimeout(() => {
                 setupSensor();
                 refreshIcon.classList.remove('spinning');
+                refreshIcon.innerText = "🔄"; // Pulangkan semula icon asal selepas pusingan tamat
             }, 800);
         }
 
@@ -588,17 +630,25 @@
                     
                     updateLED('led-qibla', 'green');
                     prayBtn.classList.add('active');
+                }
+
+                // PEMBAHARUAN 3: GETARAN HANYA AKTIF APABILA MASUK KAWASAN BEACON PULSE / PERFECT LOCK (<= 1.5 DEGREES)
+                if (Math.abs(relativeAngle) <= 1.5) {
+                    kaabahIcon.classList.add('perfect-lock');
                     
-                    if (navigator.vibrate) {
+                    if (navigator.vibrate && !isVibrating) {
+                        isVibrating = true;
                         navigator.vibrate(300);
                         vibrateInterval = setInterval(() => navigator.vibrate(300), 700);
                     }
-                }
-
-                if (Math.abs(relativeAngle) <= 1.5) {
-                    kaabahIcon.classList.add('perfect-lock');
                 } else {
                     kaabahIcon.classList.remove('perfect-lock');
+                    // Jika masih aligned tapi terkeluar dari zon tip-top 1.5°, matikan getaran segera
+                    if (isVibrating) {
+                        clearInterval(vibrateInterval);
+                        if (navigator.vibrate) navigator.vibrate(0);
+                        isVibrating = false;
+                    }
                 }
 
             } else {
@@ -618,8 +668,9 @@
 
         function resetQiblaLock() {
             document.getElementById('kaabah-outer').classList.remove('perfect-lock');
-            if (isLocked) {
+            if (isLocked || isVibrating) {
                 isLocked = false;
+                isVibrating = false;
                 document.body.style.backgroundColor = "var(--bg)"; 
                 document.getElementById('instruction-card').style.backgroundColor = "#141414";
                 document.getElementById('instruction-card').style.borderColor = "var(--border)";
@@ -634,6 +685,7 @@
         function cancelVibration() {
              clearInterval(vibrateInterval);
              if (navigator.vibrate) navigator.vibrate(0);
+             isVibrating = false;
         }
 
         function openSpiritualScreen() {
