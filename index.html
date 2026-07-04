@@ -354,7 +354,8 @@
 
     <script>
         // =========================================================================
-        // 🛡️ DEV INSURANCE SWITCH (Set to false as default to bypass passive audit)
+        // 🛡️ JABATAN 2: DEV INSURANCE SWITCH (AUDIT DEPARTMENT)
+        // Set kepada 'false' secara default untuk membiarkan JABATAN 1 berjalan telus.
         // =========================================================================
         const ENABLE_AUDIT_DEPT = false; 
 
@@ -363,12 +364,12 @@
         let isLocked = false, isVibrating = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // UNIVERSAL TUNING VALUES FROM v8.1
+        // TUNING VALUES DARI v8.1
         let smoothedBeta = null, smoothedGamma = null;
         const FILTER_FACTOR = 0.20; 
         const FLAT_TOLERANCE = 25;  
 
-        // STATE ENGINE FOR AUDIT UNIT
+        // STATE ENGINE UNTUK AUDIT DEPT
         let lastHeadingAudit = 0;
         let stuckCounter = 0;
         let magneticAnomalyDetected = false;
@@ -384,7 +385,7 @@
         const compassPointer = document.getElementById('compassPointer');
         const needlePlate = document.getElementById('needle-plate');
 
-        // Draw compass ticks
+        // Bina tanda senggatan kompas
         for (let i = 0; i < 360; i += 5) {
             const tick = document.createElement('div');
             if (i % 30 === 0) {
@@ -444,7 +445,7 @@
             document.getElementById('prayer-time-text').innerText = currentPrayer;
         }
 
-        // 🚀 CRITICAL FIX: Direct and synchronous request permission on user tap interaction
+        // PEMBETULAN REFRESH: Fungsi integrasi perkakasan yang selamat pada sentuhan pertama
         function initApp() {
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
@@ -459,7 +460,7 @@
             const accText = document.getElementById('val-accuracy');
             accText.innerText = "WAIT"; accText.style.color = "#555555";
 
-            // STEP 1: Immediate Permission Request for Device Orientation Sensor
+            // Kebenaran Akses Orientasi Sensor (iOS / Android Modern)
             if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 DeviceOrientationEvent.requestPermission()
                     .then(permissionState => {
@@ -467,7 +468,7 @@
                             window.addEventListener('deviceorientation', handleOrientation, true);
                             sensorReady = true;
                             updateLED('led-sensor', 'green');
-                            checkInitializationStatus();
+                            verifySystemReady();
                         } else {
                             statusText.innerText = "SENSOR DENIED";
                             iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
@@ -480,14 +481,14 @@
                 window.addEventListener('deviceorientation', handleOrientation, true);
                 sensorReady = true;
                 updateLED('led-sensor', 'green');
-                checkInitializationStatus();
+                verifySystemReady();
             } else {
                 statusText.innerText = "NO SENSOR HARDWARE";
                 iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
                 updateLED('led-sensor', 'red');
             }
 
-            // STEP 2: Simultaneous Geolocation Request
+            // Permintaan Isyarat Koordinat GPS
             if (!navigator.geolocation) {
                 statusText.innerText = "GPS NOT SUPPORTED";
                 updateLED('led-gps', 'red');
@@ -515,14 +516,14 @@
                 
                 gpsReady = true;
                 updateLED('led-gps', 'green');
-                checkInitializationStatus();
+                verifySystemReady();
             }, error => {
                 statusText.innerText = "GPS SIGNAL ERROR";
                 updateLED('led-gps', 'red');
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
-        function checkInitializationStatus() {
+        function verifySystemReady() {
             if (gpsReady && sensorReady) {
                 statusText.innerText = "ALIGN TO QIBLA";
                 iconLeft.innerHTML = "🧭"; iconRight.innerHTML = "🧭";
@@ -530,7 +531,7 @@
             }
         }
 
-        // 🔄 CRITICAL FIX: refreshSensors calls initApp to bypass broken loops
+        // PEMBETULAN REFRESH SENSOR: Mengelakkan kitaran tersekat, mengaktifkan semula rantaian penuh GPS & Kompas
         function refreshSensors() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
             smoothedHeading = null; smoothedBeta = null; smoothedGamma = null;
@@ -556,7 +557,7 @@
             setTimeout(() => {
                 refreshIcon.classList.remove('spinning');
                 refreshIcon.innerText = "🔄"; 
-                initApp(); // Re-trigger initial robust interaction setup flow
+                initApp(); 
             }, 800);
         }
 
@@ -578,14 +579,14 @@
         }
 
         // =========================================================================
-        // 🕋 MAIN RESOLUTION ENGINE: STABLE v8.1 LOGIC + REAL-TIME ROTATION COMPILATION
+        // 🕋 JABATAN 1: ENJIN UTAMA KOMPAS & MANIPULASI DOM UI (STABLE v8.1 LOGIC)
         // =========================================================================
         function handleOrientation(event) {
             let heading = null;
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            // Stable v8.1 Low Pass Filtering
+            // Low Pass Filtering v8.1 yang sangat stabil
             if (smoothedBeta === null) { 
                 smoothedBeta = rawBeta; 
                 smoothedGamma = rawGamma; 
@@ -598,7 +599,7 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
-            // Resolve Native Compass Heading Orientation
+            // Membaca Nilai Kompas Peranti
             if (event.webkitCompassHeading) {
                 heading = event.webkitCompassHeading;
                 let accuracy = event.webkitCompassAccuracy;
@@ -618,7 +619,7 @@
 
             if (heading === null) return;
 
-            // Passive compilation data bundle
+            // Bundel data pasif sedia untuk dihantar ke Jabatan Audit
             let auditBundle = {
                 heading: heading,
                 isFlat: isFlat,
@@ -627,12 +628,12 @@
                 gamma: smoothedGamma
             };
 
-            // Kill Switch Bypass Logic
+            // Pasang tapisan sekatan Jabatan Audit di sini jika diaktifkan (true)
             if (ENABLE_AUDIT_DEPT && typeof runAuditDepartment === 'function' && runAuditDepartment(auditBundle)) {
-                return;
+                return; // Jabatan Audit mengambil alih kawalan tapisan amaran
             }
 
-            // Smooth Heading Logic Calculation
+            // Pengiraan Gerak Smooth Heading Kompas
             if (smoothedHeading === null) {
                 smoothedHeading = heading;
             } else {
@@ -645,23 +646,24 @@
             let finalHeading = Math.round(smoothedHeading);
             document.getElementById('dash-heading-val').innerText = `${finalHeading}°`;
 
-            // 🚀 CRITICAL COMPASS ROTATION COMPILATION (DOM STYLING)
-            // Needle plate rotates opposite of heading to stay dynamically pointing North
+            // MEMUTARKAN JARUM KOMPAS SECARA DINAMIK (UI COMPILATION)
             needlePlate.style.transform = `rotate(${-finalHeading}deg)`;
 
             if (qiblaBearing !== null) {
-                // Calculate target rotation relative to compass needle pointing direction
+                // PEMBETULAN GEOMETRI MARKER KAABAH LARI:
+                // Sudut tontonan relatif baki pandangan pengguna pada skrin rata
                 let targetAngle = (qiblaBearing - finalHeading + 360) % 360;
                 
-                // Position Kaabah icon dynamically relative to target angle at top edge orbit
+                // Formula pemetaan orbit sepusat yang stabil mengikut susun atur reka bentuk asal
                 let radius = 105; 
                 let angleRad = (targetAngle - 90) * Math.PI / 180; 
                 let kx = radius * Math.cos(angleRad);
                 let ky = radius * Math.sin(angleRad) + 105; 
+                
                 kaabahOuter.style.left = `calc(50% + ${kx}px)`;
                 kaabahOuter.style.top = `${ky}px`;
 
-                // Angular proximity calculations for strict alignment validation
+                // Logik Pengiraan Proksimiti Kunci Kiblat (Locking Logic)
                 let headingDiff = Math.abs(finalHeading - qiblaBearing);
                 if (headingDiff > 180) headingDiff = 360 - headingDiff;
 
@@ -688,7 +690,7 @@
                         }
                     }
                 } else {
-                    if (isLocked || statusText.innerText === "INITIALIZING SENSORS & GPS..." || statusText.innerText === "ALIGN TO QIBLA") {
+                    if (isLocked || statusText.innerText === "INITIALIZING SENSORS & GPS..." || statusText.innerText === "ALIGN TO QIBLA" || statusText.innerText === "DEVICE NOT FLAT") {
                         resetQiblaLock();
                         updateLED('led-qibla', 'off');
                         compassPointer.classList.remove('aligned');
@@ -697,6 +699,7 @@
                         prayStatusBtn.setAttribute('disabled', 'true');
                         prayStatusBtn.classList.remove('active');
 
+                        // PEMBETULAN STATE DEVICE NOT FLAT TERSEKAT: Kemas kini dinamik setiap saat peranti diangkat
                         if (!isFlat) {
                             statusText.innerText = "DEVICE NOT FLAT";
                             statusText.style.color = "var(--amber)";
@@ -705,8 +708,8 @@
                         } else {
                             statusText.innerText = "ALIGN TO QIBLA";
                             statusText.style.color = "#ffffff";
-                            iconLeft.innerHTML = "Compass"; iconRight.innerHTML = "Compass";
-                            // Dynamically guide left or right rotation direction
+                            
+                            // Panduan panah navigasi berpusing mengikut baki silang produk bearing
                             let crossProduct = Math.sin((qiblaBearing - finalHeading) * Math.PI / 180);
                             if (crossProduct > 0) {
                                 iconLeft.innerHTML = "➡️"; iconRight.innerHTML = "➡️";
