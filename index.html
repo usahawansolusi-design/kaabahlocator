@@ -1,572 +1,739 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaabah Finder - UIA v9.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-color=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kaabah Finder - Universal Integrated Audit v9.0</title>
     <style>
         :root {
-            --primary-color: #1b4d3e;
-            --secondary-color: #c5a059;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
-            --text-muted: #aaaaaa;
-            --success: #2e7d32;
-            --error: #c62828;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --gold: #d4af37;
+            --bg: #0a0a0a;
+            --card: #141414;
+            --border: #222222;
+            --green: #2ecc71;
+            --red: #e74c3c;
+            --amber: #f39c12;
+            --dim-gray: #222222;
         }
 
         body {
-            background-color: var(--dark-bg);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            margin: 0; padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg); color: #ffffff; text-align: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100vh; height: -webkit-fill-available;
+            box-sizing: border-box; padding: 16px; overflow: hidden;
+            transition: background-color 0.4s ease;
         }
 
-        .container {
-            width: 100%;
-            max-width: 450px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #333;
+        .main-wrapper {
+            width: 100%; max-width: 342px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            height: 100%; max-height: 100%;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 25px;
+        /* STARTING PAGE */
+        #start-screen {
+            display: flex; flex-direction: column; width: 100%;
+            justify-content: center; align-items: center; gap: 14px; height: 100%;
         }
 
-        header h1 {
-            color: var(--secondary-color);
-            font-size: 24px;
-            margin-bottom: 5px;
+        #app-screen { 
+            display: none; flex-direction: column; width: 100%; 
+            justify-content: center; align-items: center; gap: 12px; 
         }
 
-        header p {
-            color: var(--text-muted);
-            font-size: 12px;
-            letter-spacing: 1px;
+        .brand-container { display: flex; flex-direction: column; align-items: center; }
+        .brand-logo { font-size: 3.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); }
+        .brand-title-main { font-size: 1.6rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0; }
+        .brand-tagline { color: #888; font-size: 0.7rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; margin-top: 6px; }
+
+        .app-header { font-size: 1.25rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+
+        .checklist-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px; padding: 14px 20px; box-sizing: border-box; }
+        .checklist-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 500; color: #e0e0e0; margin: 10px 0; text-align: left; }
+        .checklist-item::before { content: '✓'; color: var(--green); font-weight: 900; }
+        
+        .btn-action { width: 100%; font-size: 1.4rem; font-weight: bold; padding: 16px; border: none; border-radius: 50px; background: var(--gold); color: #121212; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; box-shadow: 0 5px 15px rgba(212,175,55,0.3); transition: all 0.3s; }
+        
+        .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
+
+        /* PRE-EMPTIVE CALIBRATION BOX */
+        .calib-guide-box {
+            width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
+            padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
+        .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
+        
+        /* CSS INFINITY 8 ANIMATION */
+        .infinity-container { position: relative; width: 140px; height: 55px; margin-top: 6px; }
+        .infinity-path {
+            width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.3);
+            stroke-width: 2.5; stroke-dasharray: 5 3;
+        }
+        .infinity-pointer {
+            position: absolute; width: 12px; height: 12px; background: #ffffff;
+            border-radius: 50%; top: 0; left: 0;
+            offset-path: path('M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z');
+            animation: moveInfinity 2.5s infinite linear;
+            box-shadow: 0 0 10px #ffffff, 0 0 20px var(--gold), 0 0 30px var(--gold);
+        }
+        @keyframes moveInfinity { 100% { offset-distance: 100%; } }
+
+        /* COMPASS AREA WITH REVERTED AND CLEAN RADAR STRUCTURE */
+        .compass-outer-wrapper { position: relative; width: 100%; height: 250px; display: flex; justify-content: center; align-items: flex-end; margin: 4px 0; }
+        
+        /* KAABAH ICON CORE STYLE */
+        #kaabah-outer { 
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%); 
+            font-size: 1.4rem; z-index: 15; 
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Status LEDs */
-        .status-panel {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.3);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 1px solid #222;
+        /* HIGH INTENSITY BEACON PULSE */
+        #kaabah-outer.perfect-lock {
+            transform: translateX(-50%) scale(1.3);
+            animation: kaabah-glow-pulse 1.0s infinite ease-in-out;
+        }
+        @keyframes kaabah-glow-pulse {
+            0% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
+            50% { filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 22px #ffd700); }
+            100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
         }
 
-        .status-item {
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            color: var(--text-muted);
+        /* DASHBOARD BOXES */
+        .top-dashboard-box {
+            position: absolute; top: 0; width: 75px; height: 35px;
+            background: #141414; border: 1px solid var(--border); border-radius: 8px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-sizing: border-box; z-index: 16;
+        }
+        .box-left-target { left: 15px; }
+        .box-right-heading { right: 15px; }
+        .dash-label { font-size: 0.55rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 1px; }
+        .dash-value { font-size: 0.78rem; font-weight: 800; color: #ffffff; }
+        .dash-value.gold { color: var(--gold); }
+
+        .compass-container { 
+            position: relative; width: 210px; height: 210px; 
+            display: flex; justify-content: center; align-items: center; 
+            border: 2px solid rgba(212, 175, 55, 0.4); border-radius: 50%; 
+            background-color: #000000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        
+        .ticks-container { position: absolute; width: 100%; height: 100%; border-radius: 50%; }
+        .tick {
+            position: absolute; width: 1.5px; height: 5px;
+            background-color: rgba(212, 175, 55, 0.3);
+            left: 50%; transform-origin: bottom center; bottom: 50%;
+        }
+        .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.7); }
+
+        /* FLOATING SIDE ACTION BUTTONS */
+        .side-action-btn {
+            position: absolute; bottom: 10px; width: 44px; height: 44px;
+            background: rgba(20, 20, 20, 0.75); border: 1px solid var(--border);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; cursor: pointer; z-index: 20; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.2s ease; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            box-sizing: border-box;
+        }
+        .side-action-btn:active { background: #222; transform: scale(0.92); border-color: #444; }
+        .btn-side-left { left: 4px; }
+        .btn-side-right { right: 4px; }
+
+        #refresh-btn-ui { display: inline-flex; justify-content: center; align-items: center; line-height: 1; }
+
+        /* NEEDLE STRUCTURE */
+        .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
+        .pointer-axis { position: relative; width: 12px; height: 12px; background-color: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.8); }
+        .pointer-axis::before {
+            content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+            border-left: 6px solid transparent; border-right: 6px solid transparent;
+            border-bottom: 92px solid #FFD700;
+        }
+        .pointer-axis.aligned::before { border-bottom-color: var(--green); }
+
+        /* FULL SYMMETRIC DYNAMIC DIRECTION BOX */
+        .direction-box { 
+            width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; 
+            padding: 14px 10px; font-size: 1.25rem; font-weight: 800; 
+            display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; 
+            box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s, color 0.3s; 
+        }
+        .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
+        .dir-center-text { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; text-align: center; }
+
+        /* INFO CARD ROW */
+        .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 0.95rem; }
+        .info-left { display: flex; align-items: center; gap: 8px; color: #aaaaaa; font-weight: 500; }
+        .info-left .icon-glob { color: #3498db; font-size: 1.1rem; }
+        .info-left .icon-pin { color: #e74c3c; font-size: 1.1rem; }
+        .info-left .icon-prayer { color: var(--gold); font-size: 1.1rem; }
+        .info-right-val { font-weight: 700; color: #ffffff; }
+        .info-right-val.gold-text { color: var(--gold); text-transform: uppercase; }
+
+        /* 4-GRID DIAGNOSTICS */
+        .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+        .status-tile { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 12px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
+        .tile-label { font-size: 0.65rem; font-weight: 800; color: #777777; letter-spacing: 0.5px; }
+        .led-dot { width: 7px; height: 7px; background-color: var(--dim-gray); border-radius: 50%; transition: background-color 0.3s, box-shadow 0.3s; }
+        .accuracy-text { font-size: 0.75rem; font-weight: 800; color: #555555; }
+
+        .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* READY TO PRAY BUTTON */
+        .btn-pray-status { 
+            width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; 
+            border: 1px solid var(--border); border-radius: 14px; background: #141414; 
+            color: #444444; letter-spacing: 1px; text-transform: uppercase; 
+            cursor: not-allowed; transition: all 0.4s ease; box-sizing: border-box; 
+            margin-top: 6px;
+        }
+        
+        .btn-pray-status.active { 
+            background: var(--green); 
+            color: #051a0e; 
+            border-color: #4ade80; 
+            cursor: pointer; 
+            animation: pulse-beacon-gold-white 1.4s infinite ease-in-out;
         }
 
-        .led {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-            background-color: #555;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
+        @keyframes pulse-beacon-gold-white {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.85), 0 0 0 0 rgba(212, 175, 55, 0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0), 0 0 0 22px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        .led.active {
-            background-color: #4caf50;
-            box-shadow: 0 0 8px #4caf50;
-        }
-
-        .led.error {
-            background-color: var(--error);
-            box-shadow: 0 0 8px var(--error);
-        }
-
-        /* Compass Visual */
-        .compass-wrapper {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 35px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .compass-dial {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 4px solid var(--secondary-color);
-            background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
-            transition: transform 0.1s ease-out;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
-        }
-
-        .compass-ticks {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            transition: transform 0.1s ease-out;
-        }
-
-        .direction-label {
-            position: absolute;
-            font-weight: bold;
-            font-size: 16px;
-            color: var(--text-muted);
-        }
-
-        .label-n { top: 12px; left: 50%; transform: translateX(-50%); color: var(--error); }
-        .label-s { bottom: 12px; left: 50%; transform: translateX(-50%); }
-        .label-e { right: 12px; top: 50%; transform: translateY(-50%); }
-        .label-w { left: 12px; top: 50%; transform: translateY(-50%); }
-
-        .qibla-pointer {
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 40px solid var(--secondary-color);
-            top: 25px;
-            left: calc(50% - 15px);
-            filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.6));
-            display: none;
-        }
-
-        .center-hub {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0,0,0,0.8);
-            z-index: 10;
-        }
-
-        .overlay-status {
-            position: absolute;
-            text-align: center;
-            z-index: 5;
-            background: rgba(18, 18, 18, 0.85);
-            padding: 15px;
-            border-radius: 12px;
-            width: 85%;
-            border: 1px solid #333;
-        }
-
-        /* Readout Metrics */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .metric-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid #2a2a2a;
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .metric-card p {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .metric-card h2 {
-            font-size: 18px;
-            color: var(--text-main);
-        }
-
-        .metric-card h2.highlight {
-            color: var(--secondary-color);
-        }
-
-        /* Controls */
-        .control-btns {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: var(--secondary-color);
-            color: #000;
-        }
-
-        .btn-primary:hover {
-            background: #b38f48;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid #444;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        /* SPIRITUAL SCREEN POP-UP */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.5s ease forwards; }
+        
+        .modal-thanks-lead { font-size: 1.15rem; font-weight: 700; color: var(--green); line-height: 1.4; margin: 0; }
+        .brand-highlight { font-size: 1.35rem; font-weight: 900; color: var(--gold); display: inline-block; white-space: nowrap; letter-spacing: 0.5px; margin-top: 4px; }
+        .modal-thanks-sub { font-size: 1.05rem; font-weight: 700; color: var(--green); margin: 4px 0 0 0; }
+        
+        .modal-divider { width: 50px; height: 2px; background: rgba(255, 255, 255, 0.2); margin: 6px auto; }
+        
+        .verse-container { display: flex; flex-direction: column; gap: 12px; text-align: center; padding: 0 4px; }
+        .modal-verse-en { font-size: 0.88rem; font-weight: 500; color: #bbbbbb; line-height: 1.5; font-style: italic; margin: 0; }
+        .modal-verse-my { font-size: 0.92rem; font-weight: 600; color: #ffffff; line-height: 1.5; margin: 0; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; }
+        
+        .modal-reference { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+        .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>KAABAH FINDER</h1>
-            <p>UNIVERSAL INTEGRATED AUDIT V9.0</p>
-        </header>
+    <div class="main-wrapper">
+        <div id="start-screen">
+            <div class="brand-container">
+                <div class="brand-logo">🕋</div>
+                <h1 class="brand-title-main">Kaabah Finder</h1>
+                <div class="brand-tagline">Verified Qiblah Navigation System</div>
+            </div>
 
-        <div class="status-panel">
-            <div class="status-item">
-                <div id="led-gps" class="led"></div> GPS
+            <div class="checklist-card">
+                <div class="checklist-item">Place phone on flat surface</div>
+                <div class="checklist-item">Keep away from metal objects</div>
+                <div class="checklist-item">Enable GPS location</div>
+                <div class="checklist-item">Hold device steady</div>
             </div>
-            <div class="status-item">
-                <div id="led-sensor" class="led"></div> SENSOR
+
+            <button class="btn-action" onclick="initApp()">Start Finder</button>
+
+            <div class="calib-guide-box">
+                <div class="calib-title">Compass Calibration Tip</div>
+                <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
+                
+                <div class="infinity-container">
+                    <svg class="infinity-path" viewBox="0 0 140 55">
+                        <path d="M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z"/>
+                    </svg>
+                    <div class="infinity-pointer"></div>
+                </div>
             </div>
-            <div class="status-item">
-                <div id="led-audit" class="led"></div> AUDIT BYPASS
-            </div>
+
+            <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
-        <div class="compass-wrapper">
-            <div id="needle-plate" class="compass-dial">
-                <div class="direction-label label-n">N</div>
-                <div class="direction-label label-s">S</div>
-                <div class="direction-label label-e">E</div>
-                <div class="direction-label label-w">W</div>
-                <div id="qibla-marker" class="qibla-pointer"></div>
+        <div id="app-screen">
+            <div class="app-header">
+                <span>🕋</span> KAABAH FINDER <span>🕋</span>
             </div>
-            <div class="center-hub"></div>
 
-            <div id="status-overlay" class="overlay-status">
-                <p id="status-text" style="font-weight: bold; font-size: 14px;">SYSTEM READY</p>
-                <p id="status-subtext" style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Sila tekan butang mula di bawah.</p>
+            <div class="compass-outer-wrapper">
+                <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
+                
+                <div class="top-dashboard-box box-left-target">
+                    <span class="dash-label">Target Qibla</span>
+                    <span id="dash-qibla-val" class="dash-value gold">---°</span>
+                </div>
+
+                <div id="kaabah-outer">🕋</div>
+
+                <div class="top-dashboard-box box-right-heading">
+                    <span class="dash-label">Heading</span>
+                    <span id="dash-heading-val" class="dash-value">---°</span>
+                </div>
+
+                <div class="compass-container">
+                    <div class="ticks-container" id="ticks"></div>
+                    <div class="needle-wrapper" id="needle-plate">
+                        <div class="pointer-axis" id="compassPointer"></div>
+                    </div>
+                </div>
+
+                <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
+
+            <div id="instruction-card" class="direction-box">
+                <span id="icon-left" class="dir-side-icon">⏳</span>
+                <span id="status-text" class="dir-center-text">INITIALIZING...</span>
+                <span id="icon-right" class="dir-side-icon">⏳</span>
+            </div>
+
+            <div class="united-card">
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-glob">🌐</span>
+                        <span>Distance to Kaabah</span>
+                    </div>
+                    <div id="distance-text" class="info-right-val gold-text">Calculating...</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-pin">📍</span>
+                        <span>Current Location</span>
+                    </div>
+                    <div id="location-text" class="info-right-val">Detecting...</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-left">
+                        <span class="icon-prayer">🕌</span>
+                        <span>Current Prayer</span>
+                    </div>
+                    <div id="prayer-time-text" class="info-right-val gold-text">Detecting...</div>
+                </div>
+            </div>
+
+            <div class="status-grid">
+                <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">QIBLA</span><div id="led-qibla" class="led-dot"></div></div>
+                <div class="status-tile"><span class="tile-label">ACCURACY</span><span id="val-accuracy" class="accuracy-text">WAIT</span></div>
+            </div>
+
+            <button id="pray-status-btn" class="btn-pray-status" onclick="openSpiritualScreen()">Ready to Pray</button>
         </div>
+    </div>
 
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <p>Heading Semasa</p>
-                <h2 id="txt-heading">---°</h2>
+    <div id="spiritual-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div>
+                <p class="modal-thanks-lead">Thank you for using</p>
+                <span class="brand-highlight">Kaabah Finder</span>
+                <p class="modal-thanks-sub">Have a blessed prayer.</p>
             </div>
-            <div class="metric-card">
-                <p>Sudut Kiblat</p>
-                <h2 id="txt-bearing" class="highlight">---°</h2>
+            <div class="modal-divider"></div>
+            <div class="verse-container">
+                <p class="modal-verse-en">"Indeed, prayer has been decreed upon the believers a decree of specified times."</p>
+                <p class="modal-verse-my">"Sesungguhnya solat itu adalah satu kewajipan yang ditentukan waktunya atas orang-orang yang beriman."</p>
             </div>
-            <div class="metric-card">
-                <p>Lokasi Semasa</p>
-                <h2 id="txt-location" style="font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">---</h2>
-            </div>
-            <div class="metric-card">
-                <p>Jarak ke Kaabah</p>
-                <h2 id="txt-distance">--- km</h2>
-            </div>
-        </div>
-
-        <div class="control-btns">
-            <button id="btn-start" class="btn btn-primary" onclick="initApp()">Start Finder</button>
-            <button id="btn-refresh" class="btn btn-secondary hidden" onclick="refreshSensors()">Refresh Sensors</button>
+            <div class="modal-reference">Surah An-Nisa': 103</div>
+            <button class="btn-back" onclick="closeSpiritualScreen()">Return</button>
         </div>
     </div>
 
     <script>
-        // GLOBAL ENGINE CONFIGURATIONS & CORE CONSTANTS (v8.1 Core + v9.0 Sync)
-        const KAABAH_COORDS = { lat: 21.422522, lng: 39.826122 };
-        const ENABLE_AUDIT_DEPT = false; // ENGINE KILL SWITCH: Memintas penungguan subsistem audit yang tergantung.
+        // =========================================================================
+        // 🛡️ DEV INSURANCE SWITCH (Set to false as default to bypass passive audit)
+        // =========================================================================
+        const ENABLE_AUDIT_DEPT = false; 
 
-        // Real-time Runtime States
-        let currentHeading = null;
-        let qiblaBearing = null;
-        let userLocation = null;
-        let isAppRunning = false;
+        const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
+        let userLat, userLng, qiblaBearing = null, smoothedHeading = null;
+        let isLocked = false, isVibrating = false, vibrateInterval;
+        let gpsReady = false, sensorReady = false;
 
-        // DOM Element Cache
-        const dom = {
-            ledGps: document.getElementById('led-gps'),
-            ledSensor: document.getElementById('led-sensor'),
-            ledAudit: document.getElementById('led-audit'),
-            needlePlate: document.getElementById('needle-plate'),
-            qiblaMarker: document.getElementById('qibla-marker'),
-            statusOverlay: document.getElementById('status-overlay'),
-            statusText: document.getElementById('status-text'),
-            statusSubtext: document.getElementById('status-subtext'),
-            txtHeading: document.getElementById('txt-heading'),
-            txtBearing: document.getElementById('txt-bearing'),
-            txtLocation: document.getElementById('txt-location'),
-            txtDistance: document.getElementById('txt-distance'),
-            btnStart: document.getElementById('btn-start'),
-            btnRefresh: document.getElementById('btn-refresh')
-        };
+        // UNIVERSAL TUNING VALUES FROM v8.1
+        let smoothedBeta = null, smoothedGamma = null;
+        const FILTER_FACTOR = 0.20; 
+        const FLAT_TOLERANCE = 25;  
 
-        /**
-         * 3. SENSOR & GPS INITIALIZATION FLOW (V9.0 FIX)
-         * Dicetuskan serentak melalui 'direct user interaction' untuk mengelakkan sekatan keselamatan pelayar web.
-         */
-        async function initApp() {
-            dom.statusText.innerText = "CONNECTING GPS & SENSORS...";
-            dom.statusSubtext.innerText = "Sila berikan kebenaran akses sekiranya diminta.";
-            
-            // Set status awal LED Kill Switch Engine
-            if (!ENABLE_AUDIT_DEPT) {
-                dom.ledAudit.classList.add('active');
-            }
+        // STATE ENGINE FOR AUDIT UNIT
+        let lastHeadingAudit = 0;
+        let stuckCounter = 0;
+        let magneticAnomalyDetected = false;
 
-            // A. mulakan Kebenaran Orientasi Peranti (iOS / Android Asynchronous Bypass)
-            let sensorGranted = false;
-            try {
-                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                    const permission = await DeviceOrientationEvent.requestPermission();
-                    sensorGranted = (permission === 'granted');
-                } else {
-                    // Untuk pelayar web android/desktop biasa yang tidak memerlukan requestPermission eksplisit
-                    sensorGranted = true;
-                }
-            } catch (err) {
-                console.error("Ralat kebenaran sensor:", err);
-                sensorGranted = false;
-            }
+        // UI Caching
+        const ticksContainer = document.getElementById('ticks');
+        const instructionCard = document.getElementById('instruction-card');
+        const statusText = document.getElementById('status-text');
+        const iconLeft = document.getElementById('icon-left');
+        const iconRight = document.getElementById('icon-right');
+        const prayStatusBtn = document.getElementById('pray-status-btn');
+        const kaabahOuter = document.getElementById('kaabah-outer');
+        const compassPointer = document.getElementById('compassPointer');
+        const needlePlate = document.getElementById('needle-plate');
 
-            // B. Jalankan Geolocation serentak bersama kebenaran sensor
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        handleGpsSuccess(position);
-                        if (sensorGranted) {
-                            startOrientationListener();
-                        } else {
-                            handleSensorFailure("Akses orientasi dinafikan.");
-                        }
-                    },
-                    (error) => {
-                        handleGpsFailure(error);
-                        // Tetap cuba jalankan sensor arah jika sekadar GPS gagal fungsi sementara
-                        if (sensorGranted) startOrientationListener();
-                    },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
+        // Draw compass ticks
+        for (let i = 0; i < 360; i += 5) {
+            const tick = document.createElement('div');
+            if (i % 30 === 0) {
+                tick.className = 'tick major';
+                tick.style.transform = `translateX(-50%) rotate(${i}deg) translateY(-94px)`;
             } else {
-                handleGpsFailure({ message: "Geolarian tidak disokong oleh pelayar web." });
+                tick.className = 'tick';
+                tick.style.transform = `translateX(-50%) rotate(${i}deg) translateY(-99px)`;
             }
-
-            // Kemas kini paparan butang kawalan UI
-            dom.btnStart.classList.add('hidden');
-            dom.btnRefresh.classList.remove('hidden');
-            dom.btnRefresh.innerText = "Refresh Sensors";
-            dom.btnRefresh.disabled = false;
-            isAppRunning = true;
+            ticksContainer.appendChild(tick);
         }
 
-        /**
-         * Pemprosesan Data Lokasi & Reverse-Geocode Simulasi (Batu Caves Default)
-         */
-        function handleGpsSuccess(position) {
-            dom.ledGps.classList.remove('error');
-            dom.ledGps.classList.add('active');
-
-            userLocation = {
-                lat: position.coords.coords ? position.coords.coords.latitude : position.coords.latitude,
-                lng: position.coords.coords ? position.coords.coords.longitude : position.coords.longitude
-            };
-
-            // Hitung Bearing dan Jarak ke Kaabah menggunakan Core Logic v8.1
-            qiblaBearing = calculateQiblaBearing(userLocation.lat, userLocation.lng);
-            const distance = calculateDistance(userLocation.lat, userLocation.lng, KAABAH_COORDS.lat, KAABAH_COORDS.lng);
-
-            // Data Persistence Update UI
-            dom.txtBearing.innerText = Math.round(qiblaBearing) + "°";
-            dom.txtDistance.innerText = Math.round(distance).toLocaleString() + " km";
-            
-            // Hardcoded "Batu Caves" seiring kehendak spesifikasi penukaran nama lokasi reverse-geocode
-            dom.txtLocation.innerText = "Batu Caves, MY";
-            dom.qiblaMarker.style.display = "block";
-
-            evaluateSystemReady();
+        function updateLED(id, state) {
+            const led = document.getElementById(id);
+            if (!led) return;
+            if (state === 'green') { led.style.backgroundColor = 'var(--green)'; led.style.boxShadow = '0 0 8px var(--green)'; }
+            else if (state === 'amber') { led.style.backgroundColor = 'var(--amber)'; led.style.boxShadow = '0 0 8px var(--amber)'; }
+            else if (state === 'red') { led.style.backgroundColor = 'var(--red)'; led.style.boxShadow = '0 0 8px var(--red)'; }
+            else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
-        function handleGpsFailure(err) {
-            console.error("GPS Error:", err);
-            dom.ledGps.classList.add('error');
-            dom.txtLocation.innerText = "Batu Caves (Est)";
-            
-            // Fallback default koordinat ke Batu Caves demi kelangsungan persistence data jika GPS disekat
-            userLocation = { lat: 3.2374, lng: 101.6839 }; 
-            qiblaBearing = calculateQiblaBearing(userLocation.lat, userLocation.lng);
-            const distance = calculateDistance(userLocation.lat, userLocation.lng, KAABAH_COORDS.lat, KAABAH_COORDS.lng);
-            
-            dom.txtBearing.innerText = Math.round(qiblaBearing) + "°";
-            dom.txtDistance.innerText = Math.round(distance).toLocaleString() + " km";
-            dom.qiblaMarker.style.display = "block";
-            
-            evaluateSystemReady();
-        }
-
-        /**
-         * Pendaftaran Event Listener Sensor Orientasi
-         */
-        function startOrientationListener() {
-            // Semak event terbaik mengikut kesesuaian pelayar web (iOS vs Android webkit)
-            if ('ondeviceorientationabsolute' in window) {
-                window.addEventListener('deviceorientationabsolute', handleOrientation, true);
-            } else if ('ondeviceorientation' in window) {
-                window.addEventListener('deviceorientation', handleOrientation, true);
-            } else {
-                handleSensorFailure("Tiada sensor hardware dikesan.");
-                return;
-            }
-            dom.ledSensor.classList.remove('error');
-            dom.ledSensor.classList.add('active');
-            evaluateSystemReady();
-        }
-
-        function handleSensorFailure(msg) {
-            console.warn(msg);
-            dom.ledSensor.classList.add('error');
-            dom.statusText.innerText = "SENSOR ERROR";
-            dom.statusSubtext.innerText = "Arah kompas tidak disokong pada peranti ini.";
-        }
-
-        /**
-         * EVALUATE STATUS OVERLAY HIDING MECHANISM
-         */
-        function evaluateSystemReady() {
-            if ((dom.ledGps.classList.contains('active') || userLocation) && dom.ledSensor.classList.contains('active')) {
-                dom.statusOverlay.classList.add('hidden');
-            }
-        }
-
-        /**
-         * 2. THE FREEZE BUG RESOLUTION (handleOrientation Complete Logic)
-         * Mengira sudut pusingan dial plate dan mengemaskini UI secara real-time tanpa terputus.
-         */
-        function handleOrientation(event) {
-            // Ambil data heading berdasarkan ketersediaan parameter pelayar web (Alpha / WebkitHeading)
-            let heading = event.alpha;
-            
-            if (event.webkitCompassHeading !== undefined) {
-                heading = event.webkitCompassHeading; // Untuk peranti iOS Safari
-            } else if (event.absolute === true || event.alpha !== null) {
-                // Untuk Android, nilai alpha adalah berlawanan arah jam, tukar ke arah jam (360 - alpha)
-                heading = 360 - event.alpha;
-            }
-
-            if (heading === null || heading === undefined) return;
-
-            currentHeading = heading;
-            dom.txtHeading.innerText = Math.round(currentHeading) + "°";
-
-            // KIRA PUSINGAN UNTUK DIAL COMPASS (#needle-plate)
-            // Dial plate perlu dipusingkan secara negatif (-heading) supaya Utara sentiasa menunjuk ke Utara sebenar bumi.
-            const dialRotation = -currentHeading;
-            dom.needlePlate.style.transform = `rotate(${dialRotation}deg)`;
-
-            // SINKRONISASI ARTIFAK PENANDA KIBLAT
-            // Penanda kiblat diletakkan di dalam plat yang berpusing, kedudukannya adalah berdasarkan sudut bearing kiblat relatif terhadap piring kompas.
-            if (qiblaBearing !== null) {
-                dom.qiblaMarker.style.transform = `rotate(${qiblaBearing}deg)`;
-                
-                // Berikan petunjuk visual ringkas jika peranti lurus menghala tepat ke arah kiblat (Toleransi +-3 darjah)
-                const diff = Math.abs((currentHeading - qiblaBearing + 360) % 360);
-                if (diff < 3 || diff > 357) {
-                    dom.needlePlate.style.borderColor = "#4caf50";
-                } else {
-                    dom.needlePlate.style.borderColor = "var(--secondary-color)";
-                }
-            }
-        }
-
-        /**
-         * 4. REFRESH STUCK FIX
-         * Memanggil semula initApp() secara telus bagi memulakan semula rantaian pengesahan kebenaran peranti.
-         */
-        function refreshSensors() {
-            dom.btnRefresh.innerText = "REFRESHING SENSORS...";
-            dom.btnRefresh.disabled = true;
-            
-            // Reset status visual
-            dom.ledGps.classList.remove('active', 'error');
-            dom.ledSensor.classList.remove('active', 'error');
-            dom.statusOverlay.classList.remove('hidden');
-            
-            // Panggil semula permulaan aplikasi v9.0
-            initApp();
-        }
-
-        /**
-         * MATH CORE LOGIC (v8.1 Mathematical Formulations)
-         */
-        function calculateQiblaBearing(lat, lng) {
-            // Penukaran darjah kepada Radian
-            const phi1 = lat * Math.PI / 180;
-            const lambda1 = lng * Math.PI / 180;
-            const phi2 = KAABAH_COORDS.lat * Math.PI / 180;
-            const lambda2 = KAABAH_COORDS.lng * Math.PI / 180;
-
-            const dLng = lambda2 - lambda1;
-
-            const y = Math.sin(dLng);
-            const x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(dLng);
-            
-            let bearing = Math.atan2(y, x);
-            bearing = bearing * 180 / Math.PI;
-            bearing = (bearing + 360) % 360;
-
-            return bearing;
+        function calculateQibla(lat1, lon1) {
+            let lat1Rad = lat1 * Math.PI / 180;
+            let lon1Rad = lon1 * Math.PI / 180;
+            let lat2Rad = KAABAH_LAT * Math.PI / 180;
+            let lon2Rad = KAABAH_LNG * Math.PI / 180;
+            let dLon = lon2Rad - lon1Rad;
+            let y = Math.sin(dLon);
+            let x = Math.cos(lat1Rad) * Math.sin(lat2Rad) - Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(dLon);
+            let brng = Math.atan2(y, x) * 180 / Math.PI;
+            return (brng + 360) % 360;
         }
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Jejari bumi dalam KM
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-            
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const R = 6371;
+            let dLat = (lat2 - lat1) * Math.PI / 180;
+            let dLon = (lon2 - lon1) * Math.PI / 180;
+            let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             return R * c;
+        }
+
+        function updateCurrentPrayerTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const timeVal = hours * 60 + minutes;
+            let currentPrayer = "Syuruk/Dhuha";
+
+            if (timeVal >= 330 && timeVal < 420) { currentPrayer = "Subuh"; }
+            else if (timeVal >= 420 && timeVal < 790) { currentPrayer = "Syuruk / Dhuha"; }
+            else if (timeVal >= 790 && timeVal < 980) { currentPrayer = "Zuhur"; }
+            else if (timeVal >= 980 && timeVal < 1160) { currentPrayer = "Asar"; }
+            else if (timeVal >= 1160 && timeVal < 1230) { currentPrayer = "Maghrib"; }
+            else if (timeVal >= 1230 || timeVal < 330) { currentPrayer = "Isyak"; }
+
+            document.getElementById('prayer-time-text').innerText = currentPrayer;
+        }
+
+        // 🚀 CRITICAL FIX: Direct and synchronous request permission on user tap interaction
+        function initApp() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'flex';
+            statusText.innerText = "INITIALIZING SENSORS & GPS...";
+            iconLeft.innerHTML = "⏳"; iconRight.innerHTML = "⏳";
+            
+            updateLED('led-gps', 'amber');
+            updateLED('led-sensor', 'amber');
+            updateLED('led-qibla', 'off');
+            updateCurrentPrayerTime();
+
+            const accText = document.getElementById('val-accuracy');
+            accText.innerText = "WAIT"; accText.style.color = "#555555";
+
+            // STEP 1: Immediate Permission Request for Device Orientation Sensor
+            if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation, true);
+                            sensorReady = true;
+                            updateLED('led-sensor', 'green');
+                            checkInitializationStatus();
+                        } else {
+                            statusText.innerText = "SENSOR DENIED";
+                            iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
+                            updateLED('led-sensor', 'red');
+                        }
+                    }).catch(() => { 
+                        updateLED('led-sensor', 'red'); 
+                    });
+            } else if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', handleOrientation, true);
+                sensorReady = true;
+                updateLED('led-sensor', 'green');
+                checkInitializationStatus();
+            } else {
+                statusText.innerText = "NO SENSOR HARDWARE";
+                iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
+                updateLED('led-sensor', 'red');
+            }
+
+            // STEP 2: Simultaneous Geolocation Request
+            if (!navigator.geolocation) {
+                statusText.innerText = "GPS NOT SUPPORTED";
+                updateLED('led-gps', 'red');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(position => {
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
+                qiblaBearing = calculateQibla(userLat, userLng);
+                document.getElementById('dash-qibla-val').innerText = `${Math.round(qiblaBearing)}°`;
+
+                let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
+                document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
+                
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
+                    .then(res => res.json())
+                    .then(data => {
+                        let placeName = data.address.suburb || data.address.town || data.address.city || "Unknown Location";
+                        document.getElementById('location-text').innerText = placeName;
+                    })
+                    .catch(() => {
+                        document.getElementById('location-text').innerText = `${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+                    });
+                
+                gpsReady = true;
+                updateLED('led-gps', 'green');
+                checkInitializationStatus();
+            }, error => {
+                statusText.innerText = "GPS SIGNAL ERROR";
+                updateLED('led-gps', 'red');
+            }, { enableHighAccuracy: true, timeout: 10000 });
+        }
+
+        function checkInitializationStatus() {
+            if (gpsReady && sensorReady) {
+                statusText.innerText = "ALIGN TO QIBLA";
+                iconLeft.innerHTML = "🧭"; iconRight.innerHTML = "🧭";
+                needlePlate.style.opacity = "1";
+            }
+        }
+
+        // 🔄 CRITICAL FIX: refreshSensors calls initApp to bypass broken loops
+        function refreshSensors() {
+            window.removeEventListener('deviceorientation', handleOrientation, true);
+            smoothedHeading = null; smoothedBeta = null; smoothedGamma = null;
+            sensorReady = false; gpsReady = false; stuckCounter = 0; magneticAnomalyDetected = false;
+            resetQiblaLock();
+            
+            const refreshIcon = document.getElementById('refresh-btn-ui');
+            refreshIcon.innerText = "⏳"; 
+            refreshIcon.classList.add('spinning');
+            
+            document.getElementById('dash-heading-val').innerText = "---°";
+            document.getElementById('dash-qibla-val').innerText = "---°";
+            document.getElementById('distance-text').innerText = "Calculating...";
+            document.getElementById('location-text').innerText = "Detecting...";
+            needlePlate.style.opacity = "0.2";
+            
+            statusText.innerText = "REFRESHING SENSORS...";
+            iconLeft.innerHTML = "⏳"; iconRight.innerHTML = "⏳";
+            updateLED('led-sensor', 'amber');
+            updateLED('led-gps', 'amber');
+            updateLED('led-qibla', 'off');
+            
+            setTimeout(() => {
+                refreshIcon.classList.remove('spinning');
+                refreshIcon.innerText = "🔄"; 
+                initApp(); // Re-trigger initial robust interaction setup flow
+            }, 800);
+        }
+
+        function goBackToStart() {
+            window.removeEventListener('deviceorientation', handleOrientation, true);
+            resetQiblaLock();
+            smoothedHeading = null; smoothedBeta = null; smoothedGamma = null;
+            gpsReady = false; sensorReady = false; stuckCounter = 0; magneticAnomalyDetected = false;
+            
+            updateLED('led-gps', 'off'); updateLED('led-sensor', 'off'); updateLED('led-qibla', 'off');
+            document.getElementById('val-accuracy').innerText = "WAIT";
+            document.getElementById('val-accuracy').style.color = "#555555";
+            document.getElementById('dash-qibla-val').innerText = "---°";
+            document.getElementById('dash-heading-val').innerText = "---°";
+            needlePlate.style.opacity = "0.2";
+            
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'flex';
+        }
+
+        // =========================================================================
+        // 🕋 MAIN RESOLUTION ENGINE: STABLE v8.1 LOGIC + REAL-TIME ROTATION COMPILATION
+        // =========================================================================
+        function handleOrientation(event) {
+            let heading = null;
+            let rawBeta = event.beta || 0;
+            let rawGamma = event.gamma || 0;
+
+            // Stable v8.1 Low Pass Filtering
+            if (smoothedBeta === null) { 
+                smoothedBeta = rawBeta; 
+                smoothedGamma = rawGamma; 
+            } else {
+                smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
+                smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
+            }
+
+            let currentTolerance = isLocked ? (FLAT_TOLERANCE + 5) : FLAT_TOLERANCE;
+            let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
+            let isTegak = Math.abs(smoothedBeta) > 65;
+
+            // Resolve Native Compass Heading Orientation
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+                let accuracy = event.webkitCompassAccuracy;
+                const accText = document.getElementById('val-accuracy');
+                if (accuracy >= 0 && accuracy <= 15) {
+                    accText.innerText = "HIGH"; accText.style.color = "var(--green)";
+                } else if (accuracy > 15 && accuracy <= 30) {
+                    accText.innerText = "MED"; accText.style.color = "var(--amber)";
+                } else {
+                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
+                }
+            } else if (event.alpha !== null) {
+                heading = (360 - event.alpha) % 360;
+                document.getElementById('val-accuracy').innerText = "AUTO";
+                document.getElementById('val-accuracy').style.color = "var(--green)";
+            }
+
+            if (heading === null) return;
+
+            // Passive compilation data bundle
+            let auditBundle = {
+                heading: heading,
+                isFlat: isFlat,
+                isTegak: isTegak,
+                beta: smoothedBeta,
+                gamma: smoothedGamma
+            };
+
+            // Kill Switch Bypass Logic
+            if (ENABLE_AUDIT_DEPT && typeof runAuditDepartment === 'function' && runAuditDepartment(auditBundle)) {
+                return;
+            }
+
+            // Smooth Heading Logic Calculation
+            if (smoothedHeading === null) {
+                smoothedHeading = heading;
+            } else {
+                let diff = heading - smoothedHeading;
+                if (diff > 180) diff -= 360;
+                if (diff < -180) diff += 360;
+                smoothedHeading = (smoothedHeading + FILTER_FACTOR * diff + 360) % 360;
+            }
+
+            let finalHeading = Math.round(smoothedHeading);
+            document.getElementById('dash-heading-val').innerText = `${finalHeading}°`;
+
+            // 🚀 CRITICAL COMPASS ROTATION COMPILATION (DOM STYLING)
+            // Needle plate rotates opposite of heading to stay dynamically pointing North
+            needlePlate.style.transform = `rotate(${-finalHeading}deg)`;
+
+            if (qiblaBearing !== null) {
+                // Calculate target rotation relative to compass needle pointing direction
+                let targetAngle = (qiblaBearing - finalHeading + 360) % 360;
+                
+                // Position Kaabah icon dynamically relative to target angle at top edge orbit
+                let radius = 105; 
+                let angleRad = (targetAngle - 90) * Math.PI / 180; 
+                let kx = radius * Math.cos(angleRad);
+                let ky = radius * Math.sin(angleRad) + 105; 
+                kaabahOuter.style.left = `calc(50% + ${kx}px)`;
+                kaabahOuter.style.top = `${ky}px`;
+
+                // Angular proximity calculations for strict alignment validation
+                let headingDiff = Math.abs(finalHeading - qiblaBearing);
+                if (headingDiff > 180) headingDiff = 360 - headingDiff;
+
+                if (isFlat && headingDiff <= 3) {
+                    if (!isLocked) {
+                        isLocked = true;
+                        updateLED('led-qibla', 'green');
+                        statusText.innerText = "PERFECT QIBLA LOCK";
+                        statusText.style.color = "var(--green)";
+                        iconLeft.innerHTML = "🟢"; iconRight.innerHTML = "🟢";
+                        instructionCard.style.borderColor = "var(--green)";
+                        compassPointer.classList.add('aligned');
+                        kaabahOuter.classList.add('perfect-lock');
+                        
+                        prayStatusBtn.removeAttribute('disabled');
+                        prayStatusBtn.classList.add('active');
+
+                        if ('vibrate' in navigator && !isVibrating) {
+                            isVibrating = true;
+                            navigator.vibrate(200);
+                            vibrateInterval = setInterval(() => {
+                                navigator.vibrate(200);
+                            }, 1000);
+                        }
+                    }
+                } else {
+                    if (isLocked || statusText.innerText === "INITIALIZING SENSORS & GPS..." || statusText.innerText === "ALIGN TO QIBLA") {
+                        resetQiblaLock();
+                        updateLED('led-qibla', 'off');
+                        compassPointer.classList.remove('aligned');
+                        kaabahOuter.classList.remove('perfect-lock');
+                        
+                        prayStatusBtn.setAttribute('disabled', 'true');
+                        prayStatusBtn.classList.remove('active');
+
+                        if (!isFlat) {
+                            statusText.innerText = "DEVICE NOT FLAT";
+                            statusText.style.color = "var(--amber)";
+                            iconLeft.innerHTML = "⚠️"; iconRight.innerHTML = "⚠️";
+                            instructionCard.style.borderColor = "var(--amber)";
+                        } else {
+                            statusText.innerText = "ALIGN TO QIBLA";
+                            statusText.style.color = "#ffffff";
+                            iconLeft.innerHTML = "Compass"; iconRight.innerHTML = "Compass";
+                            // Dynamically guide left or right rotation direction
+                            let crossProduct = Math.sin((qiblaBearing - finalHeading) * Math.PI / 180);
+                            if (crossProduct > 0) {
+                                iconLeft.innerHTML = "➡️"; iconRight.innerHTML = "➡️";
+                            } else {
+                                iconLeft.innerHTML = "⬅️"; iconRight.innerHTML = "⬅️";
+                            }
+                            instructionCard.style.borderColor = "var(--border)";
+                        }
+                    }
+                }
+            }
+        }
+
+        function resetQiblaLock() {
+            isLocked = false;
+            if (vibrateInterval) { clearInterval(vibrateInterval); vibrateInterval = null; }
+            isVibrating = false;
+        }
+
+        function openSpiritualScreen() {
+            if (isLocked) {
+                document.getElementById('spiritual-modal').style.display = 'flex';
+            }
+        }
+
+        function closeSpiritualScreen() {
+            document.getElementById('spiritual-modal').style.display = 'none';
         }
     </script>
 </body>
