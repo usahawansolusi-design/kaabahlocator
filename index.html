@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-color=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Integrated Audit v9.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kaabah Finder - Universal Symmetric v8.1</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -59,7 +59,7 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-        /* PRE-EMPTIVE CALIBRATION BOX */
+        /* PRE-EMPTIVE CALIBRATION BOX - RE-ENFORCED FOR BETTER VISIBILITY */
         .calib-guide-box {
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
             padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -93,7 +93,7 @@
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* HIGH INTENSITY BEACON PULSE */
+        /* HIGH INTENSITY BEACON PULSE UNTUK KAABAH ICON */
         #kaabah-outer.perfect-lock {
             transform: translateX(-50%) scale(1.3);
             animation: kaabah-glow-pulse 1.0s infinite ease-in-out;
@@ -104,7 +104,7 @@
             100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
         }
 
-        /* DASHBOARD BOXES */
+        /* PEMBAHARUAN KOSMETIK: DUA KOTAK MINI PADA RUANG KOSONG ATAS (KIRI & KANAN KAABAH ICON) */
         .top-dashboard-box {
             position: absolute; top: 0; width: 75px; height: 35px;
             background: #141414; border: 1px solid var(--border); border-radius: 8px;
@@ -132,7 +132,7 @@
         }
         .tick.major { height: 10px; background-color: rgba(212, 175, 55, 0.7); }
 
-        /* FLOATING SIDE ACTION BUTTONS */
+        /* FLOATING SIDE ACTION BUTTONS STYLE */
         .side-action-btn {
             position: absolute; bottom: 10px; width: 44px; height: 44px;
             background: rgba(20, 20, 20, 0.75); border: 1px solid var(--border);
@@ -145,7 +145,12 @@
         .btn-side-left { left: 4px; }
         .btn-side-right { right: 4px; }
 
-        #refresh-btn-ui { display: inline-flex; justify-content: center; align-items: center; line-height: 1; }
+        #refresh-btn-ui {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+        }
 
         /* NEEDLE STRUCTURE */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
@@ -162,7 +167,7 @@
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; 
             padding: 14px 10px; font-size: 1.25rem; font-weight: 800; 
             display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; 
-            box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s, color 0.3s; 
+            box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; 
         }
         .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
         .dir-center-text { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; text-align: center; }
@@ -187,7 +192,7 @@
         .spinning { animation: spin 0.8s linear infinite; display: inline-block; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* READY TO PRAY BUTTON */
+        /* READY TO PRAY BUTTON WITH HIGH CONTRAST BEACON */
         .btn-pray-status { 
             width: 100%; font-size: 1.1rem; font-weight: 800; padding: 15px; 
             border: 1px solid var(--border); border-radius: 14px; background: #141414; 
@@ -233,6 +238,7 @@
 <body>
 
     <div class="main-wrapper">
+        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -249,6 +255,7 @@
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
+            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
@@ -264,6 +271,7 @@
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
+        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -272,6 +280,7 @@
             <div class="compass-outer-wrapper">
                 <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
                 
+                <!-- PAPARAN 1: KOTAK KUNING KIRI - BEARING SASARAN KAABAH -->
                 <div class="top-dashboard-box box-left-target">
                     <span class="dash-label">Target Qibla</span>
                     <span id="dash-qibla-val" class="dash-value gold">---°</span>
@@ -279,6 +288,7 @@
 
                 <div id="kaabah-outer">🕋</div>
 
+                <!-- PAPARAN 2: KOTAK KUNING KANAN - HEADING TELEFON SEMASA (REAL-TIME) -->
                 <div class="top-dashboard-box box-right-heading">
                     <span class="dash-label">Heading</span>
                     <span id="dash-heading-val" class="dash-value">---°</span>
@@ -286,6 +296,7 @@
 
                 <div class="compass-container">
                     <div class="ticks-container" id="ticks"></div>
+                    
                     <div class="needle-wrapper" id="needle-plate">
                         <div class="pointer-axis" id="compassPointer"></div>
                     </div>
@@ -294,6 +305,7 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
+            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -324,6 +336,7 @@
                 </div>
             </div>
 
+            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -335,6 +348,7 @@
         </div>
     </div>
 
+    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div>
@@ -342,50 +356,31 @@
                 <span class="brand-highlight">Kaabah Finder</span>
                 <p class="modal-thanks-sub">Have a blessed prayer.</p>
             </div>
+            
             <div class="modal-divider"></div>
+            
             <div class="verse-container">
                 <p class="modal-verse-en">"Indeed, prayer has been decreed upon the believers a decree of specified times."</p>
                 <p class="modal-verse-my">"Sesungguhnya solat itu adalah satu kewajipan yang ditentukan waktunya atas orang-orang yang beriman."</p>
             </div>
+            
             <div class="modal-reference">Surah An-Nisa': 103</div>
             <button class="btn-back" onclick="closeSpiritualScreen()">Return</button>
         </div>
     </div>
 
     <script>
-        // =========================================================================
-        // 🛡️ JABATAN 2: DEV INSURANCE SWITCH (AUDIT DEPARTMENT)
-        // Set kepada 'false' secara default untuk membiarkan JABATAN 1 berjalan telus.
-        // =========================================================================
-        const ENABLE_AUDIT_DEPT = false; 
-
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
-        let userLat, userLng, qiblaBearing = null, smoothedHeading = null;
+        let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
         let isLocked = false, isVibrating = false, vibrateInterval;
         let gpsReady = false, sensorReady = false;
 
-        // TUNING VALUES DARI v8.1
+        // UNIVERSAL TUNING VALUES
         let smoothedBeta = null, smoothedGamma = null;
         const FILTER_FACTOR = 0.20; 
         const FLAT_TOLERANCE = 25;  
 
-        // STATE ENGINE UNTUK AUDIT DEPT
-        let lastHeadingAudit = 0;
-        let stuckCounter = 0;
-        let magneticAnomalyDetected = false;
-
-        // UI Caching
         const ticksContainer = document.getElementById('ticks');
-        const instructionCard = document.getElementById('instruction-card');
-        const statusText = document.getElementById('status-text');
-        const iconLeft = document.getElementById('icon-left');
-        const iconRight = document.getElementById('icon-right');
-        const prayStatusBtn = document.getElementById('pray-status-btn');
-        const kaabahOuter = document.getElementById('kaabah-outer');
-        const compassPointer = document.getElementById('compassPointer');
-        const needlePlate = document.getElementById('needle-plate');
-
-        // Bina tanda senggatan kompas
         for (let i = 0; i < 360; i += 5) {
             const tick = document.createElement('div');
             if (i % 30 === 0) {
@@ -407,27 +402,6 @@
             else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
-        function calculateQibla(lat1, lon1) {
-            let lat1Rad = lat1 * Math.PI / 180;
-            let lon1Rad = lon1 * Math.PI / 180;
-            let lat2Rad = KAABAH_LAT * Math.PI / 180;
-            let lon2Rad = KAABAH_LNG * Math.PI / 180;
-            let dLon = lon2Rad - lon1Rad;
-            let y = Math.sin(dLon);
-            let x = Math.cos(lat1Rad) * Math.sin(lat2Rad) - Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(dLon);
-            let brng = Math.atan2(y, x) * 180 / Math.PI;
-            return (brng + 360) % 360;
-        }
-
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            let dLat = (lat2 - lat1) * Math.PI / 180;
-            let dLon = (lon2 - lon1) * Math.PI / 180;
-            let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
-        }
-
         function updateCurrentPrayerTime() {
             const now = new Date();
             const hours = now.getHours();
@@ -445,52 +419,24 @@
             document.getElementById('prayer-time-text').innerText = currentPrayer;
         }
 
-        // PEMBETULAN REFRESH: Fungsi integrasi perkakasan yang selamat pada sentuhan pertama
         function initApp() {
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
-            statusText.innerText = "INITIALIZING SENSORS & GPS...";
-            iconLeft.innerHTML = "⏳"; iconRight.innerHTML = "⏳";
-            
+            document.getElementById('status-text').innerText = "CONNECTING GPS...";
+            document.getElementById('icon-left').innerHTML = "⏳";
+            document.getElementById('icon-right').innerHTML = "⏳";
             updateLED('led-gps', 'amber');
-            updateLED('led-sensor', 'amber');
-            updateLED('led-qibla', 'off');
+
             updateCurrentPrayerTime();
 
             const accText = document.getElementById('val-accuracy');
-            accText.innerText = "WAIT"; accText.style.color = "#555555";
+            accText.innerText = "WAIT";
+            accText.style.color = "#555555";
 
-            // Kebenaran Akses Orientasi Sensor (iOS / Android Modern)
-            if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                            window.addEventListener('deviceorientation', handleOrientation, true);
-                            sensorReady = true;
-                            updateLED('led-sensor', 'green');
-                            verifySystemReady();
-                        } else {
-                            statusText.innerText = "SENSOR DENIED";
-                            iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
-                            updateLED('led-sensor', 'red');
-                        }
-                    }).catch(() => { 
-                        updateLED('led-sensor', 'red'); 
-                    });
-            } else if (window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', handleOrientation, true);
-                sensorReady = true;
-                updateLED('led-sensor', 'green');
-                verifySystemReady();
-            } else {
-                statusText.innerText = "NO SENSOR HARDWARE";
-                iconLeft.innerHTML = "❌"; iconRight.innerHTML = "❌";
-                updateLED('led-sensor', 'red');
-            }
-
-            // Permintaan Isyarat Koordinat GPS
             if (!navigator.geolocation) {
-                statusText.innerText = "GPS NOT SUPPORTED";
+                document.getElementById('status-text').innerText = "GPS NOT SUPPORTED";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
                 updateLED('led-gps', 'red');
                 return;
             }
@@ -498,7 +444,9 @@
             navigator.geolocation.getCurrentPosition(position => {
                 userLat = position.coords.latitude;
                 userLng = position.coords.longitude;
+                
                 qiblaBearing = calculateQibla(userLat, userLng);
+                // MASUKKAN DATA BEARING KIBLAT KE KOTAK DASHBOARD SEBELAH KIRI
                 document.getElementById('dash-qibla-val').innerText = `${Math.round(qiblaBearing)}°`;
 
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
@@ -516,81 +464,93 @@
                 
                 gpsReady = true;
                 updateLED('led-gps', 'green');
-                verifySystemReady();
+                setupSensor();
             }, error => {
-                statusText.innerText = "GPS SIGNAL ERROR";
+                document.getElementById('status-text').innerText = "GPS SIGNAL ERROR";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
                 updateLED('led-gps', 'red');
             }, { enableHighAccuracy: true, timeout: 10000 });
         }
 
-        function verifySystemReady() {
-            if (gpsReady && sensorReady) {
-                statusText.innerText = "ALIGN TO QIBLA";
-                iconLeft.innerHTML = "🧭"; iconRight.innerHTML = "🧭";
-                needlePlate.style.opacity = "1";
+        function setupSensor() {
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                window.addEventListener('deviceorientation', handleOrientation, true);
+                            } else {
+                                document.getElementById('status-text').innerText = "SENSOR DENIED";
+                                document.getElementById('icon-left').innerHTML = "❌";
+                                document.getElementById('icon-right').innerHTML = "❌";
+                                updateLED('led-sensor', 'red');
+                            }
+                        }).catch(() => { updateLED('led-sensor', 'red'); });
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation, true);
+                }
+            } else {
+                document.getElementById('status-text').innerText = "NO SENSOR HARDWARE";
+                document.getElementById('icon-left').innerHTML = "❌";
+                document.getElementById('icon-right').innerHTML = "❌";
+                updateLED('led-sensor', 'red');
             }
         }
 
-        // PEMBETULAN REFRESH SENSOR: Mengelakkan kitaran tersekat, mengaktifkan semula rantaian penuh GPS & Kompas
         function refreshSensors() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
-            smoothedHeading = null; smoothedBeta = null; smoothedGamma = null;
-            sensorReady = false; gpsReady = false; stuckCounter = 0; magneticAnomalyDetected = false;
+            smoothedHeading = null;
+            smoothedBeta = null;
+            smoothedGamma = null;
+            sensorReady = false;
             resetQiblaLock();
             
             const refreshIcon = document.getElementById('refresh-btn-ui');
             refreshIcon.innerText = "⏳"; 
             refreshIcon.classList.add('spinning');
             
-            document.getElementById('dash-heading-val').innerText = "---°";
-            document.getElementById('dash-qibla-val').innerText = "---°";
-            document.getElementById('distance-text').innerText = "Calculating...";
-            document.getElementById('location-text').innerText = "Detecting...";
-            needlePlate.style.opacity = "0.2";
-            
-            statusText.innerText = "REFRESHING SENSORS...";
-            iconLeft.innerHTML = "⏳"; iconRight.innerHTML = "⏳";
+            document.getElementById('dash-heading-val').innerText = "---°"; // Reset paparan heading semasa refresh
+            document.getElementById('status-text').innerText = "REFRESHING SENSORS...";
+            document.getElementById('icon-left').innerHTML = "⏳";
+            document.getElementById('icon-right').innerHTML = "⏳";
             updateLED('led-sensor', 'amber');
-            updateLED('led-gps', 'amber');
-            updateLED('led-qibla', 'off');
             
             setTimeout(() => {
+                setupSensor();
                 refreshIcon.classList.remove('spinning');
                 refreshIcon.innerText = "🔄"; 
-                initApp(); 
             }, 800);
         }
 
         function goBackToStart() {
             window.removeEventListener('deviceorientation', handleOrientation, true);
             resetQiblaLock();
-            smoothedHeading = null; smoothedBeta = null; smoothedGamma = null;
-            gpsReady = false; sensorReady = false; stuckCounter = 0; magneticAnomalyDetected = false;
+            smoothedHeading = null;
+            smoothedBeta = null;
+            smoothedGamma = null;
+            gpsReady = false;
+            sensorReady = false;
             
-            updateLED('led-gps', 'off'); updateLED('led-sensor', 'off'); updateLED('led-qibla', 'off');
+            updateLED('led-gps', 'off');
+            updateLED('led-sensor', 'off');
+            updateLED('led-qibla', 'off');
             document.getElementById('val-accuracy').innerText = "WAIT";
             document.getElementById('val-accuracy').style.color = "#555555";
             document.getElementById('dash-qibla-val').innerText = "---°";
             document.getElementById('dash-heading-val').innerText = "---°";
-            needlePlate.style.opacity = "0.2";
             
             document.getElementById('app-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'flex';
         }
 
-        // =========================================================================
-        // 🕋 JABATAN 1: ENJIN UTAMA KOMPAS & MANIPULASI DOM UI (STABLE v8.1 LOGIC)
-        // =========================================================================
         function handleOrientation(event) {
             let heading = null;
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            // Low Pass Filtering v8.1 yang sangat stabil
-            if (smoothedBeta === null) { 
-                smoothedBeta = rawBeta; 
-                smoothedGamma = rawGamma; 
-            } else {
+            if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
+            else {
                 smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
                 smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
             }
@@ -599,144 +559,180 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
-            // Membaca Nilai Kompas Peranti
+            if (isTegak) {
+                sensorReady = false;
+                updateLED('led-sensor', 'red');
+                if(!isLocked) {
+                    document.getElementById('status-text').innerText = "PHONE VERTICAL";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
+                }
+            } else if (!isFlat) {
+                sensorReady = false;
+                updateLED('led-sensor', 'amber');
+                if(!isLocked) {
+                    document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
+                    document.getElementById('icon-left').innerHTML = "⚠️";
+                    document.getElementById('icon-right').innerHTML = "⚠️";
+                }
+            } else {
+                sensorReady = true;
+                updateLED('led-sensor', 'green');
+            }
+
+            const accText = document.getElementById('val-accuracy');
+            if (!gpsReady) {
+                accText.innerText = "WAIT";
+                accText.style.color = "#555555";
+                return;
+            }
+
+            if (event.webkitCompassAccuracy) {
+                let accuracy = event.webkitCompassAccuracy;
+                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
+                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
+                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
+            } else {
+                accText.innerText = "GOOD";
+                accText.style.color = "var(--green)";
+            }
+
+            const needlePlate = document.getElementById('needle-plate');
+            if (!sensorReady) {
+                if(!isLocked) {
+                    needlePlate.style.opacity = "0.15";
+                    resetQiblaLock();
+                }
+                return; 
+            }
+
+            needlePlate.style.opacity = "1";
+
             if (event.webkitCompassHeading) {
                 heading = event.webkitCompassHeading;
-                let accuracy = event.webkitCompassAccuracy;
-                const accText = document.getElementById('val-accuracy');
-                if (accuracy >= 0 && accuracy <= 15) {
-                    accText.innerText = "HIGH"; accText.style.color = "var(--green)";
-                } else if (accuracy > 15 && accuracy <= 30) {
-                    accText.innerText = "MED"; accText.style.color = "var(--amber)";
-                } else {
-                    accText.innerText = "LOW"; accText.style.color = "var(--red)";
-                }
             } else if (event.alpha !== null) {
                 heading = (360 - event.alpha) % 360;
-                document.getElementById('val-accuracy').innerText = "AUTO";
-                document.getElementById('val-accuracy').style.color = "var(--green)";
             }
 
             if (heading === null) return;
 
-            // Bundel data pasif sedia untuk dihantar ke Jabatan Audit
-            let auditBundle = {
-                heading: heading,
-                isFlat: isFlat,
-                isTegak: isTegak,
-                beta: smoothedBeta,
-                gamma: smoothedGamma
-            };
-
-            // Pasang tapisan sekatan Jabatan Audit di sini jika diaktifkan (true)
-            if (ENABLE_AUDIT_DEPT && typeof runAuditDepartment === 'function' && runAuditDepartment(auditBundle)) {
-                return; // Jabatan Audit mengambil alih kawalan tapisan amaran
-            }
-
-            // Pengiraan Gerak Smooth Heading Kompas
             if (smoothedHeading === null) {
                 smoothedHeading = heading;
             } else {
                 let diff = heading - smoothedHeading;
                 if (diff > 180) diff -= 360;
                 if (diff < -180) diff += 360;
-                smoothedHeading = (smoothedHeading + FILTER_FACTOR * diff + 360) % 360;
+                smoothedHeading += 0.25 * diff;
+                smoothedHeading = (smoothedHeading + 360) % 360;
             }
 
-            let finalHeading = Math.round(smoothedHeading);
-            document.getElementById('dash-heading-val').innerText = `${finalHeading}°`;
+            // MASUKKAN DATA HEADING REAL-TIME KE KOTAK DASHBOARD SEBELAH KANAN
+            document.getElementById('dash-heading-val').innerText = `${Math.round(smoothedHeading)}°`;
 
-            // MEMUTARKAN JARUM KOMPAS SECARA DINAMIK (UI COMPILATION)
-            needlePlate.style.transform = `rotate(${-finalHeading}deg)`;
+            let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
+            needlePlate.style.transform = `rotate(${arrowRotation}deg)`;
 
-            if (qiblaBearing !== null) {
-                // PEMBETULAN GEOMETRI MARKER KAABAH LARI:
-                // Sudut tontonan relatif baki pandangan pengguna pada skrin rata
-                let targetAngle = (qiblaBearing - finalHeading + 360) % 360;
-                
-                // Formula pemetaan orbit sepusat yang stabil mengikut susun atur reka bentuk asal
-                let radius = 105; 
-                let angleRad = (targetAngle - 90) * Math.PI / 180; 
-                let kx = radius * Math.cos(angleRad);
-                let ky = radius * Math.sin(angleRad) + 105; 
-                
-                kaabahOuter.style.left = `calc(50% + ${kx}px)`;
-                kaabahOuter.style.top = `${ky}px`;
+            let relativeAngle = arrowRotation;
+            if (relativeAngle > 180) relativeAngle -= 360;
 
-                // Logik Pengiraan Proksimiti Kunci Kiblat (Locking Logic)
-                let headingDiff = Math.abs(finalHeading - qiblaBearing);
-                if (headingDiff > 180) headingDiff = 360 - headingDiff;
+            const pointerAxis = document.getElementById('compassPointer');
+            const prayBtn = document.getElementById('pray-status-btn');
+            const kaabahIcon = document.getElementById('kaabah-outer');
 
-                if (isFlat && headingDiff <= 3) {
-                    if (!isLocked) {
-                        isLocked = true;
-                        updateLED('led-qibla', 'green');
-                        statusText.innerText = "PERFECT QIBLA LOCK";
-                        statusText.style.color = "var(--green)";
-                        iconLeft.innerHTML = "🟢"; iconRight.innerHTML = "🟢";
-                        instructionCard.style.borderColor = "var(--green)";
-                        compassPointer.classList.add('aligned');
-                        kaabahOuter.classList.add('perfect-lock');
-                        
-                        prayStatusBtn.removeAttribute('disabled');
-                        prayStatusBtn.classList.add('active');
+            let errorMargin = isLocked ? 10 : 4;
 
-                        if ('vibrate' in navigator && !isVibrating) {
-                            isVibrating = true;
-                            navigator.vibrate(200);
-                            vibrateInterval = setInterval(() => {
-                                navigator.vibrate(200);
-                            }, 1000);
-                        }
+            if (Math.abs(relativeAngle) < errorMargin) {
+                if (!isLocked) {
+                    isLocked = true;
+                    document.body.style.backgroundColor = "#073b24"; 
+                    document.getElementById('instruction-card').style.backgroundColor = "var(--green)";
+                    document.getElementById('instruction-card').style.borderColor = "#4ade80";
+                    pointerAxis.classList.add('aligned');
+                    
+                    document.getElementById('status-text').innerText = "QIBLAH ALIGNED";
+                    document.getElementById('icon-left').innerHTML = "🤲";
+                    document.getElementById('icon-right').innerHTML = "🤲";
+                    
+                    updateLED('led-qibla', 'green');
+                    prayBtn.classList.add('active');
+                }
+
+                if (Math.abs(relativeAngle) <= 1.5) {
+                    kaabahIcon.classList.add('perfect-lock');
+                    
+                    if (navigator.vibrate && !isVibrating) {
+                        isVibrating = true;
+                        navigator.vibrate(300);
+                        vibrateInterval = setInterval(() => navigator.vibrate(300), 700);
                     }
                 } else {
-                    if (isLocked || statusText.innerText === "INITIALIZING SENSORS & GPS..." || statusText.innerText === "ALIGN TO QIBLA" || statusText.innerText === "DEVICE NOT FLAT") {
-                        resetQiblaLock();
-                        updateLED('led-qibla', 'off');
-                        compassPointer.classList.remove('aligned');
-                        kaabahOuter.classList.remove('perfect-lock');
-                        
-                        prayStatusBtn.setAttribute('disabled', 'true');
-                        prayStatusBtn.classList.remove('active');
-
-                        // PEMBETULAN STATE DEVICE NOT FLAT TERSEKAT: Kemas kini dinamik setiap saat peranti diangkat
-                        if (!isFlat) {
-                            statusText.innerText = "DEVICE NOT FLAT";
-                            statusText.style.color = "var(--amber)";
-                            iconLeft.innerHTML = "⚠️"; iconRight.innerHTML = "⚠️";
-                            instructionCard.style.borderColor = "var(--amber)";
-                        } else {
-                            statusText.innerText = "ALIGN TO QIBLA";
-                            statusText.style.color = "#ffffff";
-                            
-                            // Panduan panah navigasi berpusing mengikut baki silang produk bearing
-                            let crossProduct = Math.sin((qiblaBearing - finalHeading) * Math.PI / 180);
-                            if (crossProduct > 0) {
-                                iconLeft.innerHTML = "➡️"; iconRight.innerHTML = "➡️";
-                            } else {
-                                iconLeft.innerHTML = "⬅️"; iconRight.innerHTML = "⬅️";
-                            }
-                            instructionCard.style.borderColor = "var(--border)";
-                        }
+                    kaabahIcon.classList.remove('perfect-lock');
+                    if (isVibrating) {
+                        clearInterval(vibrateInterval);
+                        if (navigator.vibrate) navigator.vibrate(0);
+                        isVibrating = false;
                     }
+                }
+
+            } else {
+                resetQiblaLock();
+                let roundedAngle = Math.abs(Math.round(relativeAngle));
+                if (relativeAngle > 0) {
+                    document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
+                    document.getElementById('icon-left').innerHTML = "↪️";
+                    document.getElementById('icon-right').innerHTML = "↪️";
+                } else {
+                    document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
+                    document.getElementById('icon-left').innerHTML = "↩️";
+                    document.getElementById('icon-right').innerHTML = "↩️";
                 }
             }
         }
 
         function resetQiblaLock() {
-            isLocked = false;
-            if (vibrateInterval) { clearInterval(vibrateInterval); vibrateInterval = null; }
-            isVibrating = false;
+            document.getElementById('kaabah-outer').classList.remove('perfect-lock');
+            if (isLocked || isVibrating) {
+                isLocked = false;
+                isVibrating = false;
+                document.body.style.backgroundColor = "var(--bg)"; 
+                document.getElementById('instruction-card').style.backgroundColor = "#141414";
+                document.getElementById('instruction-card').style.borderColor = "var(--border)";
+                document.getElementById('compassPointer').classList.remove('aligned');
+                document.getElementById('pray-status-btn').classList.remove('active');
+                updateLED('led-qibla', 'off');
+                clearInterval(vibrateInterval);
+                if (navigator.vibrate) navigator.vibrate(0);
+            }
+        }
+
+        function cancelVibration() {
+             clearInterval(vibrateInterval);
+             if (navigator.vibrate) navigator.vibrate(0);
+             isVibrating = false;
         }
 
         function openSpiritualScreen() {
-            if (isLocked) {
+            if (document.getElementById('pray-status-btn').classList.contains('active')) {
                 document.getElementById('spiritual-modal').style.display = 'flex';
+                cancelVibration();
             }
         }
 
         function closeSpiritualScreen() {
             document.getElementById('spiritual-modal').style.display = 'none';
+        }
+
+        function calculateQibla(lat, lng) {
+            let phi1 = lat * Math.PI / 180; let phi2 = KAABAH_LAT * Math.PI / 180;
+            let lam1 = lng * Math.PI / 180; let lam2 = KAABAH_LNG * Math.PI / 180;
+            return (Math.atan2(Math.sin(lam2 - lam1), Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(lam2 - lam1)) * 180 / Math.PI + 360) % 360;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; 
+            let dLat = (lat2 - lat1) * Math.PI / 180; let dLon = (lon2 - lon1) * Math.PI / 180;
+            let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         }
     </script>
 </body>
