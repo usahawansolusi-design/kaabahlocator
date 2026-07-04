@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v8.1</title>
+    <title>Kaabah Finder - Universal Symmetric v9</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -250,7 +250,7 @@
                 <div class="checklist-item">Place phone on flat surface</div>
                 <div class="checklist-item">Keep away from metal objects</div>
                 <div class="checklist-item">Enable GPS location</div>
-                <div class="checklist-item">Hold device steady</div>
+                <div class="checklist-item">Keep device flat and steady</div>
             </div>
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
@@ -559,9 +559,15 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
+            const accText = document.getElementById('val-accuracy');
+
             if (isTegak) {
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
+                if (gpsReady) {
+                    accText.innerText = "LOW";
+                    accText.style.color = "var(--red)";
+                }
                 if(!isLocked) {
                     document.getElementById('status-text').innerText = "PHONE VERTICAL";
                     document.getElementById('icon-left').innerHTML = "⚠️";
@@ -570,6 +576,10 @@
             } else if (!isFlat) {
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
+                if (gpsReady) {
+                    accText.innerText = "POOR";
+                    accText.style.color = "var(--amber)";
+                }
                 if(!isLocked) {
                     document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
                     document.getElementById('icon-left').innerHTML = "⚠️";
@@ -578,23 +588,16 @@
             } else {
                 sensorReady = true;
                 updateLED('led-sensor', 'green');
+                if (gpsReady) {
+                    accText.innerText = "GOOD";
+                    accText.style.color = "var(--green)";
+                }
             }
 
-            const accText = document.getElementById('val-accuracy');
             if (!gpsReady) {
                 accText.innerText = "WAIT";
                 accText.style.color = "#555555";
                 return;
-            }
-
-            if (event.webkitCompassAccuracy) {
-                let accuracy = event.webkitCompassAccuracy;
-                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
-                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
-                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
-            } else {
-                accText.innerText = "GOOD";
-                accText.style.color = "var(--green)";
             }
 
             const needlePlate = document.getElementById('needle-plate');
@@ -678,11 +681,11 @@
                 resetQiblaLock();
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
                 if (relativeAngle > 0) {
-                    document.getElementById('status-text').innerText = `TURN RIGHT ${roundedAngle}°`;
+                    document.getElementById('status-text').innerText = `SLOWLY TURN RIGHT ${roundedAngle}°`;
                     document.getElementById('icon-left').innerHTML = "↪️";
                     document.getElementById('icon-right').innerHTML = "↪️";
                 } else {
-                    document.getElementById('status-text').innerText = `TURN LEFT ${roundedAngle}°`;
+                    document.getElementById('status-text').innerText = `SLOWLY TURN LEFT ${roundedAngle}°`;
                     document.getElementById('icon-left').innerHTML = "↩️";
                     document.getElementById('icon-right').innerHTML = "↩️";
                 }
