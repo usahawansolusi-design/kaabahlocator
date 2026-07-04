@@ -171,7 +171,7 @@
         }
         .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
         
-        /* FIX: KECILKAN FONT DAN KUNCI SEBARIS AGAR BUTANG READY TO PRAY KEKAL DI DALAM SKRIN */
+        /* FIXED SEBARIS & KECILKAN FONT */
         .dir-center-text { 
             font-size: 0.95rem; 
             font-weight: 800; 
@@ -246,6 +246,7 @@
 <body>
 
     <div class="main-wrapper">
+        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -257,11 +258,13 @@
                 <div class="checklist-item">Place phone on flat surface</div>
                 <div class="checklist-item">Keep away from metal objects</div>
                 <div class="checklist-item">Enable GPS location</div>
-                <div class="checklist-item">Hold device steady</div>
+                <!-- FIXED CHECKLIST TEXT -->
+                <div class="checklist-item">Keep device flat and steady</div>
             </div>
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
+            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
@@ -277,6 +280,7 @@
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
+        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -285,6 +289,7 @@
             <div class="compass-outer-wrapper">
                 <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
                 
+                <!-- PAPARAN 1: BEARING SASARAN KAABAH -->
                 <div class="top-dashboard-box box-left-target">
                     <span class="dash-label">Target Qibla</span>
                     <span id="dash-qibla-val" class="dash-value gold">---°</span>
@@ -292,6 +297,7 @@
 
                 <div id="kaabah-outer">🕋</div>
 
+                <!-- PAPARAN 2: HEADING TELEFON SEMASA (REAL-TIME) -->
                 <div class="top-dashboard-box box-right-heading">
                     <span class="dash-label">Heading</span>
                     <span id="dash-heading-val" class="dash-value">---°</span>
@@ -308,6 +314,7 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
+            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -338,6 +345,7 @@
                 </div>
             </div>
 
+            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -349,6 +357,7 @@
         </div>
     </div>
 
+    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div>
@@ -446,7 +455,6 @@
                 userLng = position.coords.longitude;
                 
                 qiblaBearing = calculateQibla(userLat, userLng);
-                // MASUKKAN DATA BEARING KIBLAT KE KOTAK DASHBOARD SEBELAH KIRI
                 document.getElementById('dash-qibla-val').innerText = `${Math.round(qiblaBearing)}°`;
 
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
@@ -510,7 +518,7 @@
             refreshIcon.innerText = "⏳"; 
             refreshIcon.classList.add('spinning');
             
-            document.getElementById('dash-heading-val').innerText = "---°"; // Reset paparan heading semasa refresh
+            document.getElementById('dash-heading-val').innerText = "---°"; 
             document.getElementById('status-text').innerText = "REFRESHING SENSORS...";
             document.getElementById('icon-left').innerHTML = "⏳";
             document.getElementById('icon-right').innerHTML = "⏳";
@@ -559,9 +567,17 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
-            if (isTegak) {
+            const accText = document.getElementById('val-accuracy');
+
+            // INTERLOCKING LOGIC DENGAN STATUS GPS & SENSOR ASAL
+            if (!gpsReady) {
+                accText.innerText = "WAIT";
+                accText.style.color = "#555555";
+            } else if (isTegak) {
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
+                accText.innerText = "LOW";
+                accText.style.color = "var(--red)";
                 if(!isLocked) {
                     document.getElementById('status-text').innerText = "PHONE VERTICAL";
                     document.getElementById('icon-left').innerHTML = "⚠️";
@@ -570,6 +586,8 @@
             } else if (!isFlat) {
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
+                accText.innerText = "POOR";
+                accText.style.color = "var(--amber)";
                 if(!isLocked) {
                     document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
                     document.getElementById('icon-left').innerHTML = "⚠️";
@@ -578,24 +596,11 @@
             } else {
                 sensorReady = true;
                 updateLED('led-sensor', 'green');
-            }
-
-            const accText = document.getElementById('val-accuracy');
-            if (!gpsReady) {
-                accText.innerText = "WAIT";
-                accText.style.color = "#555555";
-                return;
-            }
-
-            if (event.webkitCompassAccuracy) {
-                let accuracy = event.webkitCompassAccuracy;
-                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
-                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
-                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
-            } else {
                 accText.innerText = "GOOD";
                 accText.style.color = "var(--green)";
             }
+
+            if (!gpsReady) return;
 
             const needlePlate = document.getElementById('needle-plate');
             if (!sensorReady) {
@@ -626,7 +631,6 @@
                 smoothedHeading = (smoothedHeading + 360) % 360;
             }
 
-            // MASUKKAN DATA HEADING REAL-TIME KE KOTAK DASHBOARD SEBELAH KANAN
             document.getElementById('dash-heading-val').innerText = `${Math.round(smoothedHeading)}°`;
 
             let arrowRotation = (qiblaBearing - smoothedHeading + 360) % 360;
@@ -689,6 +693,7 @@
             }
         }
 
+        // TUGASAN ASAL SET_LOCK RESET LOGIC UNTUK SINKRONISASI PEMULIHAN
         function resetQiblaLock() {
             document.getElementById('kaabah-outer').classList.remove('perfect-lock');
             if (isLocked || isVibrating) {
@@ -737,4 +742,3 @@
     </script>
 </body>
 </html>
- 
