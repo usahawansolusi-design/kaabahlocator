@@ -165,12 +165,20 @@
         /* FULL SYMMETRIC DYNAMIC DIRECTION BOX */
         .direction-box { 
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; 
-            padding: 14px 10px; font-size: 1.25rem; font-weight: 800; 
-            display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; 
+            padding: 10px 8px; 
+            display: grid; grid-template-columns: 35px 1fr 35px; align-items: center; 
             box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; 
         }
         .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
-        .dir-center-text { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; text-align: center; }
+        
+        /* FIX: KECILKAN FONT DAN KUNCI SEBARIS AGAR BUTANG READY TO PRAY KEKAL DI DALAM SKRIN */
+        .dir-center-text { 
+            font-size: 0.95rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            text-align: center; 
+            white-space: nowrap; 
+        }
 
         /* INFO CARD ROW */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
@@ -238,7 +246,6 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -250,12 +257,11 @@
                 <div class="checklist-item">Place phone on flat surface</div>
                 <div class="checklist-item">Keep away from metal objects</div>
                 <div class="checklist-item">Enable GPS location</div>
-                <div class="checklist-item">Keep device flat and steady</div>
+                <div class="checklist-item">Hold device steady</div>
             </div>
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
-            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
@@ -271,7 +277,6 @@
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
-        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -280,7 +285,6 @@
             <div class="compass-outer-wrapper">
                 <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
                 
-                <!-- PAPARAN 1: KOTAK KUNING KIRI - BEARING SASARAN KAABAH -->
                 <div class="top-dashboard-box box-left-target">
                     <span class="dash-label">Target Qibla</span>
                     <span id="dash-qibla-val" class="dash-value gold">---°</span>
@@ -288,7 +292,6 @@
 
                 <div id="kaabah-outer">🕋</div>
 
-                <!-- PAPARAN 2: KOTAK KUNING KANAN - HEADING TELEFON SEMASA (REAL-TIME) -->
                 <div class="top-dashboard-box box-right-heading">
                     <span class="dash-label">Heading</span>
                     <span id="dash-heading-val" class="dash-value">---°</span>
@@ -305,7 +308,6 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
-            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -336,7 +338,6 @@
                 </div>
             </div>
 
-            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -348,7 +349,6 @@
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div>
@@ -559,15 +559,9 @@
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
-            const accText = document.getElementById('val-accuracy');
-
             if (isTegak) {
                 sensorReady = false;
                 updateLED('led-sensor', 'red');
-                if (gpsReady) {
-                    accText.innerText = "LOW";
-                    accText.style.color = "var(--red)";
-                }
                 if(!isLocked) {
                     document.getElementById('status-text').innerText = "PHONE VERTICAL";
                     document.getElementById('icon-left').innerHTML = "⚠️";
@@ -576,10 +570,6 @@
             } else if (!isFlat) {
                 sensorReady = false;
                 updateLED('led-sensor', 'amber');
-                if (gpsReady) {
-                    accText.innerText = "POOR";
-                    accText.style.color = "var(--amber)";
-                }
                 if(!isLocked) {
                     document.getElementById('status-text').innerText = "TILTED / UNSTEADY";
                     document.getElementById('icon-left').innerHTML = "⚠️";
@@ -588,16 +578,23 @@
             } else {
                 sensorReady = true;
                 updateLED('led-sensor', 'green');
-                if (gpsReady) {
-                    accText.innerText = "GOOD";
-                    accText.style.color = "var(--green)";
-                }
             }
 
+            const accText = document.getElementById('val-accuracy');
             if (!gpsReady) {
                 accText.innerText = "WAIT";
                 accText.style.color = "#555555";
                 return;
+            }
+
+            if (event.webkitCompassAccuracy) {
+                let accuracy = event.webkitCompassAccuracy;
+                if (accuracy > 0 && accuracy <= 15) { accText.innerText = "HIGH"; accText.style.color = "var(--green)"; }
+                else if (accuracy > 15 && accuracy <= 45) { accText.innerText = "GOOD"; accText.style.color = "var(--green)"; }
+                else { accText.innerText = "LOW"; accText.style.color = "var(--red)"; }
+            } else {
+                accText.innerText = "GOOD";
+                accText.style.color = "var(--green)";
             }
 
             const needlePlate = document.getElementById('needle-plate');
