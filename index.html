@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v9</title>
+    <title>Kaabah Finder - Universal Symmetric v11</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -59,7 +59,7 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-        /* PRE-EMPTIVE CALIBRATION BOX - RE-ENFORCED FOR BETTER VISIBILITY */
+        /* PRE-EMPTIVE CALIBRATION BOX */
         .calib-guide-box {
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
             padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -104,7 +104,7 @@
             100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
         }
 
-        /* PEMBAHARUAN KOSMETIK: DUA KOTAK MINI PADA RUANG KOSONG ATAS (KIRI & KANAN KAABAH ICON) */
+        /* DUA KOTAK MINI PADA RUANG KOSONG ATAS (KIRI & KANAN KAABAH ICON) */
         .top-dashboard-box {
             position: absolute; top: 0; width: 75px; height: 35px;
             background: #141414; border: 1px solid var(--border); border-radius: 8px;
@@ -170,15 +170,7 @@
             box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; 
         }
         .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
-        
-        /* FIXED SEBARIS & KECILKAN FONT */
-        .dir-center-text { 
-            font-size: 0.95rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            text-align: center; 
-            white-space: nowrap; 
-        }
+        .dir-center-text { font-size: 0.95rem; font-weight: 800; text-transform: uppercase; text-align: center; white-space: nowrap; }
 
         /* INFO CARD ROW */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
@@ -239,6 +231,15 @@
         
         .modal-reference { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
         .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; }
+
+        /* BLOCKING ANOMALY CALIBRATION MODAL MENU */
+        .anomaly-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(12, 12, 12, 0.98); z-index: 150; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
+        .anomaly-card { width: 100%; max-width: 310px; background: #161616; border: 2px solid var(--red); border-radius: 20px; padding: 22px 18px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 14px; animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; box-shadow: 0 10px 30px rgba(231,76,60,0.25); }
+        .anomaly-badge { font-size: 2.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+        .anomaly-title { font-size: 1.15rem; font-weight: 900; color: var(--red); letter-spacing: 1px; text-transform: uppercase; margin: 0; }
+        .anomaly-body { font-size: 0.84rem; color: #dddddd; line-height: 1.5; font-weight: 500; margin: 0; text-align: center; }
+        .btn-dismiss-anomaly { width: 100%; font-size: 1.05rem; font-weight: 800; padding: 14px; border: none; border-radius: 50px; background: var(--red); color: #ffffff; cursor: pointer; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 6px; box-shadow: 0 4px 12px rgba(231,76,60,0.3); transition: transform 0.2s; }
+        .btn-dismiss-anomaly:active { transform: scale(0.96); }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -258,13 +259,11 @@
                 <div class="checklist-item">Place phone on flat surface</div>
                 <div class="checklist-item">Keep away from metal objects</div>
                 <div class="checklist-item">Enable GPS location</div>
-                <!-- FIXED CHECKLIST TEXT -->
                 <div class="checklist-item">Keep device flat and steady</div>
             </div>
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
-            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
@@ -289,7 +288,6 @@
             <div class="compass-outer-wrapper">
                 <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
                 
-                <!-- PAPARAN 1: BEARING SASARAN KAABAH -->
                 <div class="top-dashboard-box box-left-target">
                     <span class="dash-label">Target Qibla</span>
                     <span id="dash-qibla-val" class="dash-value gold">---°</span>
@@ -297,7 +295,6 @@
 
                 <div id="kaabah-outer">🕋</div>
 
-                <!-- PAPARAN 2: HEADING TELEFON SEMASA (REAL-TIME) -->
                 <div class="top-dashboard-box box-right-heading">
                     <span class="dash-label">Heading</span>
                     <span id="dash-heading-val" class="dash-value">---°</span>
@@ -341,7 +338,7 @@
                         <span class="icon-prayer">🕌</span>
                         <span>Current Prayer</span>
                     </div>
-                    <div id="prayer-time-text" class="info-right-val gold-text">Detecting...</div>
+                    <div id="prayer-time-text" class="info-right-val gold-text">FETCHING...</div>
                 </div>
             </div>
 
@@ -378,6 +375,16 @@
         </div>
     </div>
 
+    <!-- BLOCKING ANOMALY CALIBRATION MODAL MENU -->
+    <div id="anomaly-modal" class="anomaly-overlay">
+        <div class="anomaly-card">
+            <div class="anomaly-badge">⚠️</div>
+            <h2 class="anomaly-title">Sensor Abnormality</h2>
+            <p id="anomaly-message-text" class="anomaly-body">Magnetic disruption has corrupted your device's core direction stream.</p>
+            <button class="btn-dismiss-anomaly" onclick="dismissAnomalyModal()">I've Calibrated / Close</button>
+        </div>
+    </div>
+
     <script>
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
         let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
@@ -388,6 +395,14 @@
         let smoothedBeta = null, smoothedGamma = null;
         const FILTER_FACTOR = 0.20; 
         const FLAT_TOLERANCE = 25;  
+
+        // ANOMALY INTEGRATION HARDWARE TRACKERS
+        let lastRawHeading = null;
+        let lastHeadingTime = Date.now();
+        let anomalyModalActive = false;
+
+        // GLOBAL PRAYER TIMES STORAGE
+        let cachedPrayerTimings = null;
 
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -411,21 +426,72 @@
             else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
-        function updateCurrentPrayerTime() {
+        // ==========================================
+        // NEW GLOBAL PRAYER API INTEGRATION (V11)
+        // ==========================================
+        function fetchGlobalPrayerTime(lat, lng) {
+            document.getElementById('prayer-time-text').innerText = "FETCHING...";
+            
+            // Menggunakan Aladhan API (Method 3: Muslim World League - Standard Universal Global)
+            const apiUrl = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=3`;
+
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(json => {
+                    if (json && json.data && json.data.timings) {
+                        cachedPrayerTimings = json.data.timings;
+                        evaluateCurrentPrayer();
+                        // Pasang timer semakan setiap 1 minit untuk kemas kini automatik jika bertukar waktu solat
+                        setInterval(evaluateCurrentPrayer, 60000);
+                    } else {
+                        document.getElementById('prayer-time-text').innerText = "ERROR DATA";
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('prayer-time-text').innerText = "OFFLINE";
+                });
+        }
+
+        function evaluateCurrentPrayer() {
+            if (!cachedPrayerTimings) return;
+
             const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const timeVal = hours * 60 + minutes;
-            let currentPrayer = "Syuruk/Dhuha";
+            const currentHours = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const currentTotalMinutes = currentHours * 60 + currentMinutes;
 
-            if (timeVal >= 330 && timeVal < 420) { currentPrayer = "Subuh"; }
-            else if (timeVal >= 420 && timeVal < 790) { currentPrayer = "Syuruk / Dhuha"; }
-            else if (timeVal >= 790 && timeVal < 980) { currentPrayer = "Zuhur"; }
-            else if (timeVal >= 980 && timeVal < 1160) { currentPrayer = "Asar"; }
-            else if (timeVal >= 1160 && timeVal < 1230) { currentPrayer = "Maghrib"; }
-            else if (timeVal >= 1230 || timeVal < 330) { currentPrayer = "Isyak"; }
+            // Tukar format string "HH:MM" dari API kepada jumlah minit harian
+            const parseToMinutes = (timeStr) => {
+                if(!timeStr) return 0;
+                const parts = timeStr.split(':');
+                return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+            };
 
-            document.getElementById('prayer-time-text').innerText = currentPrayer;
+            const fagrMin = parseToMinutes(cachedPrayerTimings.Fajr);
+            const shurukMin = parseToMinutes(cachedPrayerTimings.Sunrise);
+            const dhuhrMin = parseToMinutes(cachedPrayerTimings.Dhuhr);
+            const asrMin = parseToMinutes(cachedPrayerTimings.Asr);
+            const maghribMin = parseToMinutes(cachedPrayerTimings.Maghrib);
+            const ishaMin = parseToMinutes(cachedPrayerTimings.Isha);
+
+            let activePrayer = "Syuruk/Dhuha";
+
+            // Aturan logik semakan waktu solat sah mengikut garis masa matahari global
+            if (currentTotalMinutes >= fagrMin && currentTotalMinutes < shurukMin) {
+                activePrayer = "Subuh";
+            } else if (currentTotalMinutes >= shurukMin && currentTotalMinutes < dhuhrMin) {
+                activePrayer = "Syuruk / Dhuha";
+            } else if (currentTotalMinutes >= dhuhrMin && currentTotalMinutes < asrMin) {
+                activePrayer = "Zuhur";
+            } else if (currentTotalMinutes >= asrMin && currentTotalMinutes < maghribMin) {
+                activePrayer = "Asar";
+            } else if (currentTotalMinutes >= maghribMin && currentTotalMinutes < ishaMin) {
+                activePrayer = "Maghrib";
+            } else if (currentTotalMinutes >= ishaMin || currentTotalMinutes < fagrMin) {
+                activePrayer = "Isyak";
+            }
+
+            document.getElementById('prayer-time-text').innerText = activePrayer;
         }
 
         function initApp() {
@@ -435,8 +501,6 @@
             document.getElementById('icon-left').innerHTML = "⏳";
             document.getElementById('icon-right').innerHTML = "⏳";
             updateLED('led-gps', 'amber');
-
-            updateCurrentPrayerTime();
 
             const accText = document.getElementById('val-accuracy');
             accText.innerText = "WAIT";
@@ -460,6 +524,9 @@
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
                 document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
                 
+                // Panggil sistem waktu solat global berasaskan koordinat GPS semasa pengguna
+                fetchGlobalPrayerTime(userLat, userLng);
+
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
                     .then(res => res.json())
                     .then(data => {
@@ -511,6 +578,8 @@
             smoothedHeading = null;
             smoothedBeta = null;
             smoothedGamma = null;
+            lastRawHeading = null;
+            lastHeadingTime = Date.now();
             sensorReady = false;
             resetQiblaLock();
             
@@ -537,8 +606,11 @@
             smoothedHeading = null;
             smoothedBeta = null;
             smoothedGamma = null;
+            lastRawHeading = null;
+            lastHeadingTime = Date.now();
             gpsReady = false;
             sensorReady = false;
+            cachedPrayerTimings = null;
             
             updateLED('led-gps', 'off');
             updateLED('led-sensor', 'off');
@@ -547,15 +619,97 @@
             document.getElementById('val-accuracy').style.color = "#555555";
             document.getElementById('dash-qibla-val').innerText = "---°";
             document.getElementById('dash-heading-val').innerText = "---°";
+            document.getElementById('prayer-time-text').innerText = "FETCHING...";
             
             document.getElementById('app-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'flex';
+        }
+
+        function checkSensorAnomaly(rawHeading, currentBeta, currentGamma, currentIsLocked) {
+            if (anomalyModalActive) return true;
+
+            const currentTime = Date.now();
+            if (lastRawHeading === null) {
+                lastRawHeading = rawHeading;
+                lastHeadingTime = currentTime;
+                return false;
+            }
+
+            let headingDiff = Math.abs(rawHeading - lastRawHeading);
+            if (headingDiff > 180) headingDiff = 360 - headingDiff;
+
+            const timeDiff = currentTime - lastHeadingTime;
+
+            // ANOMALI 1: JARUM MELOMPAT (> 5 DARJAH DALAM MASA SINGKAT)
+            let isJumping = (headingDiff > 5) && (timeDiff < 250);
+
+            // ANOMALI 2: JARUM STUCK (> 5 SAAT TETAPI PHONE BERGERAK)
+            let isStuck = false;
+            if (headingDiff === 0 && (Math.abs(currentBeta) > 0.1 || Math.abs(currentGamma) > 0.1)) {
+                if (currentTime - lastHeadingTime > 5000) {
+                    isStuck = true;
+                }
+            } else {
+                lastHeadingTime = currentTime;
+            }
+
+            // ANOMALI 3: FALSE BEARING LOCK
+            let isFalseBearing = false;
+            if (currentIsLocked) {
+                let isFlatNow = Math.abs(currentBeta) < FLAT_TOLERANCE && Math.abs(currentGamma) < FLAT_TOLERANCE;
+                if (headingDiff > 5 || !isFlatNow) {
+                    isFalseBearing = true;
+                }
+            }
+
+            if (isJumping || isStuck || isFalseBearing) {
+                let alertMsg = "";
+                if (isStuck) {
+                    alertMsg = "<strong>COMPASS SENSOR FREEZING!</strong><br><br>The compass needle is unresponsive. Please move away from large metal objects and wave your phone in a steady Figure-8 motion.";
+                } else if (isJumping) {
+                    alertMsg = "<strong>MAGNETIC INTERFERENCE DETECTED!</strong><br><br>Sudden compass jump (>5°) intercepted. Nearby metallic or electronic components might be altering your hardware readings.";
+                } else if (isFalseBearing) {
+                    alertMsg = "<strong>FALSE BEARING ALIGNMENT CORRUPTED!</strong><br><br>Sensing excessive magnetic spikes or severe tilt during an active lock. Recalibrating sensors for accuracy.";
+                }
+
+                triggerAnomalyModal(alertMsg);
+                return true; 
+            }
+
+            lastRawHeading = rawHeading;
+            return false;
+        }
+
+        function triggerAnomalyModal(htmlMessage) {
+            anomalyModalActive = true;
+            resetQiblaLock(); 
+            window.removeEventListener('deviceorientation', handleOrientation, true);
+
+            document.getElementById('anomaly-message-text').innerHTML = htmlMessage;
+            document.getElementById('anomaly-modal').style.display = 'flex';
+        }
+
+        function dismissAnomalyModal() {
+            document.getElementById('anomaly-modal').style.display = 'none';
+            anomalyModalActive = false;
+            refreshSensors(); 
         }
 
         function handleOrientation(event) {
             let heading = null;
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
+
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+            } else if (event.alpha !== null) {
+                heading = (360 - event.alpha) % 360;
+            }
+
+            if (heading === null) return;
+
+            let sensorIsCorrupted = checkSensorAnomaly(heading, rawBeta, rawGamma, isLocked);
+            if (sensorIsCorrupted) return; 
 
             if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
             else {
@@ -569,7 +723,6 @@
 
             const accText = document.getElementById('val-accuracy');
 
-            // INTERLOCKING LOGIC DENGAN STATUS GPS & SENSOR ASAL
             if (!gpsReady) {
                 accText.innerText = "WAIT";
                 accText.style.color = "#555555";
@@ -612,14 +765,6 @@
             }
 
             needlePlate.style.opacity = "1";
-
-            if (event.webkitCompassHeading) {
-                heading = event.webkitCompassHeading;
-            } else if (event.alpha !== null) {
-                heading = (360 - event.alpha) % 360;
-            }
-
-            if (heading === null) return;
 
             if (smoothedHeading === null) {
                 smoothedHeading = heading;
@@ -693,7 +838,6 @@
             }
         }
 
-        // TUGASAN ASAL SET_LOCK RESET LOGIC UNTUK SINKRONISASI PEMULIHAN
         function resetQiblaLock() {
             document.getElementById('kaabah-outer').classList.remove('perfect-lock');
             if (isLocked || isVibrating) {
