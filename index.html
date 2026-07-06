@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v11</title>
+    <title>Kaabah Finder - Universal Symmetric v12</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -396,9 +396,11 @@
         const FILTER_FACTOR = 0.20; 
         const FLAT_TOLERANCE = 25;  
 
-        // ANOMALY INTEGRATION HARDWARE TRACKERS
+        // ANOMALY INTEGRATION HARDWARE TRACKERS (V12 RE-TUNED)
         let lastRawHeading = null;
         let lastHeadingTime = Date.now();
+        let sluggishTimer = null; 
+        let isSluggishState = false;
         let anomalyModalActive = false;
 
         // GLOBAL PRAYER TIMES STORAGE
@@ -426,13 +428,8 @@
             else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
-        // ==========================================
-        // NEW GLOBAL PRAYER API INTEGRATION (V11)
-        // ==========================================
         function fetchGlobalPrayerTime(lat, lng) {
             document.getElementById('prayer-time-text').innerText = "FETCHING...";
-            
-            // Menggunakan Aladhan API (Method 3: Muslim World League - Standard Universal Global)
             const apiUrl = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=3`;
 
             fetch(apiUrl)
@@ -441,7 +438,6 @@
                     if (json && json.data && json.data.timings) {
                         cachedPrayerTimings = json.data.timings;
                         evaluateCurrentPrayer();
-                        // Pasang timer semakan setiap 1 minit untuk kemas kini automatik jika bertukar waktu solat
                         setInterval(evaluateCurrentPrayer, 60000);
                     } else {
                         document.getElementById('prayer-time-text').innerText = "ERROR DATA";
@@ -460,7 +456,6 @@
             const currentMinutes = now.getMinutes();
             const currentTotalMinutes = currentHours * 60 + currentMinutes;
 
-            // Tukar format string "HH:MM" dari API kepada jumlah minit harian
             const parseToMinutes = (timeStr) => {
                 if(!timeStr) return 0;
                 const parts = timeStr.split(':');
@@ -476,7 +471,6 @@
 
             let activePrayer = "Syuruk/Dhuha";
 
-            // Aturan logik semakan waktu solat sah mengikut garis masa matahari global
             if (currentTotalMinutes >= fagrMin && currentTotalMinutes < shurukMin) {
                 activePrayer = "Subuh";
             } else if (currentTotalMinutes >= shurukMin && currentTotalMinutes < dhuhrMin) {
@@ -524,7 +518,6 @@
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
                 document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
                 
-                // Panggil sistem waktu solat global berasaskan koordinat GPS semasa pengguna
                 fetchGlobalPrayerTime(userLat, userLng);
 
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
@@ -580,6 +573,9 @@
             smoothedGamma = null;
             lastRawHeading = null;
             lastHeadingTime = Date.now();
+            clearTimeout(sluggishTimer);
+            sluggishTimer = null;
+            isSluggishState = false;
             sensorReady = false;
             resetQiblaLock();
             
@@ -608,6 +604,9 @@
             smoothedGamma = null;
             lastRawHeading = null;
             lastHeadingTime = Date.now();
+            clearTimeout(sluggishTimer);
+            sluggishTimer = null;
+            isSluggishState = false;
             gpsReady = false;
             sensorReady = false;
             cachedPrayerTimings = null;
@@ -625,6 +624,9 @@
             document.getElementById('start-screen').style.display = 'flex';
         }
 
+        // ==========================================
+        // RE-TUNED ANOMALY DETECTION ENGINE (V12)
+        // ==========================================
         function checkSensorAnomaly(rawHeading, currentBeta, currentGamma, currentIsLocked) {
             if (anomalyModalActive) return true;
 
@@ -640,39 +642,56 @@
 
             const timeDiff = currentTime - lastHeadingTime;
 
-            // ANOMALI 1: JARUM MELOMPAT (> 5 DARJAH DALAM MASA SINGKAT)
-            let isJumping = (headingDiff > 5) && (timeDiff < 250);
+            // ANOMALI 1: JARUM MELOMPAT GILA (TUKAR HINGGA > 25° DALAM MASA SINGKAT UNTUK ELAK TANGAN LAJU)
+            let isJumping = (headingDiff > 25) && (timeDiff < 200);
 
-            // ANOMALI 2: JARUM STUCK (> 5 SAAT TETAPI PHONE BERGERAK)
+            // ANOMALI 2: JARUM STUCK (> 5 SAAT TETAPI PHONE DI TANGAN)
             let isStuck = false;
-            if (headingDiff === 0 && (Math.abs(currentBeta) > 0.1 || Math.abs(currentGamma) > 0.1)) {
+            if (headingDiff === 0 && (Math.abs(currentBeta) > 0.5 || Math.abs(currentGamma) > 0.5)) {
                 if (currentTime - lastHeadingTime > 5000) {
                     isStuck = true;
                 }
-            } else {
-                lastHeadingTime = currentTime;
+            } else if (headingDiff > 0) {
+                lastHeadingTime = currentTime; 
             }
 
-            // ANOMALI 3: FALSE BEARING LOCK
+            // ANOMALI 3: RE-DESIGN FALSE BEARING LOCK (ABSOLUTE DEVIATION ONLY - NO TILT INTERFERENCE)
             let isFalseBearing = false;
             if (currentIsLocked) {
-                let isFlatNow = Math.abs(currentBeta) < FLAT_TOLERANCE && Math.abs(currentGamma) < FLAT_TOLERANCE;
-                if (headingDiff > 5 || !isFlatNow) {
+                // Sementara skrin locked hijau, tiba-tiba jarum kompas lari melompat > 20 darjah dari bearing kiblat
+                let currentArrowPos = (qiblaBearing - rawHeading + 360) % 360;
+                if (currentArrowPos > 180) currentArrowPos -= 360;
+                if (Math.abs(currentArrowPos) > 20) {
                     isFalseBearing = true;
                 }
             }
 
-            if (isJumping || isStuck || isFalseBearing) {
+            // ANOMALI 4: NEW SENSING FOR SPEAKER MAGNETS (SLUGGISH ENGINE)
+            // Phone bergerak (beta/gamma aktif) tapi jarum cuma bergetar malas bawah 1 darjah dalam masa 3.5 saat
+            let phoneMoving = (Math.abs(currentBeta) > 1.0 || Math.abs(currentGamma) > 1.0);
+            if (phoneMoving && headingDiff > 0.01 && headingDiff < 0.9) {
+                if (!sluggishTimer) {
+                    sluggishTimer = setTimeout(() => {
+                        isSluggishState = true;
+                        triggerAnomalyModal("<strong>MAGNETIC ATTRACTION IN PROGRESS!</strong><br><br>The compass stream is lagging/heavy. Detected a permanent magnetic drag (e.g. Speaker/Magnetic Case) slowing down the sensor.");
+                    }, 3500);
+                }
+            } else {
+                clearTimeout(sluggishTimer);
+                sluggishTimer = null;
+            }
+
+            if (isJumping || isStuck || isFalseBearing || isSluggishState) {
                 let alertMsg = "";
                 if (isStuck) {
                     alertMsg = "<strong>COMPASS SENSOR FREEZING!</strong><br><br>The compass needle is unresponsive. Please move away from large metal objects and wave your phone in a steady Figure-8 motion.";
                 } else if (isJumping) {
-                    alertMsg = "<strong>MAGNETIC INTERFERENCE DETECTED!</strong><br><br>Sudden compass jump (>5°) intercepted. Nearby metallic or electronic components might be altering your hardware readings.";
+                    alertMsg = "<strong>HARDWARE MAGNETIC SPIKE!</strong><br><br>An extreme compass jump (>25°) intercepted. Nearby strong electro-magnetic waves or metals are pulling the core sensor.";
                 } else if (isFalseBearing) {
-                    alertMsg = "<strong>FALSE BEARING ALIGNMENT CORRUPTED!</strong><br><br>Sensing excessive magnetic spikes or severe tilt during an active lock. Recalibrating sensors for accuracy.";
+                    alertMsg = "<strong>FALSE QIBLAH BEARING DETECTED!</strong><br><br>The compass active directional stream was severely corrupted and warped post-alignment. Resetting data for accuracy.";
                 }
 
-                triggerAnomalyModal(alertMsg);
+                if (alertMsg !== "") triggerAnomalyModal(alertMsg);
                 return true; 
             }
 
@@ -684,6 +703,7 @@
             anomalyModalActive = true;
             resetQiblaLock(); 
             window.removeEventListener('deviceorientation', handleOrientation, true);
+            clearTimeout(sluggishTimer);
 
             document.getElementById('anomaly-message-text').innerHTML = htmlMessage;
             document.getElementById('anomaly-modal').style.display = 'flex';
@@ -692,6 +712,7 @@
         function dismissAnomalyModal() {
             document.getElementById('anomaly-modal').style.display = 'none';
             anomalyModalActive = false;
+            isSluggishState = false;
             refreshSensors(); 
         }
 
@@ -717,6 +738,7 @@
                 smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
             }
 
+            // Had kekal 25 darjah untuk penunjuk kualiti LED sahaja, tidak mencetuskan modal sekatan
             let currentTolerance = isLocked ? (FLAT_TOLERANCE + 5) : FLAT_TOLERANCE;
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
@@ -756,11 +778,11 @@
             if (!gpsReady) return;
 
             const needlePlate = document.getElementById('needle-plate');
-            if (!sensorReady) {
-                if(!isLocked) {
-                    needlePlate.style.opacity = "0.15";
-                    resetQiblaLock();
-                }
+            
+            // ISU 2 DISOSIASI: Jika phone senget biasa masa dah lock, kita tak sekat guna modal.
+            // Kita cuma lepaskan lock secara lembut di latar belakang UI.
+            if (!sensorReady && !isLocked) {
+                needlePlate.style.opacity = "0.15";
                 return; 
             }
 
