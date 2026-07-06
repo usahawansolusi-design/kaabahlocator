@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v10.1</title>
+    <title>Kaabah Finder - Universal Symmetric v10.2</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -14,7 +14,7 @@
             --red: #e74c3c;
             --amber: #f39c12;
             --dim-gray: #222222;
-            --orange: #e65c00;
+            --orange: #f4511e;
         }
 
         body {
@@ -60,29 +60,31 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-        /* PRE-EMPTIVE CALIBRATION BOX - RE-ENFORCED FOR BETTER VISIBILITY */
+        /* PRE-EMPTIVE CALIBRATION BOX */
         .calib-guide-box {
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
-            padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 10px;
         }
         .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
         .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
         
-        /* v10.1: HYBRID CODE BASED HYPER-PREMIUM CALIBRATION ANIMATION */
-        .infinity-container { position: relative; width: 150px; height: 65px; margin-top: 6px; }
+        /* v10.2: PERFECTLY MATHEMATICAL INFINITY RADAR LALUAN */
+        .infinity-container { position: relative; width: 160px; height: 70px; margin-top: 4px; display: flex; justify-content: center; align-items: center; }
+        .infinity-svg { width: 100%; height: 100%; }
         .infinity-path-bg {
-            width: 100%; height: 100%; fill: none; stroke: var(--orange);
-            stroke-width: 7.5; stroke-linecap: round; stroke-linejoin: round;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            fill: none; stroke: var(--orange);
+            stroke-width: 6; stroke-linecap: round; stroke-linejoin: round;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
         }
         .infinity-pointer {
             position: absolute; top: 0; left: 0;
-            font-size: 1.35rem; line-height: 1;
+            font-size: 1.25rem; width: 24px; height: 24px;
             display: flex; align-items: center; justify-content: center;
-            offset-path: path('M 38 32.5 C 38 53, 13 53, 13 32.5 C 13 12, 38 12, 75 32.5 C 112 53, 137 53, 137 32.5 C 137 12, 112 12, 75 32.5 Z');
+            /* Laluan koordinat disegerakkan tepat dengan SVG path di bawah */
+            offset-path: path('M 45,35 C 5,5 5,65 45,35 C 85,5 115,5 115,35 C 115,65 85,65 45,35 Z');
             offset-rotate: auto;
-            animation: moveInfinity 3.2s infinite linear;
-            filter: drop-shadow(0 0 6px rgba(255,255,255,0.8));
+            animation: moveInfinity 3s infinite linear;
+            filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
         }
         @keyframes moveInfinity { 100% { offset-distance: 100%; } }
 
@@ -108,7 +110,7 @@
             100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
         }
 
-        /* PEMBAHARUAN KOSMETIK: DUA KOTAK MINI PADA RUANG KOSONG ATAS (KIRI & KANAN KAABAH ICON) */
+        /* DUA KOTAK MINI PADA RUANG KOSONG ATAS */
         .top-dashboard-box {
             position: absolute; top: 0; width: 75px; height: 35px;
             background: #141414; border: 1px solid var(--border); border-radius: 8px;
@@ -149,12 +151,7 @@
         .btn-side-left { left: 4px; }
         .btn-side-right { right: 4px; }
 
-        #refresh-btn-ui {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            line-height: 1;
-        }
+        #refresh-btn-ui { display: inline-flex; justify-content: center; align-items: center; line-height: 1; }
 
         /* NEEDLE STRUCTURE */
         .needle-wrapper { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; will-change: transform; transition: opacity 0.3s ease; opacity: 0.2; }
@@ -174,15 +171,7 @@
             box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; 
         }
         .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
-        
-        /* FIXED SEBARIS & KECILKAN FONT */
-        .dir-center-text { 
-            font-size: 0.95rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            text-align: center; 
-            white-space: nowrap; 
-        }
+        .dir-center-text { font-size: 0.95rem; font-weight: 800; text-transform: uppercase; text-align: center; white-space: nowrap; }
 
         /* INFO CARD ROW */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
@@ -250,7 +239,6 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -267,15 +255,13 @@
 
             <button class="btn-action" onclick="initApp()">Start Finder</button>
 
-            <!-- UNIVERSAL PRE-EMPTIVE CALIBRATION BOX -->
             <div class="calib-guide-box">
                 <div class="calib-title">Compass Calibration Tip</div>
                 <p class="calib-desc">If the radar needle is stuck or drifting, wave your device in a steady figure-8 shape to refresh your hardware sensor compass.</p>
                 
-                <!-- v10.1: RE-DESIGNED SVG PATH EMBEDDED WITH HIGH CONTRAST ORANGE AND SMOOTH POINTER -->
                 <div class="infinity-container">
-                    <svg class="infinity-path-bg" viewBox="0 0 150 65">
-                        <path d="M 38 32.5 C 38 53, 13 53, 13 32.5 C 13 12, 38 12, 75 32.5 C 112 53, 137 53, 137 32.5 C 137 12, 112 12, 75 32.5 Z"/>
+                    <svg class="infinity-svg" viewBox="0 0 160 70">
+                        <path class="infinity-path-bg" d="M 45,35 C 5,5 5,65 45,35 C 85,5 115,5 115,35 C 115,65 85,65 45,35 Z"/>
                     </svg>
                     <div class="infinity-pointer">📱</div>
                 </div>
@@ -284,7 +270,6 @@
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
-        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -293,7 +278,6 @@
             <div class="compass-outer-wrapper">
                 <div class="side-action-btn btn-side-left" onclick="goBackToStart()" title="Back to main page">↩️</div>
                 
-                <!-- PAPARAN 1: BEARING SASARAN KAABAH -->
                 <div class="top-dashboard-box box-left-target">
                     <span class="dash-label">Target Qibla</span>
                     <span id="dash-qibla-val" class="dash-value gold">---°</span>
@@ -301,7 +285,6 @@
 
                 <div id="kaabah-outer">🕋</div>
 
-                <!-- PAPARAN 2: HEADING TELEFON SEMASA (REAL-TIME) -->
                 <div class="top-dashboard-box box-right-heading">
                     <span class="dash-label">Heading</span>
                     <span id="dash-heading-val" class="dash-value">---°</span>
@@ -318,7 +301,6 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
-            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -349,7 +331,6 @@
                 </div>
             </div>
 
-            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -361,7 +342,6 @@
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div>
@@ -415,13 +395,11 @@
             else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
-        // v10/v10.1: OFFLINE-READY GLOBAL MATHEMATICAL PRAYER TIME CALCULATION
         function updateCurrentPrayerTime() {
             if (!userLat || !userLng) {
                 document.getElementById('prayer-time-text').innerText = "Syuruk/Dhuha";
                 return;
             }
-
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth() + 1;
@@ -431,14 +409,12 @@
             const currentMins = hours * 60 + minutes;
 
             const d = Math.floor((new Date(year, month - 1, day) - new Date(year, 0, 0)) / 86400000);
-            
             const b = (2 * Math.PI * (d - 81)) / 365;
             const eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b); 
             const delta = 23.45 * Math.sin((2 * Math.PI * (284 + d)) / 365) * (Math.PI / 180); 
 
             const timezoneOffset = -now.getTimezoneOffset() / 60;
             const solarTransit = 720 - 4 * userLng + eot + (timezoneOffset * 60); 
-
             const latRad = userLat * (Math.PI / 180);
 
             function hourAngle(angle) {
@@ -459,7 +435,6 @@
             const asarAlt = Math.atan(1 / (1 + Math.tan(asarDist))) * (180 / Math.PI);
             const H_asar = hourAngle(asarAlt);
             const asarTime = solarTransit + H_asar;
-
             const maghribTime = solarTransit + H_maghrib;
             const isyakTime = maghribTime + 90; 
 
@@ -710,7 +685,6 @@
 
                 if (Math.abs(relativeAngle) <= 1.5) {
                     kaabahIcon.classList.add('perfect-lock');
-                    
                     if (navigator.vibrate && !isVibrating) {
                         isVibrating = true;
                         navigator.vibrate(300);
@@ -724,7 +698,6 @@
                         isVibrating = false;
                     }
                 }
-
             } else {
                 resetQiblaLock();
                 let roundedAngle = Math.abs(Math.round(relativeAngle));
@@ -773,6 +746,10 @@
             document.getElementById('spiritual-modal').style.display = 'none';
         }
 
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) cancelVibration();
+        });
+
         function calculateQibla(lat, lng) {
             let phi1 = lat * Math.PI / 180; let phi2 = KAABAH_LAT * Math.PI / 180;
             let lam1 = lng * Math.PI / 180; let lam2 = KAABAH_LNG * Math.PI / 180;
@@ -787,4 +764,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
