@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v12</title>
+    <title>Kaabah Finder - Universal Symmetric v10</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -59,7 +59,7 @@
         
         .slogan-footer { font-size: 0.75rem; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-        /* PRE-EMPTIVE CALIBRATION BOX */
+        /* PRE-EMPTIVE CALIBRATION BOX - RE-ENFORCED FOR BETTER VISIBILITY */
         .calib-guide-box {
             width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 16px;
             padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -67,18 +67,20 @@
         .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
         .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
         
-        /* CSS INFINITY 8 ANIMATION */
+        /* CSS INFINITY 8 ANIMATION WITH AUTO-ROTATING PHONE ICON */
         .infinity-container { position: relative; width: 140px; height: 55px; margin-top: 6px; }
         .infinity-path {
             width: 100%; height: 100%; fill: none; stroke: rgba(214, 175, 55, 0.3);
             stroke-width: 2.5; stroke-dasharray: 5 3;
         }
         .infinity-pointer {
-            position: absolute; width: 12px; height: 12px; background: #ffffff;
-            border-radius: 50%; top: 0; left: 0;
+            position: absolute; top: 0; left: 0;
+            font-size: 1.1rem; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
             offset-path: path('M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z');
-            animation: moveInfinity 2.5s infinite linear;
-            box-shadow: 0 0 10px #ffffff, 0 0 20px var(--gold), 0 0 30px var(--gold);
+            offset-rotate: auto;
+            animation: moveInfinity 3.0s infinite linear;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.6)) drop-shadow(0 0 10px var(--gold));
         }
         @keyframes moveInfinity { 100% { offset-distance: 100%; } }
 
@@ -104,7 +106,7 @@
             100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 8px var(--gold)); }
         }
 
-        /* DUA KOTAK MINI PADA RUANG KOSONG ATAS (KIRI & KANAN KAABAH ICON) */
+        /* PEMBAHARUAN KOSMETIK: DUA KOTAK MINI PADA RUANG KOSONG ATAS (KIRI & KANAN KAABAH ICON) */
         .top-dashboard-box {
             position: absolute; top: 0; width: 75px; height: 35px;
             background: #141414; border: 1px solid var(--border); border-radius: 8px;
@@ -170,7 +172,15 @@
             box-sizing: border-box; letter-spacing: 0.5px; transition: background-color 0.3s, border-color 0.3s; 
         }
         .dir-side-icon { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; }
-        .dir-center-text { font-size: 0.95rem; font-weight: 800; text-transform: uppercase; text-align: center; white-space: nowrap; }
+        
+        /* FIXED SEBARIS & KECILKAN FONT */
+        .dir-center-text { 
+            font-size: 0.95rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            text-align: center; 
+            white-space: nowrap; 
+        }
 
         /* INFO CARD ROW */
         .united-card { width: 100%; background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
@@ -231,15 +241,6 @@
         
         .modal-reference { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
         .btn-back { background: transparent; border: 1px solid #444; color: #aaa; padding: 12px 32px; border-radius: 50px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; align-self: center; transition: all 0.2s; letter-spacing: 0.5px; }
-
-        /* BLOCKING ANOMALY CALIBRATION MODAL MENU */
-        .anomaly-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(12, 12, 12, 0.98); z-index: 150; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 24px; box-sizing: border-box; }
-        .anomaly-card { width: 100%; max-width: 310px; background: #161616; border: 2px solid var(--red); border-radius: 20px; padding: 22px 18px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 14px; animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; box-shadow: 0 10px 30px rgba(231,76,60,0.25); }
-        .anomaly-badge { font-size: 2.5rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
-        .anomaly-title { font-size: 1.15rem; font-weight: 900; color: var(--red); letter-spacing: 1px; text-transform: uppercase; margin: 0; }
-        .anomaly-body { font-size: 0.84rem; color: #dddddd; line-height: 1.5; font-weight: 500; margin: 0; text-align: center; }
-        .btn-dismiss-anomaly { width: 100%; font-size: 1.05rem; font-weight: 800; padding: 14px; border: none; border-radius: 50px; background: var(--red); color: #ffffff; cursor: pointer; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 6px; box-shadow: 0 4px 12px rgba(231,76,60,0.3); transition: transform 0.2s; }
-        .btn-dismiss-anomaly:active { transform: scale(0.96); }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -247,7 +248,6 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- START PAGE -->
         <div id="start-screen">
             <div class="brand-container">
                 <div class="brand-logo">🕋</div>
@@ -272,14 +272,13 @@
                     <svg class="infinity-path" viewBox="0 0 140 55">
                         <path d="M 35 27.5 C 35 48, 10 48, 10 27.5 C 10 7, 35 7, 70 27.5 C 105 48, 130 48, 130 27.5 C 130 7, 105 7, 70 27.5 Z"/>
                     </svg>
-                    <div class="infinity-pointer"></div>
+                    <div class="infinity-pointer">📱</div>
                 </div>
             </div>
 
             <div class="slogan-footer">Find. Align. Verify. Pray.</div>
         </div>
 
-        <!-- MAIN APP SCREEN -->
         <div id="app-screen">
             <div class="app-header">
                 <span>🕋</span> KAABAH FINDER <span>🕋</span>
@@ -311,7 +310,6 @@
                 <div id="refresh-btn-ui" class="side-action-btn btn-side-right" onclick="refreshSensors()" title="Reset compass sensors">🔄</div>
             </div>
 
-            <!-- UNIVERSAL SYMMETRIC DIRECTION BOX -->
             <div id="instruction-card" class="direction-box">
                 <span id="icon-left" class="dir-side-icon">⏳</span>
                 <span id="status-text" class="dir-center-text">INITIALIZING...</span>
@@ -338,11 +336,10 @@
                         <span class="icon-prayer">🕌</span>
                         <span>Current Prayer</span>
                     </div>
-                    <div id="prayer-time-text" class="info-right-val gold-text">FETCHING...</div>
+                    <div id="prayer-time-text" class="info-right-val gold-text">Detecting...</div>
                 </div>
             </div>
 
-            <!-- 4-GRID DIAGNOSTICS -->
             <div class="status-grid">
                 <div class="status-tile"><span class="tile-label">GPS</span><div id="led-gps" class="led-dot"></div></div>
                 <div class="status-tile"><span class="tile-label">SENSOR</span><div id="led-sensor" class="led-dot"></div></div>
@@ -354,7 +351,6 @@
         </div>
     </div>
 
-    <!-- SPIRITUAL MODAL POP-UP -->
     <div id="spiritual-modal" class="modal-overlay">
         <div class="modal-content">
             <div>
@@ -375,16 +371,6 @@
         </div>
     </div>
 
-    <!-- BLOCKING ANOMALY CALIBRATION MODAL MENU -->
-    <div id="anomaly-modal" class="anomaly-overlay">
-        <div class="anomaly-card">
-            <div class="anomaly-badge">⚠️</div>
-            <h2 class="anomaly-title">Sensor Abnormality</h2>
-            <p id="anomaly-message-text" class="anomaly-body">Magnetic disruption has corrupted your device's core direction stream.</p>
-            <button class="btn-dismiss-anomaly" onclick="dismissAnomalyModal()">I've Calibrated / Close</button>
-        </div>
-    </div>
-
     <script>
         const KAABAH_LAT = 21.422522, KAABAH_LNG = 39.826122;
         let userLat, userLng, qiblaBearing = 0, smoothedHeading = null;
@@ -395,16 +381,6 @@
         let smoothedBeta = null, smoothedGamma = null;
         const FILTER_FACTOR = 0.20; 
         const FLAT_TOLERANCE = 25;  
-
-        // ANOMALY INTEGRATION HARDWARE TRACKERS (V12 RE-TUNED)
-        let lastRawHeading = null;
-        let lastHeadingTime = Date.now();
-        let sluggishTimer = null; 
-        let isSluggishState = false;
-        let anomalyModalActive = false;
-
-        // GLOBAL PRAYER TIMES STORAGE
-        let cachedPrayerTimings = null;
 
         const ticksContainer = document.getElementById('ticks');
         for (let i = 0; i < 360; i += 5) {
@@ -428,64 +404,70 @@
             else { led.style.backgroundColor = 'var(--dim-gray)'; led.style.boxShadow = 'none'; }
         }
 
-        function fetchGlobalPrayerTime(lat, lng) {
-            document.getElementById('prayer-time-text').innerText = "FETCHING...";
-            const apiUrl = `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=3`;
-
-            fetch(apiUrl)
-                .then(res => res.json())
-                .then(json => {
-                    if (json && json.data && json.data.timings) {
-                        cachedPrayerTimings = json.data.timings;
-                        evaluateCurrentPrayer();
-                        setInterval(evaluateCurrentPrayer, 60000);
-                    } else {
-                        document.getElementById('prayer-time-text').innerText = "ERROR DATA";
-                    }
-                })
-                .catch(() => {
-                    document.getElementById('prayer-time-text').innerText = "OFFLINE";
-                });
-        }
-
-        function evaluateCurrentPrayer() {
-            if (!cachedPrayerTimings) return;
-
-            const now = new Date();
-            const currentHours = now.getHours();
-            const currentMinutes = now.getMinutes();
-            const currentTotalMinutes = currentHours * 60 + currentMinutes;
-
-            const parseToMinutes = (timeStr) => {
-                if(!timeStr) return 0;
-                const parts = timeStr.split(':');
-                return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-            };
-
-            const fagrMin = parseToMinutes(cachedPrayerTimings.Fajr);
-            const shurukMin = parseToMinutes(cachedPrayerTimings.Sunrise);
-            const dhuhrMin = parseToMinutes(cachedPrayerTimings.Dhuhr);
-            const asrMin = parseToMinutes(cachedPrayerTimings.Asr);
-            const maghribMin = parseToMinutes(cachedPrayerTimings.Maghrib);
-            const ishaMin = parseToMinutes(cachedPrayerTimings.Isha);
-
-            let activePrayer = "Syuruk/Dhuha";
-
-            if (currentTotalMinutes >= fagrMin && currentTotalMinutes < shurukMin) {
-                activePrayer = "Subuh";
-            } else if (currentTotalMinutes >= shurukMin && currentTotalMinutes < dhuhrMin) {
-                activePrayer = "Syuruk / Dhuha";
-            } else if (currentTotalMinutes >= dhuhrMin && currentTotalMinutes < asrMin) {
-                activePrayer = "Zuhur";
-            } else if (currentTotalMinutes >= asrMin && currentTotalMinutes < maghribMin) {
-                activePrayer = "Asar";
-            } else if (currentTotalMinutes >= maghribMin && currentTotalMinutes < ishaMin) {
-                activePrayer = "Maghrib";
-            } else if (currentTotalMinutes >= ishaMin || currentTotalMinutes < fagrMin) {
-                activePrayer = "Isyak";
+        // v10: OFFLINE-READY GLOBAL MATHEMATICAL PRAYER TIME CALCULATION
+        function updateCurrentPrayerTime() {
+            if (!userLat || !userLng) {
+                document.getElementById('prayer-time-text').innerText = "Syuruk/Dhuha";
+                return;
             }
 
-            document.getElementById('prayer-time-text').innerText = activePrayer;
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const currentMins = hours * 60 + minutes;
+
+            // 1. Dapatkan Hari Dalam Setahun (Day of Year)
+            const d = Math.floor((new Date(year, month - 1, day) - new Date(year, 0, 0)) / 86400000);
+            
+            // 2. Anggaran Deklinasi Matahari (Solar Declination) & Equation of Time
+            const b = (2 * Math.PI * (d - 81)) / 365;
+            const eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b); // dalam minit
+            const delta = 23.45 * Math.sin((2 * Math.PI * (284 + d)) / 365) * (Math.PI / 180); // Radian
+
+            // 3. Kira Waktu Transit Matahari (Zuhur Tempatan)
+            const timezoneOffset = -now.getTimezoneOffset() / 60;
+            const solarTransit = 720 - 4 * userLng + eot + (timezoneOffset * 60); // Minit dari tengah malam UTC/Zon
+
+            const latRad = userLat * (Math.PI / 180);
+
+            // Fungsi Pembantu Sudut Jam (Hour Angle)
+            function hourAngle(angle) {
+                const angleRad = angle * (Math.PI / 180);
+                const cosH = (Math.sin(angleRad) - Math.sin(latRad) * Math.sin(delta)) / (Math.cos(latRad) * Math.cos(delta));
+                if (cosH > 1 || cosH < -1) return 0;
+                return Math.acos(cosH) * (180 / Math.PI) * 4; // tukar ke minit
+            }
+
+            // 4. Pengiraan Waktu Solat Utama (Minit dari Tengah Malam)
+            const H_subuh = hourAngle(-18); // Standard Dunia Muslim am (18 darjah di bawah ufuk)
+            const H_maghrib = hourAngle(-0.833); // Ambil kira pembiasan atmosfera
+
+            const subuhTime = solarTransit - H_subuh;
+            const syurukTime = solarTransit - H_maghrib;
+            const zuhurTime = solarTransit + 5; // Tambah ikhtiyati 5 minit
+            
+            // Asar (Kaedah Syafii/Am: Panjang bayang = 1x panjang objek + bayang waktu rembang)
+            const asarDist = Math.abs(latRad - delta);
+            const asarAlt = Math.atan(1 / (1 + Math.tan(asarDist))) * (180 / Math.PI);
+            const H_asar = hourAngle(asarAlt);
+            const asarTime = solarTransit + H_asar;
+
+            const maghribTime = solarTransit + H_maghrib;
+            const isyakTime = maghribTime + 90; // Anggaran standard global (90 minit selepas Maghrib)
+
+            // 5. Klasifikasi Waktu Solat Semasa Berdasarkan Minit Masing-Masing
+            let currentPrayer = "Syuruk / Dhuha";
+            if (currentMins >= subuhTime && currentMins < syurukTime) { currentPrayer = "Subuh"; }
+            else if (currentMins >= syurukTime && currentMins < zuhurTime) { currentPrayer = "Syuruk / Dhuha"; }
+            else if (currentMins >= zuhurTime && currentMins < asarTime) { currentPrayer = "Zuhur"; }
+            else if (currentMins >= asarTime && currentMins < maghribTime) { currentPrayer = "Asar"; }
+            else if (currentMins >= maghribTime && currentMins < isyakTime) { currentPrayer = "Maghrib"; }
+            else if (currentMins >= isyakTime || currentMins < subuhTime) { currentPrayer = "Isyak"; }
+
+            document.getElementById('prayer-time-text').innerText = currentPrayer;
         }
 
         function initApp() {
@@ -495,6 +477,8 @@
             document.getElementById('icon-left').innerHTML = "⏳";
             document.getElementById('icon-right').innerHTML = "⏳";
             updateLED('led-gps', 'amber');
+
+            updateCurrentPrayerTime();
 
             const accText = document.getElementById('val-accuracy');
             accText.innerText = "WAIT";
@@ -518,7 +502,8 @@
                 let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
                 document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
                 
-                fetchGlobalPrayerTime(userLat, userLng);
+                // v10: Kemas kini waktu solat sebaik mendapat koordinat rasmi GPS
+                updateCurrentPrayerTime();
 
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLat}&lon=${userLng}&zoom=12`)
                     .then(res => res.json())
@@ -571,11 +556,6 @@
             smoothedHeading = null;
             smoothedBeta = null;
             smoothedGamma = null;
-            lastRawHeading = null;
-            lastHeadingTime = Date.now();
-            clearTimeout(sluggishTimer);
-            sluggishTimer = null;
-            isSluggishState = false;
             sensorReady = false;
             resetQiblaLock();
             
@@ -602,14 +582,8 @@
             smoothedHeading = null;
             smoothedBeta = null;
             smoothedGamma = null;
-            lastRawHeading = null;
-            lastHeadingTime = Date.now();
-            clearTimeout(sluggishTimer);
-            sluggishTimer = null;
-            isSluggishState = false;
             gpsReady = false;
             sensorReady = false;
-            cachedPrayerTimings = null;
             
             updateLED('led-gps', 'off');
             updateLED('led-sensor', 'off');
@@ -618,102 +592,9 @@
             document.getElementById('val-accuracy').style.color = "#555555";
             document.getElementById('dash-qibla-val').innerText = "---°";
             document.getElementById('dash-heading-val').innerText = "---°";
-            document.getElementById('prayer-time-text').innerText = "FETCHING...";
             
             document.getElementById('app-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'flex';
-        }
-
-        // ==========================================
-        // RE-TUNED ANOMALY DETECTION ENGINE (V12)
-        // ==========================================
-        function checkSensorAnomaly(rawHeading, currentBeta, currentGamma, currentIsLocked) {
-            if (anomalyModalActive) return true;
-
-            const currentTime = Date.now();
-            if (lastRawHeading === null) {
-                lastRawHeading = rawHeading;
-                lastHeadingTime = currentTime;
-                return false;
-            }
-
-            let headingDiff = Math.abs(rawHeading - lastRawHeading);
-            if (headingDiff > 180) headingDiff = 360 - headingDiff;
-
-            const timeDiff = currentTime - lastHeadingTime;
-
-            // ANOMALI 1: JARUM MELOMPAT GILA (TUKAR HINGGA > 25° DALAM MASA SINGKAT UNTUK ELAK TANGAN LAJU)
-            let isJumping = (headingDiff > 25) && (timeDiff < 200);
-
-            // ANOMALI 2: JARUM STUCK (> 5 SAAT TETAPI PHONE DI TANGAN)
-            let isStuck = false;
-            if (headingDiff === 0 && (Math.abs(currentBeta) > 0.5 || Math.abs(currentGamma) > 0.5)) {
-                if (currentTime - lastHeadingTime > 5000) {
-                    isStuck = true;
-                }
-            } else if (headingDiff > 0) {
-                lastHeadingTime = currentTime; 
-            }
-
-            // ANOMALI 3: RE-DESIGN FALSE BEARING LOCK (ABSOLUTE DEVIATION ONLY - NO TILT INTERFERENCE)
-            let isFalseBearing = false;
-            if (currentIsLocked) {
-                // Sementara skrin locked hijau, tiba-tiba jarum kompas lari melompat > 20 darjah dari bearing kiblat
-                let currentArrowPos = (qiblaBearing - rawHeading + 360) % 360;
-                if (currentArrowPos > 180) currentArrowPos -= 360;
-                if (Math.abs(currentArrowPos) > 20) {
-                    isFalseBearing = true;
-                }
-            }
-
-            // ANOMALI 4: NEW SENSING FOR SPEAKER MAGNETS (SLUGGISH ENGINE)
-            // Phone bergerak (beta/gamma aktif) tapi jarum cuma bergetar malas bawah 1 darjah dalam masa 3.5 saat
-            let phoneMoving = (Math.abs(currentBeta) > 1.0 || Math.abs(currentGamma) > 1.0);
-            if (phoneMoving && headingDiff > 0.01 && headingDiff < 0.9) {
-                if (!sluggishTimer) {
-                    sluggishTimer = setTimeout(() => {
-                        isSluggishState = true;
-                        triggerAnomalyModal("<strong>MAGNETIC ATTRACTION IN PROGRESS!</strong><br><br>The compass stream is lagging/heavy. Detected a permanent magnetic drag (e.g. Speaker/Magnetic Case) slowing down the sensor.");
-                    }, 3500);
-                }
-            } else {
-                clearTimeout(sluggishTimer);
-                sluggishTimer = null;
-            }
-
-            if (isJumping || isStuck || isFalseBearing || isSluggishState) {
-                let alertMsg = "";
-                if (isStuck) {
-                    alertMsg = "<strong>COMPASS SENSOR FREEZING!</strong><br><br>The compass needle is unresponsive. Please move away from large metal objects and wave your phone in a steady Figure-8 motion.";
-                } else if (isJumping) {
-                    alertMsg = "<strong>HARDWARE MAGNETIC SPIKE!</strong><br><br>An extreme compass jump (>25°) intercepted. Nearby strong electro-magnetic waves or metals are pulling the core sensor.";
-                } else if (isFalseBearing) {
-                    alertMsg = "<strong>FALSE QIBLAH BEARING DETECTED!</strong><br><br>The compass active directional stream was severely corrupted and warped post-alignment. Resetting data for accuracy.";
-                }
-
-                if (alertMsg !== "") triggerAnomalyModal(alertMsg);
-                return true; 
-            }
-
-            lastRawHeading = rawHeading;
-            return false;
-        }
-
-        function triggerAnomalyModal(htmlMessage) {
-            anomalyModalActive = true;
-            resetQiblaLock(); 
-            window.removeEventListener('deviceorientation', handleOrientation, true);
-            clearTimeout(sluggishTimer);
-
-            document.getElementById('anomaly-message-text').innerHTML = htmlMessage;
-            document.getElementById('anomaly-modal').style.display = 'flex';
-        }
-
-        function dismissAnomalyModal() {
-            document.getElementById('anomaly-modal').style.display = 'none';
-            anomalyModalActive = false;
-            isSluggishState = false;
-            refreshSensors(); 
         }
 
         function handleOrientation(event) {
@@ -721,30 +602,19 @@
             let rawBeta = event.beta || 0;
             let rawGamma = event.gamma || 0;
 
-            if (event.webkitCompassHeading) {
-                heading = event.webkitCompassHeading;
-            } else if (event.alpha !== null) {
-                heading = (360 - event.alpha) % 360;
-            }
-
-            if (heading === null) return;
-
-            let sensorIsCorrupted = checkSensorAnomaly(heading, rawBeta, rawGamma, isLocked);
-            if (sensorIsCorrupted) return; 
-
             if (smoothedBeta === null) { smoothedBeta = rawBeta; smoothedGamma = rawGamma; }
             else {
                 smoothedBeta += FILTER_FACTOR * (rawBeta - smoothedBeta);
                 smoothedGamma += FILTER_FACTOR * (rawGamma - smoothedGamma);
             }
 
-            // Had kekal 25 darjah untuk penunjuk kualiti LED sahaja, tidak mencetuskan modal sekatan
             let currentTolerance = isLocked ? (FLAT_TOLERANCE + 5) : FLAT_TOLERANCE;
             let isFlat = Math.abs(smoothedBeta) < currentTolerance && Math.abs(smoothedGamma) < currentTolerance;
             let isTegak = Math.abs(smoothedBeta) > 65;
 
             const accText = document.getElementById('val-accuracy');
 
+            // INTERLOCKING LOGIC DENGAN STATUS GPS & SENSOR ASAL
             if (!gpsReady) {
                 accText.innerText = "WAIT";
                 accText.style.color = "#555555";
@@ -778,15 +648,23 @@
             if (!gpsReady) return;
 
             const needlePlate = document.getElementById('needle-plate');
-            
-            // ISU 2 DISOSIASI: Jika phone senget biasa masa dah lock, kita tak sekat guna modal.
-            // Kita cuma lepaskan lock secara lembut di latar belakang UI.
-            if (!sensorReady && !isLocked) {
-                needlePlate.style.opacity = "0.15";
+            if (!sensorReady) {
+                if(!isLocked) {
+                    needlePlate.style.opacity = "0.15";
+                    resetQiblaLock();
+                }
                 return; 
             }
 
             needlePlate.style.opacity = "1";
+
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+            } else if (event.alpha !== null) {
+                heading = (360 - event.alpha) % 360;
+            }
+
+            if (heading === null) return;
 
             if (smoothedHeading === null) {
                 smoothedHeading = heading;
