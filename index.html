@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v10.2</title>
+    <title>Kaabah Finder - Universal Symmetric v10.3</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -68,19 +68,19 @@
         .calib-title { font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
         .calib-desc { font-size: 0.78rem; color: #aaaaaa; line-height: 1.4; font-weight: 500; margin: 0; }
         
-        /* v10.2: PERFECTLY MATHEMATICAL INFINITY RADAR LALUAN */
+        /* v10.3: SLEEK AND SLENDER INFINITY SVG RADAR PATH */
         .infinity-container { position: relative; width: 160px; height: 70px; margin-top: 4px; display: flex; justify-content: center; align-items: center; }
         .infinity-svg { width: 100%; height: 100%; }
         .infinity-path-bg {
             fill: none; stroke: var(--orange);
-            stroke-width: 6; stroke-linecap: round; stroke-linejoin: round;
-            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
+            stroke-width: 3.5; /* v10.3: Dinipiskan daripada 6 untuk impak premium */
+            stroke-linecap: round; stroke-linejoin: round;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
         }
         .infinity-pointer {
             position: absolute; top: 0; left: 0;
             font-size: 1.25rem; width: 24px; height: 24px;
             display: flex; align-items: center; justify-content: center;
-            /* Laluan koordinat disegerakkan tepat dengan SVG path di bawah */
             offset-path: path('M 45,35 C 5,5 5,65 45,35 C 85,5 115,5 115,35 C 115,65 85,65 45,35 Z');
             offset-rotate: auto;
             animation: moveInfinity 3s infinite linear;
