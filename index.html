@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kaabah Finder - Universal Symmetric v11.0 (Vincenty Engine)</title>
+    <title>Kaabah Finder - Universal Symmetric v10.3</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -73,7 +73,7 @@
         .infinity-svg { width: 100%; height: 100%; }
         .infinity-path-bg {
             fill: none; stroke: var(--orange);
-            stroke-width: 3.5;
+            stroke-width: 3.5; /* v10.3: Dinipiskan daripada 6 untuk impak premium */
             stroke-linecap: round; stroke-linejoin: round;
             filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
         }
@@ -475,11 +475,10 @@
                 userLat = position.coords.latitude;
                 userLng = position.coords.longitude;
                 
-                // PINPINT SUIS PROCEED FASA 1: Menggunakan Vincenty Engine berbanding Haversine asal
-                qiblaBearing = calculateQiblaVincenty(userLat, userLng);
+                qiblaBearing = calculateQibla(userLat, userLng);
                 document.getElementById('dash-qibla-val').innerText = `${Math.round(qiblaBearing)}°`;
 
-                let distance = calculateDistanceVincenty(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
+                let distance = calculateDistance(userLat, userLng, KAABAH_LAT, KAABAH_LNG);
                 document.getElementById('distance-text').innerText = `${Math.round(distance).toLocaleString()} KM`;
                 
                 updateCurrentPrayerTime();
@@ -751,11 +750,6 @@
             if (document.hidden) cancelVibration();
         });
 
-        // ---------------------------------------------------------
-        // ADD-VALUE MODULE: VINCENTY ENGINE (WGS-84 ELIPSOID MODEL)
-        // ---------------------------------------------------------
-        
-        // Fungsi Asal Dikekalkan Sebagai Cadangan Struktur/Backup
         function calculateQibla(lat, lng) {
             let phi1 = lat * Math.PI / 180; let phi2 = KAABAH_LAT * Math.PI / 180;
             let lam1 = lng * Math.PI / 180; let lam2 = KAABAH_LNG * Math.PI / 180;
@@ -767,78 +761,6 @@
             let dLat = (lat2 - lat1) * Math.PI / 180; let dLon = (lon2 - lon1) * Math.PI / 180;
             let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
             return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        }
-
-        // FASA 1 IMPLEMENTASI: Vincenty Formulations Untuk Ketepatan Maksimum Geodetika Bumi Realiti
-        function calculateVincentyCore(lat1, lon1, lat2, lon2) {
-            const a = 6378137.0;           // Paksi semi-major bumi WGS-84 (meter)
-            const b = 6356752.314245;      // Paksi semi-minor bumi WGS-84 (meter)
-            const f = 1 / 298.257223563;   // Faktor keleperan bumi (flattening)
-
-            const L = (lon2 - lon1) * Math.PI / 180;
-            const U1 = Math.atan((1 - f) * Math.tan(lat1 * Math.PI / 180));
-            const U2 = Math.atan((1 - f) * Math.tan(lat2 * Math.PI / 180));
-            
-            const sinU1 = Math.sin(U1), cosU1 = Math.cos(U1);
-            const sinU2 = Math.sin(U2), cosU2 = Math.cos(U2);
-
-            let lambda = L;
-            let lambdaP;
-            let iterLimit = 100;
-            let cosSqAlpha, sinSigma, cos2SigmaM, sigma, sinLambda, cosLambda;
-
-            do {
-                sinLambda = Math.sin(lambda);
-                cosLambda = Math.cos(lambda);
-                
-                let sinSqSigma = (cosU2 * sinLambda) * (cosU2 * sinLambda) + 
-                                 (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) * (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda);
-                
-                sinSigma = Math.sqrt(sinSqSigma);
-                if (sinSigma == 0) return { distance: 0, initialBearing: 0 }; // Titik bertindan
-                
-                let cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda;
-                sigma = Math.atan2(sinSigma, cosSigma);
-                
-                let sinAlpha = cosU1 * cosU2 * sinLambda / sinSigma;
-                cosSqAlpha = 1 - sinAlpha * sinAlpha;
-                
-                cos2SigmaM = cosSigma - 2 * sinU1 * sinU2 / cosSqAlpha;
-                if (isNaN(cos2SigmaM)) cos2SigmaM = 0; // Laluan Khatulistiwa
-                
-                let C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
-                lambdaP = lambda;
-                lambda = L + (1 - C) * f * sinAlpha * (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
-            } while (Math.abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
-
-            if (iterLimit == 0) return { distance: NaN, initialBearing: NaN }; // Gagal menumpu (konvergens)
-
-            let uSq = cosSqAlpha * (a * a - b * b) / (b * b);
-            let A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
-            let B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
-            let deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) -
-                B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
-
-            let s = b * A * (sigma - deltaSigma); // Jarak dalam meter
-            
-            // Pengiraan Bearing Awal (Arah Kiblat)
-            let alpha1 = Math.atan2(cosU2 * sinLambda, cosU1 * sinU2 - sinU1 * cosU2 * cosLambda);
-            let initialBearing = (alpha1 * 180 / Math.PI + 360) % 360;
-
-            return {
-                distance: s / 1000, // Tukar ke KM
-                initialBearing: initialBearing
-            };
-        }
-
-        function calculateQiblaVincenty(lat, lng) {
-            const result = calculateVincentyCore(lat, lng, KAABAH_LAT, KAABAH_LNG);
-            return isNaN(result.initialBearing) ? calculateQibla(lat, lng) : result.initialBearing;
-        }
-
-        function calculateDistanceVincenty(lat1, lon1, lat2, lon2) {
-            const result = calculateVincentyCore(lat1, lon1, lat2, lon2);
-            return isNaN(result.distance) ? calculateDistance(lat1, lon1, lat2, lon2) : result.distance;
         }
     </script>
 </body>
